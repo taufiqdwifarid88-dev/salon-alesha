@@ -9,7 +9,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    /* Mencegah Pull-to-Refresh agar tidak sengaja reload */
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
       background-color: #f8fafc; 
@@ -40,7 +39,7 @@
   <div id="loader" class="hidden fixed inset-0 bg-white/70 backdrop-blur-md z-[100] flex items-center justify-center">
     <div class="flex flex-col items-center gap-3">
       <div class="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin"></div>
-      <p class="font-bold text-pink-600 italic">Sinkronisasi Cloud... ☁️</p>
+      <p class="font-bold text-pink-600 italic">Menyinkronkan... ☁️</p>
     </div>
   </div>
 
@@ -48,81 +47,59 @@
     
     <div id="tab-kasir" class="tab-konten active space-y-4">
       <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100">
-        <h2 class="font-bold mb-4 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Transaksi Baru</h2>
+        <h2 class="font-bold mb-4 text-slate-700 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Input Transaksi</h2>
         <div class="space-y-3">
-          <div>
-            <label for="inpNama" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Nama Pelanggan</label>
-            <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Ketik nama...">
-          </div>
-          <div>
-            <label for="inpHp" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Nomor WhatsApp</label>
-            <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="0812...">
-          </div>
-          <div>
-            <label for="inpLayanan" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Pilih Treatment</label>
-            <select id="inpLayanan" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100">
-              <option value="">-- Pilih --</option>
-              <option value="Potong Rambut">Potong Rambut</option>
-              <option value="Cuci Catok / Blow">Cuci Catok / Blow</option>
-              <option value="Creambath">Creambath</option>
-              <option value="Hair Mask / Spa">Hair Mask / Spa</option>
-              <option value="Smoothing / Matrix">Smoothing / Matrix</option>
-              <option value="Coloring / Highlight">Coloring / Highlight</option>
-              <option value="Eyelash / Nail Art">Eyelash / Nail Art</option>
-              <option value="Lainnya (Custom)">Lainnya (Custom)</option>
-            </select>
-          </div>
+          <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nama Pelanggan">
+          <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nomor WA (0812...)">
+          <select id="inpLayanan" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100">
+            <option value="">-- Pilih Treatment --</option>
+            <option value="Potong Rambut">Potong Rambut</option>
+            <option value="Cuci Catok / Blow">Cuci Catok / Blow</option>
+            <option value="Creambath">Creambath</option>
+            <option value="Hair Mask / Spa">Hair Mask / Spa</option>
+            <option value="Smoothing / Matrix">Smoothing / Matrix</option>
+            <option value="Coloring / Highlight">Coloring / Highlight</option>
+            <option value="Eyelash / Nail Art">Eyelash / Nail Art</option>
+            <option value="Lainnya (Custom)">Lainnya (Custom)</option>
+          </select>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-3">
-          <div>
-            <label for="inpHarga" class="text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase block">Harga (Rp)</label>
-            <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600 outline-none" placeholder="0">
-          </div>
-          <div>
-            <label for="inpDiskon" class="text-[10px] font-bold text-orange-400 ml-2 mb-1 uppercase block">Diskon (Rp)</label>
-            <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold outline-none" placeholder="0">
-          </div>
+          <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600 outline-none" placeholder="Harga">
+          <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold outline-none" placeholder="Diskon">
         </div>
       </div>
 
       <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Total Tagihan</p>
         <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6 tracking-tight">Rp 0</h3>
-        <div class="space-y-4">
-          <div>
-            <label for="inpBayar" class="block text-[10px] text-slate-400 ml-2 mb-1 uppercase">Uang Tunai</label>
-            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl text-white outline-none focus:border-pink-500" placeholder="Rp 0">
-          </div>
-          <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
-            <span class="text-xs text-slate-400 font-bold uppercase">Kembalian:</span>
-            <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
-          </div>
+        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4" placeholder="Tunai...">
+        <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">Kembali:</span>
+          <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
         </div>
-        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 text-lg">
-          SIMPAN & KIRIM NOTA 📲
-        </button>
+        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all text-lg">SIMPAN & KIRIM NOTA 📲</button>
       </div>
     </div>
 
     <div id="tab-riwayat" class="tab-konten space-y-4">
       <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
         <div class="flex justify-between items-center">
-          <p class="text-[10px] font-bold text-slate-400 uppercase">Filter Data</p>
-          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">SINKRON CLOUD 🔄</button>
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Filter Laporan</p>
+          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">SINKRON 🔄</button>
         </div>
         <div class="flex gap-2 overflow-x-auto no-scrollbar">
           <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
           <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
         </div>
         <div class="pt-3 border-t border-slate-50">
-          <label for="filterTgl" class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Pilih Tanggal Spesifik</label>
-          <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold text-slate-600 border border-slate-200">
+          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Cari Tanggal Lain</label>
+          <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
         </div>
       </div>
 
       <div class="bg-emerald-600 text-white p-7 rounded-[2.5rem] shadow-xl relative overflow-hidden">
-        <p id="labelOmset" class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1 text-emerald-100">Total Omset</p>
-        <h4 id="txtOmset" class="text-4xl font-black tracking-tight">Rp 0</h4>
+        <p id="labelOmset" class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Total Omset</p>
+        <h4 id="txtOmset" class="text-4xl font-black">Rp 0</h4>
         <div class="absolute right-[-10px] bottom-[-10px] text-7xl opacity-10 rotate-12">💰</div>
       </div>
       
@@ -136,24 +113,20 @@
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
 
-    // FUNGSI SAKRAL: Membuat format tanggal D/M/YYYY yang selalu sama di semua alat
-    function getTglString(d) {
-      const date = new Date(d);
-      return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+    // FUNGSI NORMALISASI TANGGAL (Penyembuh Bug!)
+    function normalisasiKeISO(tglStr) {
+      if (!tglStr) return "";
+      if (tglStr.includes('/')) {
+        const p = tglStr.split('/');
+        // Format ke YYYY-MM-DD dengan padStart untuk nol di depan
+        return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
+      }
+      return tglStr; // Jika sudah format YYYY-MM-DD
     }
 
-    function putarSuaraTing() {
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine'; osc.frequency.setValueAtTime(1200, ctx.currentTime);
-        gain.gain.setValueAtTime(0.5, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 0.5);
-      } catch (e) {}
+    function getTglIndo() {
+      const d = new Date();
+      return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
     }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
@@ -171,7 +144,6 @@
         btn.classList.add('text-slate-500');
       });
       if(e) e.currentTarget.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
-      
       if(t === 'riwayat') muatData(); 
     }
 
@@ -188,8 +160,8 @@
       if(fullLoader) showLoader(true);
       try {
         const res = await fetch(SHEETS_URL);
-        const cloud = await res.json();
-        dTransaksi = cloud;
+        const data = await res.json();
+        dTransaksi = data;
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
       } catch (e) { console.log("Offline Mode"); }
@@ -204,28 +176,28 @@
       });
       if (f !== 'kalender') {
         const btn = document.getElementById('btn-f-'+f);
-        btn.classList.replace('bg-slate-100', 'bg-pink-500');
-        btn.classList.replace('text-white', 'text-white');
+        if(btn) {
+          btn.classList.replace('bg-slate-100', 'bg-pink-500');
+          btn.classList.replace('text-slate-500', 'text-white');
+        }
         document.getElementById('filterTgl').value = ''; 
       }
       renderRiwayat();
     }
 
     function renderRiwayat() {
-      const hariIniStr = getTglString(new Date());
+      const isoHariIni = normalisasiKeISO(getTglIndo());
       let filtered = dTransaksi;
-      let label = "Omset Semua";
+      let label = "Total Omset (Semua)";
 
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => String(t.Tanggal) === hariIniStr);
+        filtered = dTransaksi.filter(t => normalisasiKeISO(t.Tanggal) === isoHariIni);
         label = "Omset Hari Ini";
       } else if (currentFilter === 'kalender') {
-        const val = document.getElementById('filterTgl').value;
-        if (val) {
-          const p = val.split('-'); // YYYY-MM-DD
-          const tglTarget = `${parseInt(p[2])}/${parseInt(p[1])}/${p[0]}`;
-          filtered = dTransaksi.filter(t => String(t.Tanggal) === tglTarget);
-          label = "Omset Tgl " + tglTarget;
+        const tglPilihan = document.getElementById('filterTgl').value; // Ini sudah YYYY-MM-DD
+        if (tglPilihan) {
+          filtered = dTransaksi.filter(t => normalisasiKeISO(t.Tanggal) === tglPilihan);
+          label = "Omset Tgl " + tglPilihan.split('-').reverse().join('/');
         }
       }
 
@@ -234,9 +206,9 @@
       filtered.slice().reverse().forEach(t => {
         const nilai = clean(t["Total Tagihan"]);
         total += nilai;
-        html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center active:scale-95 transition-all">
+        html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
-                  <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'AS-00'}</p>
+                  <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'NOTA'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
@@ -249,7 +221,7 @@
 
       document.getElementById('labelOmset').innerText = label;
       document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
-      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
+      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Tidak ada transaksi ditemukan.</p>';
     }
 
     function generateNotaID() {
@@ -274,28 +246,23 @@
 
       if(!nama || !hp || !lay || harga <= 0) return alert('Mohon lengkapi data!');
       
-      putarSuaraTing();
       let id = generateNotaID();
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-      let tgl = getTglString(new Date());
+      const tgl = getTglIndo();
 
-      // Kirim Data
-      fetch(SHEETS_URL, {
-        method: 'POST',
-        body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total })
-      }).then(() => muatData());
-
-      const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
-
-      window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
-      
-      document.getElementById('inpNama').value = '';
-      document.getElementById('inpHp').value = '';
-      document.getElementById('inpLayanan').value = '';
-      document.getElementById('inpHarga').value = '';
-      document.getElementById('inpDiskon').value = '';
-      document.getElementById('inpBayar').value = '';
-      hitung();
+      showLoader(true);
+      try {
+        await fetch(SHEETS_URL, {
+          method: 'POST',
+          body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total })
+        });
+        
+        const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
+        
+        window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
+        location.reload();
+      } catch (e) { alert("Gagal kirim ke Cloud!"); }
+      showLoader(false);
     }
 
     async function hapus(id) {
