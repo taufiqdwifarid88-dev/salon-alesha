@@ -1,0 +1,16 @@
+{
+  "short_name": "Alesha",
+  "name": "Kasir Salon Alesha",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3141/3141011.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#db2777",
+  "background_color": "#ffffff"
+}
