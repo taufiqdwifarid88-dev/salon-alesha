@@ -66,9 +66,9 @@
       <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Total Tagihan</p>
         <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6 tracking-tight">Rp 0</h3>
-        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4 text-white" placeholder="Tunai...">
+        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4 text-white outline-none" placeholder="Uang Tunai...">
         <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-bold uppercase">Kembali:</span>
+          <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">Kembali:</span>
           <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
         </div>
         <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all text-lg">SIMPAN & KIRIM NOTA 📲</button>
@@ -79,14 +79,15 @@
       <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
         <div class="flex justify-between items-center">
           <p class="text-[10px] font-bold text-slate-400 uppercase">Laporan Transaksi</p>
-          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full active:scale-90 transition">REFRESH DATA 🔄</button>
+          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full active:scale-90 transition">REFRESH 🔄</button>
         </div>
-        <div class="flex gap-2 overflow-x-auto no-scrollbar">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
           <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
+          <button onclick="setFilter('bulan_ini')" id="btn-f-bulan_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Bulan Ini</button>
         </div>
         <div class="pt-3 border-t border-slate-50">
-          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Filter Tanggal Spesifik</label>
+          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Filter Tanggal Lain</label>
           <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
         </div>
       </div>
@@ -103,21 +104,13 @@
 
   <script>
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
-    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
 
-    // FUNGSI KUNCI: Menangani konversi tanggal dengan cerdas (Termasuk ISO UTC+7)
     function parseDateToISO(str) {
       if (!str) return "";
       let d = new Date(str);
-      
-      // Jika Date object valid, gunakan toLocaleDateString en-CA (Hasilnya YYYY-MM-DD)
-      if (!isNaN(d.getTime())) {
-        return d.toLocaleDateString('en-CA'); 
-      }
-      
-      // Fallback jika format D/M/YYYY manual
+      if (!isNaN(d.getTime())) return d.toLocaleDateString('en-CA'); 
       if (typeof str === 'string' && str.includes('/')) {
         const p = str.split('/');
         return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
@@ -125,15 +118,10 @@
       return "";
     }
 
-    function getTodayISO() {
-      return new Date().toLocaleDateString('en-CA');
-    }
+    function getTodayISO() { return new Date().toLocaleDateString('en-CA'); }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
-    function clean(s) { 
-      if (!s) return 0;
-      return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; 
-    }
+    function clean(s) { return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; }
     function formatRpInput(i) { 
       let v = i.value.replace(/[^0-9]/g, '');
       i.value = v ? formatRp(v) : '';
@@ -166,7 +154,7 @@
         dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
-      } catch (e) { console.log("Gagal muat data cloud"); }
+      } catch (e) { console.log("Gagal muat cloud"); }
       showLoader(false);
     }
 
@@ -188,32 +176,37 @@
     }
 
     function renderRiwayat() {
-      const targetHariIni = getTodayISO();
+      const todayISO = getTodayISO();
+      const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      const now = new Date();
+      
       let filtered = dTransaksi;
       let label = "Omset Semua";
 
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === targetHariIni);
+        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === todayISO);
         label = "Omset Hari Ini";
+      } else if (currentFilter === 'bulan_ini') {
+        const thisMonth = todayISO.substring(0, 7); // Hasil: YYYY-MM
+        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal).startsWith(thisMonth));
+        label = "Omset " + monthNames[now.getMonth()] + " " + now.getFullYear();
       } else if (currentFilter === 'kalender') {
-        const tglPilihan = document.getElementById('filterTgl').value; // YYYY-MM-DD
+        const tglPilihan = document.getElementById('filterTgl').value;
         if (tglPilihan) {
           filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === tglPilihan);
           label = "Omset Tgl " + tglPilihan.split('-').reverse().join('/');
         }
       }
 
-      let totalOmset = 0;
-      let htmlContent = '';
+      let total = 0;
+      let html = '';
       filtered.slice().reverse().forEach(t => {
         const nilai = clean(t["Total Akhir"] || t["Total Tagihan"] || 0);
-        totalOmset += nilai;
-        
-        // Tampilkan tanggal yang rapi di list
+        total += nilai;
         let tglAsli = t.Tanggal;
         let tglRapi = !isNaN(new Date(tglAsli).getTime()) ? new Date(tglAsli).toLocaleDateString('id-ID') : tglAsli;
 
-        htmlContent += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
+        html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
                   <p class="text-[10px] text-slate-400 font-bold">${tglRapi} • ${t["ID Nota"] || 'AS-00'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
@@ -227,8 +220,8 @@
       });
 
       document.getElementById('labelOmset').innerText = label;
-      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(totalOmset);
-      document.getElementById('listRiwayat').innerHTML = htmlContent || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
+      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
+      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
     }
 
     function generateNotaID() {
@@ -255,7 +248,7 @@
       
       let id = generateNotaID();
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-      const tgl = new Date().toLocaleDateString('id-ID'); // Simpan format Indo
+      const tgl = new Date().toLocaleDateString('id-ID');
 
       showLoader(true);
       try {
