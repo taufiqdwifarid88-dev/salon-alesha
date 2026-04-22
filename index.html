@@ -66,27 +66,27 @@
       <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Total Tagihan</p>
         <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6 tracking-tight">Rp 0</h3>
-        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4 text-white outline-none focus:border-pink-500" placeholder="Tunai...">
+        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4 text-white" placeholder="Tunai...">
         <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">Kembali:</span>
+          <span class="text-xs text-slate-400 font-bold uppercase">Kembali:</span>
           <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
         </div>
-        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all text-lg tracking-wide">SIMPAN & KIRIM NOTA 📲</button>
+        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all text-lg">SIMPAN & KIRIM NOTA 📲</button>
       </div>
     </div>
 
     <div id="tab-riwayat" class="tab-konten space-y-4">
       <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
         <div class="flex justify-between items-center">
-          <p class="text-[10px] font-bold text-slate-400 uppercase">Filter Laporan</p>
-          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full active:scale-90 transition">SINKRON DATA 🔄</button>
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Laporan Transaksi</p>
+          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full active:scale-90 transition">REFRESH DATA 🔄</button>
         </div>
         <div class="flex gap-2 overflow-x-auto no-scrollbar">
           <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
           <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
         </div>
         <div class="pt-3 border-t border-slate-50">
-          <label for="filterTgl" class="text-[10px] font-bold text-slate-400 uppercase mb-1 block">Pilih Tanggal Spesifik</label>
+          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Filter Tanggal Spesifik</label>
           <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
         </div>
       </div>
@@ -103,33 +103,30 @@
 
   <script>
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
+    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
 
-    // FUNGSI PINTAR: Menangani format ISO (T dan Z) maupun format D/M/YYYY
-    function toISO(str) {
+    // FUNGSI KUNCI: Menangani konversi tanggal dengan cerdas (Termasuk ISO UTC+7)
+    function parseDateToISO(str) {
       if (!str) return "";
-      let s = String(str);
+      let d = new Date(str);
       
-      // Jika format ISO (seperti di foto Mas Taufiq: 2026-04-22T17:00...)
-      if (s.includes('T')) {
-        let tglMurni = s.split('T')[0]; // Ambil 2026-04-22
-        // Karena ISO biasanya bergeser 1 hari karena UTC, kita koreksi jika perlu
-        // Tapi untuk cari aman, kita ambil tanggal murninya saja
-        return tglMurni;
+      // Jika Date object valid, gunakan toLocaleDateString en-CA (Hasilnya YYYY-MM-DD)
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('en-CA'); 
       }
       
-      // Jika format D/M/YYYY
-      if (s.includes('/')) {
-        const p = s.split('/');
+      // Fallback jika format D/M/YYYY manual
+      if (typeof str === 'string' && str.includes('/')) {
+        const p = str.split('/');
         return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
       }
-      return s;
+      return "";
     }
 
-    function getTglIndo() {
-      const d = new Date();
-      return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+    function getTodayISO() {
+      return new Date().toLocaleDateString('en-CA');
     }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
@@ -169,7 +166,7 @@
         dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
-      } catch (e) { console.log("Gagal muat cloud"); }
+      } catch (e) { console.log("Gagal muat data cloud"); }
       showLoader(false);
     }
 
@@ -191,32 +188,34 @@
     }
 
     function renderRiwayat() {
-      const isoHariIni = toISO(getTglIndo());
+      const targetHariIni = getTodayISO();
       let filtered = dTransaksi;
-      let label = "Total Omset (Semua)";
+      let label = "Omset Semua";
 
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => toISO(t.Tanggal) === isoHariIni);
+        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === targetHariIni);
         label = "Omset Hari Ini";
       } else if (currentFilter === 'kalender') {
-        const tglPilihan = document.getElementById('filterTgl').value;
+        const tglPilihan = document.getElementById('filterTgl').value; // YYYY-MM-DD
         if (tglPilihan) {
-          filtered = dTransaksi.filter(t => toISO(t.Tanggal) === tglPilihan);
-          label = "Omset Tanggal " + tglPilihan.split('-').reverse().join('/');
+          filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === tglPilihan);
+          label = "Omset Tgl " + tglPilihan.split('-').reverse().join('/');
         }
       }
 
-      let total = 0;
-      let html = '';
+      let totalOmset = 0;
+      let htmlContent = '';
       filtered.slice().reverse().forEach(t => {
         const nilai = clean(t["Total Akhir"] || t["Total Tagihan"] || 0);
-        total += nilai;
-        // Tampilkan format tanggal yang manusiawi di list, meski di sistem pakainya ISO
-        let tglTampil = String(t.Tanggal).includes('T') ? String(t.Tanggal).split('T')[0] : t.Tanggal;
+        totalOmset += nilai;
+        
+        // Tampilkan tanggal yang rapi di list
+        let tglAsli = t.Tanggal;
+        let tglRapi = !isNaN(new Date(tglAsli).getTime()) ? new Date(tglAsli).toLocaleDateString('id-ID') : tglAsli;
 
-        html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
+        htmlContent += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
-                  <p class="text-[10px] text-slate-400 font-bold">${tglTampil} • ${t["ID Nota"] || 'AS-00'}</p>
+                  <p class="text-[10px] text-slate-400 font-bold">${tglRapi} • ${t["ID Nota"] || 'AS-00'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
@@ -228,8 +227,8 @@
       });
 
       document.getElementById('labelOmset').innerText = label;
-      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
-      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
+      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(totalOmset);
+      document.getElementById('listRiwayat').innerHTML = htmlContent || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
     }
 
     function generateNotaID() {
@@ -256,7 +255,7 @@
       
       let id = generateNotaID();
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-      const tgl = getTglIndo();
+      const tgl = new Date().toLocaleDateString('id-ID'); // Simpan format Indo
 
       showLoader(true);
       try {
