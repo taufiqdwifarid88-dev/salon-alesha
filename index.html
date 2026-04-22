@@ -29,7 +29,7 @@
   </nav>
 
   <div id="loader" class="hidden fixed inset-0 bg-white/60 backdrop-blur-sm z-[100] flex items-center justify-center font-bold text-pink-600 italic text-center px-4">
-    <div class="p-5 bg-white rounded-2xl shadow-xl">Memproses Cloud... ☁️</div>
+    <div class="p-5 bg-white rounded-2xl shadow-xl">Memproses Data... ☁️</div>
   </div>
 
   <div class="max-w-2xl mx-auto p-4">
@@ -85,7 +85,7 @@
             <label for="inpBayar" class="block text-[10px] text-slate-400 ml-2 mb-1 uppercase">Uang Tunai</label>
             <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl text-white outline-none" placeholder="Masukkan nominal...">
           </div>
-          <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl border border-slate-700/30">
+          <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
             <span class="text-xs text-slate-400">Kembalian:</span>
             <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
           </div>
@@ -98,13 +98,28 @@
     </div>
 
     <div id="tab-riwayat" class="tab-konten space-y-4">
-      <div id="listRiwayat" class="space-y-3"></div>
+      <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex gap-2 overflow-x-auto no-scrollbar">
+        <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
+        <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
+        <button onclick="setFilter('bulan_ini')" id="btn-f-bulan_ini" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Bulan Ini</button>
+      </div>
+
+      <div class="bg-emerald-500 text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
+        <div class="relative z-10">
+          <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Total Omset Terfilter</p>
+          <h4 id="txtOmset" class="text-3xl font-black">Rp 0</h4>
+        </div>
+        <div class="absolute right-[-10px] bottom-[-10px] text-6xl opacity-10 rotate-12">💰</div>
+      </div>
+
+      <div id="listRiwayat" class="space-y-3 pb-20"></div>
     </div>
   </div>
 
   <script>
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
+    let currentFilter = 'semua';
 
     function putarSuaraTing() {
       try {
@@ -158,9 +173,29 @@
       showLoader(false);
     }
 
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.replace('bg-pink-500', 'bg-slate-100');
+        btn.classList.replace('text-white', 'text-slate-500');
+      });
+      document.getElementById('btn-f-'+f).classList.replace('bg-slate-100', 'bg-pink-500');
+      document.getElementById('btn-f-'+f).classList.replace('text-slate-500', 'text-white');
+      renderRiwayat();
+    }
+
     function renderRiwayat() {
+      const tglSkrg = new Date().toLocaleDateString('id-ID');
+      const blnSkrg = tglSkrg.split('/').slice(1).join('/');
+
+      let filtered = dTransaksi;
+      if(currentFilter === 'hari_ini') filtered = dTransaksi.filter(t => t.Tanggal === tglSkrg);
+      if(currentFilter === 'bulan_ini') filtered = dTransaksi.filter(t => t.Tanggal.includes(blnSkrg));
+
+      let omset = 0;
       let h = '';
-      dTransaksi.slice().reverse().forEach(t => {
+      filtered.slice().reverse().forEach(t => {
+        omset += parseInt(t["Total Tagihan"] || 0);
         h += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
                   <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'NOTA'}</p>
@@ -173,7 +208,8 @@
                 </div>
               </div>`;
       });
-      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10">Belum ada transaksi</p>';
+      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(omset);
+      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10">Data tidak ditemukan</p>';
     }
 
     async function simpan() {
@@ -182,7 +218,6 @@
       const lay = document.getElementById('inpLayanan').value;
       const harga = clean(document.getElementById('inpHarga').value);
       const diskon = clean(document.getElementById('inpDiskon').value);
-      const bayar = clean(document.getElementById('inpBayar').value);
       const total = harga - diskon;
 
       if(!nama || !hp || !lay || harga <= 0) return alert('Lengkapi data ya!');
@@ -192,7 +227,7 @@
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
       let tgl = new Date().toLocaleDateString('id-ID');
 
-      dTransaksi.push({ "Tanggal": tgl, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Diskon": diskon, "Total Tagihan": total });
+      dTransaksi.push({ "Tanggal": tgl, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Total Tagihan": total });
       localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
 
       fetch(SHEETS_URL, {
@@ -201,7 +236,9 @@
       });
 
       let barisDiskon = diskon > 0 ? `%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}` : "";
-      const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}${barisDiskon}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih! ✨_`;
+      
+      // PESAN WHATSAPP SESUAI PERMINTAAN
+      const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}${barisDiskon}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
 
       window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
       
@@ -222,6 +259,7 @@
     }
 
     function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
+    
     renderRiwayat();
     muatData();
   </script>
