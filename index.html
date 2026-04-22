@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir Salon Alesha Online</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+    .fade-in { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="text-slate-800">
+
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 p-4">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">💇‍♀️</span>
+        <h1 class="text-lg font-extrabold text-pink-600">Salon Alesha</h1>
+      </div>
+      <div class="flex gap-1 bg-slate-100 p-1 rounded-xl">
+        <button onclick="bukaTab('kasir')" class="px-4 py-2 rounded-lg text-xs font-bold transition">Kasir</button>
+        <button onclick="bukaTab('riwayat')" class="px-4 py-2 rounded-lg text-xs font-bold transition">Laporan</button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="loader" class="hidden fixed inset-0 bg-white/60 backdrop-blur-sm z-[100] flex items-center justify-center font-bold text-pink-600 italic">
+    Menghubungkan ke Cloud... ☁️
+  </div>
+
+  <div class="max-w-2xl mx-auto p-4">
+    <div id="tab-kasir" class="tab-konten fade-in space-y-4">
+      <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100">
+        <h2 class="font-bold mb-4 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded">📝</span> Input Transaksi</h2>
+        <input type="text" id="inpNama" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nama Pelanggan">
+        <input type="tel" id="inpHp" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="No WA (0812...)">
+        <select id="inpLayanan" class="w-full p-4 mb-3 bg-slate-50 rounded-2xl outline-none">
+          <option value="">-- Pilih Treatment --</option>
+          <option value="Potong Rambut">Potong Rambut</option>
+          <option value="Cuci Catok">Cuci Catok</option>
+          <option value="Creambath">Creambath</option>
+          <option value="Smoothing">Smoothing</option>
+          <option value="Coloring">Coloring</option>
+        </select>
+        <div class="grid grid-cols-2 gap-3">
+          <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600" placeholder="Harga">
+          <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold" placeholder="Diskon">
+        </div>
+      </div>
+
+      <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
+        <p class="text-slate-400 text-sm">Total Bayar</p>
+        <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6">Rp 0</h3>
+        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 mb-4 font-bold text-xl" placeholder="Uang Tunai...">
+        <div class="flex justify-between text-sm mb-6">
+          <span>Kembalian:</span>
+          <span id="txtKembali" class="font-bold">Rp 0</span>
+        </div>
+        <button onclick="simpan()" class="w-full bg-pink-500 hover:bg-pink-600 py-4 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 transition-all">SIMPAN & KIRIM WA 📲</button>
+      </div>
+    </div>
+
+    <div id="tab-riwayat" class="tab-konten hidden fade-in space-y-4">
+      <div id="listRiwayat" class="space-y-3">
+        </div>
+    </div>
+  </div>
+
+  <script>
+    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; // GANTI INI
+    let dTransaksi = [];
+
+    function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
+    function clean(s) { return parseInt(s.replace(/\./g, '')) || 0; }
+    function formatRpInput(i) { 
+      let v = i.value.replace(/[^0-9]/g, '');
+      i.value = v ? formatRp(v) : '';
+    }
+
+    function bukaTab(t) {
+      document.querySelectorAll('.tab-konten').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-'+t).classList.remove('hidden');
+      if(t === 'riwayat') muatData();
+    }
+
+    function hitung() {
+      let h = clean(document.getElementById('inpHarga').value);
+      let d = clean(document.getElementById('inpDiskon').value);
+      let b = clean(document.getElementById('inpBayar').value);
+      let t = Math.max(0, h - d);
+      document.getElementById('txtTotal').innerText = 'Rp ' + formatRp(t);
+      document.getElementById('txtKembali').innerText = 'Rp ' + formatRp(Math.max(0, b - t));
+    }
+
+    async function muatData() {
+      showLoader(true);
+      const res = await fetch(SHEETS_URL);
+      dTransaksi = await res.json();
+      let h = '';
+      dTransaksi.slice().reverse().forEach(t => {
+        h += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center">
+                <div>
+                  <p class="text-xs text-slate-400">${t.Tanggal}</p>
+                  <p class="font-bold text-slate-700">${t.Pelanggan}</p>
+                  <p class="text-xs text-pink-500">${t.Treatment}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-black">Rp ${formatRp(t["Total Tagihan"])}</p>
+                  <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded">Hapus</button>
+                </div>
+              </div>`;
+      });
+      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10">Belum ada transaksi</p>';
+      showLoader(false);
+    }
+
+    async function simpan() {
+      const nama = document.getElementById('inpNama').value;
+      const hp = document.getElementById('inpHp').value;
+      const lay = document.getElementById('inpLayanan').value;
+      const harga = clean(document.getElementById('inpHarga').value);
+      const diskon = clean(document.getElementById('inpDiskon').value);
+      const total = harga - diskon;
+
+      if(!nama || !hp || !lay || harga <= 0) return alert('Lengkapi data!');
+      
+      showLoader(true);
+      let id = 'NOTA-' + Math.floor(Math.random()*10000);
+      let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
+
+      await fetch(SHEETS_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          tanggal: new Date().toLocaleDateString('id-ID'),
+          idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total
+        })
+      });
+
+      const msg = `*NOTA SALON ALESHA*%0A-----------------%0ANama: ${nama}%0ATreatment: ${lay}%0ATotal: Rp ${formatRp(total)}%0A-----------------%0ATerima kasih! ✨`;
+      window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
+      location.reload();
+    }
+
+    async function hapus(id) {
+      if(!confirm('Hapus nota ini?')) return;
+      showLoader(true);
+      await fetch(SHEETS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'DELETE', idNota: id })
+      });
+      muatData();
+    }
+
+    function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
+    
+    bukaTab('kasir');
+  </script>
+</body>
+</html>
