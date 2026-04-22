@@ -1,7 +1,31 @@
 <script>
-    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; // Pastikan URL Anda masuk ke sini
+    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; // Pastikan URL Anda tetap di sini
     let dTransaksi = [];
-    let isDataLoaded = false; // Mencegah loading berulang kali
+    let isDataLoaded = false;
+
+    // FITUR BARU: Pencipta Suara "Ting!" Digital
+    function putarSuaraTing() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine'; // Menghasilkan suara jernih seperti bel/kaca
+        osc.frequency.setValueAtTime(1200, ctx.currentTime); // Nada tinggi
+        
+        gain.gain.setValueAtTime(0.5, ctx.currentTime); // Volume awal
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5); // Efek suara memudar perlahan (echo)
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5); // Berhenti dalam setengah detik
+      } catch (e) {
+        console.log("Fitur suara tidak didukung", e);
+      }
+    }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
     function clean(s) { return parseInt(s.replace(/\./g, '')) || 0; }
@@ -14,11 +38,10 @@
       document.querySelectorAll('.tab-konten').forEach(el => el.classList.add('hidden'));
       document.getElementById('tab-'+t).classList.remove('hidden');
       
-      // Hanya loading data dari Cloud jika belum pernah dimuat (Sangat Mempercepat!)
       if(t === 'riwayat' && !isDataLoaded) {
         muatData();
       } else if (t === 'riwayat') {
-        renderRiwayat(); // Langsung tampilkan tanpa loading jika data sudah ada
+        renderRiwayat(); 
       }
     }
 
@@ -68,59 +91,67 @@
       const lay = document.getElementById('inpLayanan').value;
       const harga = clean(document.getElementById('inpHarga').value);
       const diskon = clean(document.getElementById('inpDiskon').value);
-      const total = harga - diskon;
+      const bayar = clean(document.getElementById('inpBayar').value);
+      const total = Math.max(0, harga - diskon);
+      const kembalian = Math.max(0, bayar - total);
 
       if(!nama || !hp || !lay || harga <= 0) return alert('Lengkapi data ya Kak!');
+      if(bayar > 0 && bayar < total) return alert('Uang bayar masih kurang nih.');
       
+      // ✅ MEMAINKAN SUARA TING SAAT DATA VALID
+      putarSuaraTing();
+
       let id = 'NOTA-' + Math.floor(Math.random()*10000);
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
       let tglSekarang = new Date().toLocaleDateString('id-ID');
 
-      // Tampilkan efek loading sekejap mata saja (setengah detik)
       showLoader(true);
 
-      // KODE RAHASIA KILAT: Kirim ke Google Sheets TANPA "await" (Dibiarkan jalan di latar belakang)
+      // Kirim ke cloud
       fetch(SHEETS_URL, {
         method: 'POST',
         body: JSON.stringify({
           tanggal: tglSekarang,
           idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total
         })
-      }).catch(e => console.log("Jaringan lemot, tapi data aman:", e));
+      }).catch(e => console.log("Data aman dikirim di background", e));
 
-      // Tambahkan data ke HP secara lokal agar tidak perlu download ulang dari Google
       dTransaksi.push({
         "Tanggal": tglSekarang, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Diskon": diskon, "Total Tagihan": total
       });
 
-      // Lanjut ke WhatsApp dalam hitungan milidetik
+      // WA & Reset Formulir
       setTimeout(() => {
         showLoader(false);
-        const msg = `*NOTA SALON ALESHA*%0A-----------------%0ANama: ${nama}%0ATreatment: ${lay}%0ATotal: Rp ${formatRp(total)}%0A-----------------%0ATerima kasih! ✨`;
+        
+        let barisDiskon = '';
+        if (diskon > 0) {
+          barisDiskon = `%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}`;
+        }
+
+        const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tglSekarang}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}${barisDiskon}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A💵 *Tunai:* Rp ${formatRp(bayar)}%0A💳 *Kembali:* Rp ${formatRp(kembalian)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
+        
         window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
         
-        // Reset Formulir Kosong Bersih Tanpa Reload Halaman (Biar Mulus)
+        // Bersihkan Kolom
         document.getElementById('inpNama').value = '';
         document.getElementById('inpHp').value = '';
         document.getElementById('inpLayanan').value = '';
         document.getElementById('inpHarga').value = '';
         document.getElementById('inpDiskon').value = '';
         document.getElementById('inpBayar').value = '';
-        hitung(); // Reset angka total
+        hitung(); 
         
-        // Tampilkan halaman riwayat jika mau
         renderRiwayat();
-      }, 500); // 500ms (Setengah detik saja!)
+      }, 500); 
     }
 
     function hapus(id) {
       if(!confirm('Hapus nota ini?')) return;
       
-      // Hapus lokal secara instan biar cepat
       dTransaksi = dTransaksi.filter(t => t["ID Nota"] !== id);
       renderRiwayat();
 
-      // Hapus di cloud secara diam-diam
       fetch(SHEETS_URL, {
         method: 'POST',
         body: JSON.stringify({ action: 'DELETE', idNota: id })
@@ -129,7 +160,6 @@
 
     function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
     
-    // Muat data langsung saat aplikasi pertama kali dibuka
     muatData();
     bukaTab('kasir');
   </script>
