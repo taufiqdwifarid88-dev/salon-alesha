@@ -9,12 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body { 
-      font-family: 'Plus Jakarta Sans', sans-serif; 
-      background-color: #f8fafc; 
-      overscroll-behavior-y: none; 
-      touch-action: pan-x pan-y;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overscroll-behavior-y: none; }
     .tab-konten { display: none; }
     .tab-konten.active { display: block; animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -37,17 +32,16 @@
   </nav>
 
   <div id="loader" class="hidden fixed inset-0 bg-white/70 backdrop-blur-md z-[100] flex items-center justify-center">
-    <div class="flex flex-col items-center gap-3">
-      <div class="w-12 h-12 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin"></div>
-      <p class="font-bold text-pink-600 italic">Menyinkronkan... ☁️</p>
+    <div class="text-center">
+      <div class="w-10 h-10 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin mx-auto mb-2"></div>
+      <p class="text-xs font-bold text-pink-600 italic">Sinkronisasi Cloud...</p>
     </div>
   </div>
 
   <div class="max-w-2xl mx-auto p-4">
-    
     <div id="tab-kasir" class="tab-konten active space-y-4">
       <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100">
-        <h2 class="font-bold mb-4 text-slate-700 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Input Transaksi</h2>
+        <h2 class="font-bold mb-4 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Input Transaksi</h2>
         <div class="space-y-3">
           <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nama Pelanggan">
           <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nomor WA (0812...)">
@@ -92,7 +86,7 @@
           <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
         </div>
         <div class="pt-3 border-t border-slate-50">
-          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Cari Tanggal Lain</label>
+          <label for="filterTgl" class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Pilih Tanggal</label>
           <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
         </div>
       </div>
@@ -109,19 +103,16 @@
 
   <script>
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
-    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
 
-    // FUNGSI NORMALISASI TANGGAL (Penyembuh Bug!)
-    function normalisasiKeISO(tglStr) {
-      if (!tglStr) return "";
-      if (tglStr.includes('/')) {
-        const p = tglStr.split('/');
-        // Format ke YYYY-MM-DD dengan padStart untuk nol di depan
-        return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
-      }
-      return tglStr; // Jika sudah format YYYY-MM-DD
+    // NORMALISASI TANGGAL: Mengubah D/M/YYYY atau M/D/YYYY menjadi YYYY-MM-DD
+    function toISO(str) {
+      if (!str || typeof str !== 'string') return "";
+      const p = str.split('/');
+      if (p.length !== 3) return "";
+      // Kita asumsikan format Google Sheets Anda adalah D/M/YYYY
+      return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
     }
 
     function getTglIndo() {
@@ -130,7 +121,10 @@
     }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
-    function clean(s) { return parseInt(String(s).replace(/\./g, '')) || 0; }
+    function clean(s) { 
+      if (!s) return 0;
+      return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; 
+    }
     function formatRpInput(i) { 
       let v = i.value.replace(/[^0-9]/g, '');
       i.value = v ? formatRp(v) : '';
@@ -160,11 +154,10 @@
       if(fullLoader) showLoader(true);
       try {
         const res = await fetch(SHEETS_URL);
-        const data = await res.json();
-        dTransaksi = data;
+        dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
-      } catch (e) { console.log("Offline Mode"); }
+      } catch (e) { console.log("Gagal muat data cloud"); }
       showLoader(false);
     }
 
@@ -186,17 +179,17 @@
     }
 
     function renderRiwayat() {
-      const isoHariIni = normalisasiKeISO(getTglIndo());
+      const isoHariIni = toISO(getTglIndo());
       let filtered = dTransaksi;
-      let label = "Total Omset (Semua)";
+      let label = "Omset Semua";
 
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => normalisasiKeISO(t.Tanggal) === isoHariIni);
+        filtered = dTransaksi.filter(t => toISO(t.Tanggal) === isoHariIni);
         label = "Omset Hari Ini";
       } else if (currentFilter === 'kalender') {
-        const tglPilihan = document.getElementById('filterTgl').value; // Ini sudah YYYY-MM-DD
+        const tglPilihan = document.getElementById('filterTgl').value; // YYYY-MM-DD
         if (tglPilihan) {
-          filtered = dTransaksi.filter(t => normalisasiKeISO(t.Tanggal) === tglPilihan);
+          filtered = dTransaksi.filter(t => toISO(t.Tanggal) === tglPilihan);
           label = "Omset Tgl " + tglPilihan.split('-').reverse().join('/');
         }
       }
@@ -204,11 +197,12 @@
       let total = 0;
       let html = '';
       filtered.slice().reverse().forEach(t => {
-        const nilai = clean(t["Total Tagihan"]);
+        // PERBAIKAN: Cari data di kolom "Total Akhir" atau "Total Tagihan"
+        const nilai = clean(t["Total Akhir"] || t["Total Tagihan"] || 0);
         total += nilai;
         html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
-                  <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'NOTA'}</p>
+                  <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'AS-00'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
@@ -221,7 +215,7 @@
 
       document.getElementById('labelOmset').innerText = label;
       document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
-      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Tidak ada transaksi ditemukan.</p>';
+      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
     }
 
     function generateNotaID() {
