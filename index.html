@@ -4,13 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kasir Salon Alesha Online</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#db2777">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3141/3141011.png">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
     .tab-konten { display: none; }
     .tab-konten.active { display: block; animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -18,7 +25,7 @@
   <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/50 p-4">
     <div class="max-w-5xl mx-auto flex justify-between items-center">
       <div class="flex items-center gap-2">
-        <span class="text-2xl">💇‍♀️</span>
+        <span class="text-2xl" role="img" aria-label="logo">💇‍♀️</span>
         <h1 class="text-lg font-extrabold text-pink-600">Salon Alesha</h1>
       </div>
       <div class="flex gap-1 bg-slate-100 p-1 rounded-xl">
@@ -29,10 +36,11 @@
   </nav>
 
   <div id="loader" class="hidden fixed inset-0 bg-white/60 backdrop-blur-sm z-[100] flex items-center justify-center font-bold text-pink-600 italic text-center px-4">
-    <div class="p-5 bg-white rounded-2xl shadow-xl">Memproses Data... ☁️</div>
+    <div class="p-5 bg-white rounded-2xl shadow-xl border border-pink-100">Memproses Cloud... ☁️</div>
   </div>
 
   <div class="max-w-2xl mx-auto p-4">
+    
     <div id="tab-kasir" class="tab-konten active space-y-4">
       <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100">
         <h2 class="font-bold mb-4 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Transaksi Baru</h2>
@@ -40,18 +48,18 @@
         <div class="space-y-3">
           <div>
             <label for="inpNama" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Nama Pelanggan</label>
-            <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Ketik nama...">
+            <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="Nama Pelanggan">
           </div>
 
           <div>
             <label for="inpHp" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Nomor WhatsApp</label>
-            <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="0812...">
+            <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="0812...">
           </div>
           
           <div>
-            <label for="inpLayanan" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Pilih Treatment</label>
-            <select id="inpLayanan" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100">
-              <option value="">-- Sentuh untuk Pilih --</option>
+            <label for="inpLayanan" class="block text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase">Jenis Treatment</label>
+            <select id="inpLayanan" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-pink-500 transition-all appearance-none">
+              <option value="">-- Pilih Treatment --</option>
               <option value="Potong Rambut">Potong Rambut</option>
               <option value="Cuci Catok / Blow">Cuci Catok / Blow</option>
               <option value="Creambath">Creambath</option>
@@ -64,60 +72,62 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 mt-3">
+        <div class="grid grid-cols-2 gap-3 mt-4">
           <div>
             <label for="inpHarga" class="text-[10px] font-bold text-slate-400 ml-2 mb-1 uppercase block">Harga (Rp)</label>
-            <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600 outline-none" placeholder="0">
+            <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600 outline-none focus:border-pink-500 shadow-sm" placeholder="0">
           </div>
           <div>
             <label for="inpDiskon" class="text-[10px] font-bold text-orange-400 ml-2 mb-1 uppercase block">Diskon (Rp)</label>
-            <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold outline-none" placeholder="0">
+            <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold outline-none focus:bg-white focus:border-orange-400 transition-all" placeholder="0">
           </div>
         </div>
       </div>
 
-      <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
-        <p class="text-slate-400 text-xs font-bold uppercase mb-1">Total Bayar</p>
-        <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6">Rp 0</h3>
+      <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl border border-slate-800">
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Tagihan</p>
+        <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6 tracking-tight">Rp 0</h3>
         
         <div class="space-y-4">
           <div>
-            <label for="inpBayar" class="block text-[10px] text-slate-400 ml-2 mb-1 uppercase">Uang Tunai</label>
-            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl text-white outline-none" placeholder="Masukkan nominal...">
+            <label for="inpBayar" class="block text-[10px] text-slate-500 ml-2 mb-1 uppercase font-bold">Uang Tunai</label>
+            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl text-white outline-none focus:border-pink-500 transition-all" placeholder="Rp 0">
           </div>
-          <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
-            <span class="text-xs text-slate-400">Kembalian:</span>
-            <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
+          <div class="flex justify-between items-center bg-slate-800/40 p-4 rounded-2xl border border-slate-700/30">
+            <span class="text-xs text-slate-400 font-bold uppercase">Kembalian:</span>
+            <span id="txtKembali" class="font-bold text-2xl text-emerald-400">Rp 0</span>
           </div>
         </div>
 
-        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
+        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/40 active:scale-95 transition-all flex items-center justify-center gap-3 text-lg">
           SIMPAN & KIRIM NOTA 📲
         </button>
       </div>
     </div>
 
     <div id="tab-riwayat" class="tab-konten space-y-4">
-      <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 flex gap-2 overflow-x-auto no-scrollbar">
+      <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex gap-2 overflow-x-auto no-scrollbar">
         <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
         <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
         <button onclick="setFilter('bulan_ini')" id="btn-f-bulan_ini" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Bulan Ini</button>
       </div>
 
-      <div class="bg-emerald-500 text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
+      <div class="bg-emerald-500 text-white p-7 rounded-[2rem] shadow-xl relative overflow-hidden">
         <div class="relative z-10">
-          <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Total Omset Terfilter</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Omset Terpilih</p>
           <h4 id="txtOmset" class="text-3xl font-black">Rp 0</h4>
         </div>
-        <div class="absolute right-[-10px] bottom-[-10px] text-6xl opacity-10 rotate-12">💰</div>
+        <div class="absolute right-[-10px] bottom-[-10px] text-7xl opacity-10 rotate-12" aria-hidden="true">💰</div>
       </div>
 
-      <div id="listRiwayat" class="space-y-3 pb-20"></div>
+      <div id="listRiwayat" class="space-y-3 pb-24"></div>
     </div>
   </div>
 
   <script>
+    // URL Google Sheets Mas Taufiq
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
+    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
 
@@ -149,7 +159,10 @@
         btn.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
         btn.classList.add('text-slate-500');
       });
-      if(e) e.currentTarget.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+      if(e) {
+        e.currentTarget.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
+        e.currentTarget.classList.remove('text-slate-500');
+      }
       if(t === 'riwayat') renderRiwayat();
     }
 
@@ -169,7 +182,7 @@
         dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
-      } catch (e) {}
+      } catch (e) { console.log("Mode Offline"); }
       showLoader(false);
     }
 
@@ -190,26 +203,26 @@
 
       let filtered = dTransaksi;
       if(currentFilter === 'hari_ini') filtered = dTransaksi.filter(t => t.Tanggal === tglSkrg);
-      if(currentFilter === 'bulan_ini') filtered = dTransaksi.filter(t => t.Tanggal.includes(blnSkrg));
+      if(currentFilter === 'bulan_ini') filtered = dTransaksi.filter(t => String(t.Tanggal).includes(blnSkrg));
 
       let omset = 0;
       let h = '';
       filtered.slice().reverse().forEach(t => {
         omset += parseInt(t["Total Tagihan"] || 0);
-        h += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
+        h += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all active:scale-95">
                 <div>
                   <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'NOTA'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
                 <div class="text-right">
-                  <p class="font-black text-slate-800">Rp ${formatRp(t["Total Tagihan"])}</p>
+                  <p class="font-black text-slate-800 text-base">Rp ${formatRp(t["Total Tagihan"])}</p>
                   <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1">Hapus</button>
                 </div>
               </div>`;
       });
       document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(omset);
-      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10">Data tidak ditemukan</p>';
+      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10 text-sm italic">Belum ada data...</p>';
     }
 
     async function simpan() {
@@ -218,40 +231,47 @@
       const lay = document.getElementById('inpLayanan').value;
       const harga = clean(document.getElementById('inpHarga').value);
       const diskon = clean(document.getElementById('inpDiskon').value);
+      const bayar = clean(document.getElementById('inpBayar').value);
       const total = harga - diskon;
+      const kembali = bayar - total;
 
-      if(!nama || !hp || !lay || harga <= 0) return alert('Lengkapi data ya!');
-      
+      if(!nama || !hp || !lay || harga <= 0) return alert('Ups! Mohon lengkapi data transaksi.');
+      if(bayar > 0 && bayar < total) return alert('Uang bayar masih kurang.');
+
       putarSuaraTing();
       let id = 'NOTA-' + Math.floor(Math.random()*9000 + 1000);
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
       let tgl = new Date().toLocaleDateString('id-ID');
 
-      dTransaksi.push({ "Tanggal": tgl, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Total Tagihan": total });
+      // Update Lokal
+      dTransaksi.push({ "Tanggal": tgl, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Diskon": diskon, "Total Tagihan": total });
       localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
 
+      // Kirim Cloud Background
       fetch(SHEETS_URL, {
         method: 'POST',
         body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total })
       });
 
+      // PESAN WHATSAPP KOMPLIT
       let barisDiskon = diskon > 0 ? `%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}` : "";
-      
-      // PESAN WHATSAPP SESUAI PERMINTAAN
       const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}${barisDiskon}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
 
       window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
       
+      // Reset Form Tanpa Reload
       document.getElementById('inpNama').value = '';
       document.getElementById('inpHp').value = '';
+      document.getElementById('inpLayanan').value = '';
       document.getElementById('inpHarga').value = '';
       document.getElementById('inpDiskon').value = '';
       document.getElementById('inpBayar').value = '';
       hitung();
+      renderRiwayat();
     }
 
     async function hapus(id) {
-      if(!confirm('Hapus nota ini?')) return;
+      if(!confirm('Hapus nota ini? Data di Cloud juga akan terhapus.')) return;
       dTransaksi = dTransaksi.filter(t => t["ID Nota"] !== id);
       localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
       renderRiwayat();
@@ -260,6 +280,7 @@
 
     function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
     
+    // Start!
     renderRiwayat();
     muatData();
   </script>
