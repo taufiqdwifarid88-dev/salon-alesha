@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kasir Salon Alesha Online</title>
+  <title>Kasir Salon Alesha</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#db2777">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    /* Mencegah refresh otomatis saat layar ditarik ke bawah */
+    /* Mencegah Pull-to-Refresh agar tidak sengaja reload */
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif; 
       background-color: #f8fafc; 
@@ -38,7 +38,7 @@
   </nav>
 
   <div id="loader" class="hidden fixed inset-0 bg-white/60 backdrop-blur-sm z-[100] flex items-center justify-center font-bold text-pink-600 italic">
-    <div class="p-5 bg-white rounded-2xl shadow-xl border border-pink-100 text-center">Memproses Cloud... ☁️</div>
+    <div class="p-5 bg-white rounded-2xl shadow-xl border border-pink-100 text-center italic">Memproses Cloud... ☁️</div>
   </div>
 
   <div class="max-w-2xl mx-auto p-4">
@@ -95,38 +95,44 @@
             <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
           </div>
         </div>
-        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all flex items-center justify-center gap-2">
+        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 text-lg">
           SIMPAN & KIRIM NOTA 📲
         </button>
       </div>
     </div>
 
     <div id="tab-riwayat" class="tab-konten space-y-4">
-      <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-3">
+      <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
         <p class="text-[10px] font-bold text-slate-400 uppercase ml-1">Filter Laporan</p>
         <div class="flex gap-2 overflow-x-auto no-scrollbar">
-          <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
-          <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
+          <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
+          <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
         </div>
-        <div class="pt-2 border-t border-slate-50">
-          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Cari Tanggal Spesifik</label>
-          <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold text-slate-600 border border-slate-100">
+        <div class="pt-3 border-t border-slate-50">
+          <label for="filterTgl" class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Pilih Tanggal</label>
+          <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold text-slate-600 border border-slate-200">
         </div>
       </div>
 
-      <div class="bg-emerald-500 text-white p-6 rounded-[2rem] shadow-lg relative overflow-hidden">
-        <p class="text-[10px] font-bold uppercase opacity-80 mb-1">Total Omset</p>
-        <h4 id="txtOmset" class="text-3xl font-black">Rp 0</h4>
-        <div class="absolute right-[-10px] bottom-[-10px] text-6xl opacity-10 rotate-12">💰</div>
+      <div class="bg-emerald-600 text-white p-7 rounded-[2.5rem] shadow-xl relative overflow-hidden transition-all duration-500">
+        <p id="labelOmset" class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Total Omset</p>
+        <h4 id="txtOmset" class="text-4xl font-black">Rp 0</h4>
+        <div class="absolute right-[-10px] bottom-[-10px] text-7xl opacity-10 rotate-12">💰</div>
       </div>
-      <div id="listRiwayat" class="space-y-3 pb-20"></div>
+      
+      <div id="listRiwayat" class="space-y-3 pb-24"></div>
     </div>
   </div>
 
   <script>
     const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
+    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
+
+    function getTglString(dateObj) {
+      return dateObj.getDate() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getFullYear();
+    }
 
     function putarSuaraTing() {
       try {
@@ -187,62 +193,70 @@
         btn.classList.replace('text-white', 'text-slate-500');
       });
       if (f !== 'kalender') {
-        document.getElementById('btn-f-'+f).classList.replace('bg-slate-100', 'bg-pink-500');
-        document.getElementById('btn-f-'+f).classList.replace('text-slate-500', 'text-white');
-        document.getElementById('filterTgl').value = ''; // Reset kalender jika pilih tombol
+        const btn = document.getElementById('btn-f-'+f);
+        btn.classList.replace('bg-slate-100', 'bg-pink-500');
+        btn.classList.replace('text-white', 'text-white');
+        document.getElementById('filterTgl').value = ''; 
       }
       renderRiwayat();
     }
 
     function renderRiwayat() {
-      const now = new Date();
-      const tglSkrg = now.toLocaleDateString('id-ID');
-      
+      const tglSkrg = getTglString(new Date());
       let filtered = dTransaksi;
+      let label = "Total Omset (Semua)";
+
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => t.Tanggal === tglSkrg);
+        filtered = dTransaksi.filter(t => String(t.Tanggal) === tglSkrg);
+        label = "Omset Hari Ini";
       } else if (currentFilter === 'kalender') {
-        const val = document.getElementById('filterTgl').value; // Format: YYYY-MM-DD
+        const val = document.getElementById('filterTgl').value;
         if (val) {
-          const parts = val.split('-');
-          const tglTarget = `${parseInt(parts[2])}/${parseInt(parts[1])}/${parts[0]}`; // Ubah ke D/M/YYYY
-          filtered = dTransaksi.filter(t => t.Tanggal === tglTarget);
+          const p = val.split('-');
+          const target = `${parseInt(p[2])}/${parseInt(p[1])}/${p[0]}`;
+          filtered = dTransaksi.filter(t => String(t.Tanggal) === target);
+          label = "Omset Tanggal " + target;
         }
       }
 
-      let omset = 0;
-      let h = '';
+      let total = 0;
+      let html = '';
       filtered.slice().reverse().forEach(t => {
-        omset += parseInt(t["Total Tagihan"] || 0);
-        h += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
+        const nilai = clean(t["Total Tagihan"]);
+        total += nilai;
+        html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center active:scale-95 transition-all">
                 <div>
                   <p class="text-[10px] text-slate-400 font-bold">${t.Tanggal} • ${t["ID Nota"] || 'NOTA'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
                 <div class="text-right">
-                  <p class="font-black text-slate-800">Rp ${formatRp(t["Total Tagihan"])}</p>
+                  <p class="font-black text-slate-800">Rp ${formatRp(nilai)}</p>
                   <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1">Hapus</button>
                 </div>
               </div>`;
       });
-      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(omset);
-      document.getElementById('listRiwayat').innerHTML = h || '<p class="text-center text-slate-400 py-10">Data tidak ditemukan</p>';
+
+      document.getElementById('labelOmset').innerText = label;
+      document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
+      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
     }
 
+    // FUNGSI NOTA RINGKAS (AS-TglBln-Urut)
     function generateNotaID() {
       const d = new Date();
-      const tglKey = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+      const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
+      const dateKey = d.getFullYear() + tglBln;
+      
       let lastDate = localStorage.getItem('alesha_last_date');
       let lastSeq = parseInt(localStorage.getItem('alesha_last_seq')) || 0;
-      if (lastDate !== tglKey) {
-        lastSeq = 1;
-      } else {
-        lastSeq++;
-      }
-      localStorage.setItem('alesha_last_date', tglKey);
+
+      if (lastDate !== dateKey) { lastSeq = 1; } else { lastSeq++; }
+
+      localStorage.setItem('alesha_last_date', dateKey);
       localStorage.setItem('alesha_last_seq', lastSeq);
-      return `ALSH-${tglKey}-${String(lastSeq).padStart(3, '0')}`;
+
+      return `AS-${tglBln}-${String(lastSeq).padStart(2, '0')}`;
     }
 
     async function simpan() {
@@ -252,19 +266,26 @@
       const harga = clean(document.getElementById('inpHarga').value);
       const diskon = clean(document.getElementById('inpDiskon').value);
       const total = harga - diskon;
-      if(!nama || !hp || !lay || harga <= 0) return alert('Lengkapi data!');
+
+      if(!nama || !hp || !lay || harga <= 0) return alert('Mohon lengkapi data!');
+      
       putarSuaraTing();
       let id = generateNotaID();
       let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-      let tgl = new Date().toLocaleDateString('id-ID');
+      let tgl = getTglString(new Date());
+
       dTransaksi.push({ "Tanggal": tgl, "ID Nota": id, "Pelanggan": nama, "No WA": waHp, "Treatment": lay, "Diskon": diskon, "Total Tagihan": total });
       localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
+
       fetch(SHEETS_URL, {
         method: 'POST',
         body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total })
       });
+
       const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
+
       window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
+      
       document.getElementById('inpNama').value = '';
       document.getElementById('inpHp').value = '';
       document.getElementById('inpLayanan').value = '';
