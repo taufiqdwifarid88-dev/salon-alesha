@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kasir Salon Alesha</title>
+  <title>Kasir Salon Alesha - Final Edition</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#db2777">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,6 +14,7 @@
     .tab-konten.active { display: block; animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .no-scrollbar::-webkit-scrollbar { display: none; }
+    .btn-pay.active { background-color: #db2777; color: white; border-color: #db2777; shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -39,25 +40,50 @@
   </div>
 
   <div class="max-w-2xl mx-auto p-4">
+    
     <div id="tab-kasir" class="tab-konten active space-y-4">
-      <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100">
-        <h2 class="font-bold mb-4 flex items-center gap-2 text-slate-700"><span class="bg-pink-100 p-1 rounded text-pink-600">📝</span> Input Transaksi</h2>
+      <div class="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 space-y-4">
+        <h2 class="font-bold text-slate-700 flex items-center gap-2"><span class="bg-pink-100 p-1 rounded text-pink-600">👤</span> Data Pelanggan</h2>
+        
         <div class="space-y-3">
           <input type="text" id="inpNama" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nama Pelanggan">
-          <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nomor WA (0812...)">
-          <select id="inpLayanan" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100">
-            <option value="">-- Pilih Treatment --</option>
-            <option value="Potong Rambut">Potong Rambut</option>
-            <option value="Cuci Catok / Blow">Cuci Catok / Blow</option>
-            <option value="Creambath">Creambath</option>
-            <option value="Hair Mask / Spa">Hair Mask / Spa</option>
-            <option value="Smoothing / Matrix">Smoothing / Matrix</option>
-            <option value="Coloring / Highlight">Coloring / Highlight</option>
-            <option value="Eyelash / Nail Art">Eyelash / Nail Art</option>
-            <option value="Lainnya (Custom)">Lainnya (Custom)</option>
-          </select>
+          <input type="tel" id="inpHp" class="w-full p-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500" placeholder="Nomor WA (08...)">
+          
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold text-slate-400 ml-2 uppercase">Wilayah Alamat</label>
+            <select id="inpKab" onchange="updateKecamatan()" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100 text-sm font-bold">
+              <option value="">-- Pilih Kota/Kabupaten --</option>
+              <option value="Surakarta">Kota Surakarta (Solo)</option>
+              <option value="Sukoharjo">Kabupaten Sukoharjo</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+            <div class="grid grid-cols-2 gap-2">
+              <select id="inpKec" onchange="updateKelurahan()" class="p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100 text-xs font-bold">
+                <option value="">-- Kecamatan --</option>
+              </select>
+              <select id="inpKel" class="p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100 text-xs font-bold">
+                <option value="">-- Kelurahan --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-slate-50">
+            <label class="block text-[10px] font-bold text-slate-400 ml-2 uppercase">Layanan</label>
+            <select id="inpLayanan" onchange="cekLayananLain()" class="w-full p-4 bg-slate-50 rounded-2xl outline-none ring-1 ring-slate-100 font-bold">
+              <option value="">-- Pilih Treatment --</option>
+              <option value="Potong Rambut">Potong Rambut</option>
+              <option value="Cuci Catok / Blow">Cuci Catok / Blow</option>
+              <option value="Creambath">Creambath</option>
+              <option value="Hair Spa / Hair Mask">Hair Spa / Hair Mask</option>
+              <option value="Smoothing / Matrix">Smoothing / Matrix</option>
+              <option value="Coloring / Highlight">Coloring / Highlight</option>
+              <option value="Lainnya (Custom)">Lainnya (Custom)</option>
+            </select>
+            <input type="text" id="inpLayananLain" class="hidden w-full p-4 bg-pink-50 border-2 border-pink-100 rounded-2xl outline-none focus:ring-2 focus:ring-pink-500 font-bold" placeholder="Tulis Treatment Manual...">
+          </div>
         </div>
-        <div class="grid grid-cols-2 gap-3 mt-3">
+
+        <div class="grid grid-cols-2 gap-3 mt-4">
           <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this); hitung()" class="p-4 bg-white border-2 border-pink-100 rounded-2xl font-bold text-pink-600 outline-none" placeholder="Harga">
           <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this); hitung()" class="p-4 bg-orange-50 border border-orange-200 rounded-2xl text-orange-600 font-bold outline-none" placeholder="Diskon">
         </div>
@@ -66,12 +92,24 @@
       <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-2xl">
         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Total Tagihan</p>
         <h3 id="txtTotal" class="text-4xl font-black text-pink-400 mb-6 tracking-tight">Rp 0</h3>
-        <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl mb-4 text-white outline-none" placeholder="Uang Tunai...">
-        <div class="flex justify-between items-center bg-slate-800/50 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">Kembali:</span>
-          <span id="txtKembali" class="font-bold text-xl text-emerald-400">Rp 0</span>
+        
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="setMetode('Cash')" id="btnCash" class="btn-pay py-3 rounded-xl border border-slate-700 font-bold text-sm transition-all active:scale-95 active">💵 CASH</button>
+            <button onclick="setMetode('QRIS')" id="btnQRIS" class="btn-pay py-3 rounded-xl border border-slate-700 font-bold text-sm transition-all active:scale-95">📱 QRIS</button>
+          </div>
+          
+          <div id="divTunai">
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Uang Tunai</label>
+            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this); hitung()" class="w-full p-4 bg-slate-800 rounded-2xl border border-slate-700 font-bold text-xl text-white outline-none" placeholder="Rp 0">
+            <div class="flex justify-between items-center mt-3 bg-slate-800/50 p-4 rounded-2xl border border-slate-700/30">
+              <span class="text-xs text-slate-400 font-bold uppercase">Kembali:</span>
+              <span id="txtKembali" class="font-bold text-2xl text-emerald-400">Rp 0</span>
+            </div>
+          </div>
         </div>
-        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg shadow-pink-500/30 active:scale-95 transition-all text-lg">SIMPAN & KIRIM NOTA 📲</button>
+
+        <button onclick="simpan()" class="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-600 py-5 rounded-2xl font-extrabold shadow-lg active:scale-95 transition-all text-lg tracking-wide">SIMPAN & KIRIM NOTA 📲</button>
       </div>
     </div>
 
@@ -79,60 +117,101 @@
       <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 space-y-4">
         <div class="flex justify-between items-center">
           <p class="text-[10px] font-bold text-slate-400 uppercase">Laporan Transaksi</p>
-          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full active:scale-90 transition">REFRESH 🔄</button>
+          <button onclick="muatData(true)" class="text-[9px] font-bold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">SINKRON 🔄</button>
         </div>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           <button onclick="setFilter('semua')" id="btn-f-semua" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-pink-500 text-white transition-all whitespace-nowrap">Semua</button>
           <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Hari Ini</button>
           <button onclick="setFilter('bulan_ini')" id="btn-f-bulan_ini" class="filter-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Bulan Ini</button>
         </div>
-        <div class="pt-3 border-t border-slate-50">
-          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Filter Tanggal Lain</label>
-          <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
-        </div>
+        <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
       </div>
-
-      <div class="bg-emerald-600 text-white p-7 rounded-[2.5rem] shadow-xl relative overflow-hidden transition-all duration-500">
+      <div class="bg-emerald-600 text-white p-7 rounded-[2.5rem] shadow-xl relative overflow-hidden">
         <p id="labelOmset" class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Total Omset</p>
         <h4 id="txtOmset" class="text-4xl font-black">Rp 0</h4>
         <div class="absolute right-[-10px] bottom-[-10px] text-7xl opacity-10 rotate-12">💰</div>
       </div>
-      
       <div id="listRiwayat" class="space-y-3 pb-24"></div>
     </div>
   </div>
 
   <script>
-    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwk13_OZwnmngluCPTFehZrcZaMcJngFQlUDMZXjUEeh196q1d3AfOV-HPiEDjc360yfQ/exec"; 
+    // URL Web App Google Apps Script Terupdate
+    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxQ9vVxym-97RxnL8gncx4Y5ddL57bUWtN5ZZiF4osUeKTIWc6y3jWzFvOQpHbJvySs0A/exec"; 
+    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
+    let mBayar = 'Cash';
 
-    function parseDateToISO(str) {
-      if (!str) return "";
-      let d = new Date(str);
-      if (!isNaN(d.getTime())) return d.toLocaleDateString('en-CA'); 
-      if (typeof str === 'string' && str.includes('/')) {
-        const p = str.split('/');
-        return `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}`;
-      }
-      return "";
+    const wilayahData = {
+      "Surakarta": {
+        "Banjarsari": ["Banjarsari", "Banyuanyar", "Gilingan", "Joglo", "Kadipiro", "Keprabon", "Kestalan", "Ketelan", "Manahan", "Mangkubumen", "Nusukan", "Punggawan", "Setabelan", "Sumber", "Timuran"],
+        "Jebres": ["Gandekan", "Jagalan", "Jebres", "Kepatihan Kulon", "Kepatihan Wetan", "Mojosongo", "Pucangsawit", "Purwodiningratan", "Sewu", "Sudiroprajan", "Tegalharjo"],
+        "Laweyan": ["Bumi", "Jajar", "Karangasem", "Kerten", "Laweyan", "Pajang", "Panularan", "Penumping", "Purwosari", "Sondakan", "Sriwedari"],
+        "Pasar Kliwon": ["Baluwarti", "Gajahan", "Joyosuran", "Kampung Baru", "Kauman", "Kedung Lumbu", "Pasar Kliwon", "Sangkrah", "Semanggi"],
+        "Serengan": ["Danukusuman", "Jayengan", "Joyotakan", "Kemlayan", "Kratonan", "Serengan", "Tipes"]
+      },
+      "Sukoharjo": {
+        "Grogol": ["Cemani", "Banaran", "Grogol", "Kadokan", "Kwarasan", "Langenharjo", "Madegondo", "Manang", "Pandeyan", "Parangjoro", "Pondok", "Sanggrahan", "Telukan"],
+        "Kartasura": ["Gonilan", "Gumpang", "Kartasura", "Kertonatan", "Makamhaji", "Ngadirejo", "Ngemplak", "Ngabeyan", "Pabelan", "Pucangan", "Singopuran", "Wirogunan"],
+        "Baki": ["Bakipandeyan", "Bentakan", "Duwet", "Gedongan", "Jetis", "Kadilangu", "Kudu", "Mancasan", "Menuran", "Ngrombo", "Siwal", "Waru"],
+        "Sukoharjo": ["Begajah", "Bulakrejo", "Bulakan", "Gayam", "Jetis", "Joho", "Kenep", "Kriwen", "Mandan", "Sukoharjo"],
+        "Mojolaban": ["Bekonang", "Cangkol", "Demakan", "Dukuh", "Gadingan", "Joho", "Klumprit", "Kragilan", "Laban", "Palur", "Plumbon", "Tegalmade", "Wirun"],
+        "Gatak": ["Blimbing", "Gatak", "Geneng", "Krapyak", "Luwang", "Mayang", "Sanggung", "Taji", "Trangsan", "Wironanggan"]
+      },
+      "Lainnya": { "Wilayah Lain": ["Lainnya"] }
+    };
+
+    function setMetode(m) {
+      mBayar = m;
+      document.querySelectorAll('.btn-pay').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn' + m).classList.add('active');
+      document.getElementById('divTunai').classList.toggle('hidden', m === 'QRIS');
     }
 
-    function getTodayISO() { return new Date().toLocaleDateString('en-CA'); }
+    function updateKecamatan() {
+      const kab = document.getElementById('inpKab').value;
+      const kecSel = document.getElementById('inpKec');
+      kecSel.innerHTML = '<option value="">-- Kecamatan --</option>';
+      document.getElementById('inpKel').innerHTML = '<option value="">-- Kelurahan --</option>';
+      if (wilayahData[kab]) {
+        Object.keys(wilayahData[kab]).forEach(k => {
+          const o = document.createElement('option'); o.value = k; o.innerHTML = k; kecSel.appendChild(o);
+        });
+      }
+    }
+
+    function updateKelurahan() {
+      const kab = document.getElementById('inpKab').value;
+      const kec = document.getElementById('inpKec').value;
+      const kelSel = document.getElementById('inpKel');
+      kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
+      if (wilayahData[kab] && wilayahData[kab][kec]) {
+        wilayahData[kab][kec].forEach(k => {
+          const o = document.createElement('option'); o.value = k; o.innerHTML = k; kelSel.appendChild(o);
+        });
+      }
+    }
+
+    function cekLayananLain() {
+      document.getElementById('inpLayananLain').classList.toggle('hidden', document.getElementById('inpLayanan').value !== 'Lainnya (Custom)');
+    }
+
+    function parseISO(s) {
+      if(!s) return "";
+      let d = new Date(s);
+      return !isNaN(d.getTime()) ? d.toLocaleDateString('en-CA') : "";
+    }
 
     function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
     function clean(s) { return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; }
-    function formatRpInput(i) { 
-      let v = i.value.replace(/[^0-9]/g, '');
-      i.value = v ? formatRp(v) : '';
-    }
+    function formatRpInput(i) { let v = i.value.replace(/[^0-9]/g, ''); i.value = v ? formatRp(v) : ''; }
 
     function bukaTab(e, t) {
       document.querySelectorAll('.tab-konten').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-'+t).classList.add('active');
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-white', 'text-pink-600', 'shadow-sm');
-        btn.classList.add('text-slate-500');
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('bg-white', 'text-pink-600', 'shadow-sm'); b.classList.add('text-slate-500');
       });
       if(e) e.currentTarget.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
       if(t === 'riwayat') muatData(); 
@@ -147,55 +226,44 @@
       document.getElementById('txtKembali').innerText = 'Rp ' + formatRp(Math.max(0, b - t));
     }
 
-    async function muatData(fullLoader = false) {
-      if(fullLoader) showLoader(true);
+    async function muatData(f = false) {
+      if(f) showLoader(true);
       try {
         const res = await fetch(SHEETS_URL);
         dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
         renderRiwayat();
-      } catch (e) { console.log("Gagal muat cloud"); }
+      } catch (e) {}
       showLoader(false);
     }
 
     function setFilter(f) {
       currentFilter = f;
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.replace('bg-pink-500', 'bg-slate-100');
-        btn.classList.replace('text-white', 'text-slate-500');
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.replace('bg-pink-500', 'bg-slate-100'); b.classList.replace('text-white', 'text-slate-500');
       });
       if (f !== 'kalender') {
-        const btn = document.getElementById('btn-f-'+f);
-        if(btn) {
-          btn.classList.replace('bg-slate-100', 'bg-pink-500');
-          btn.classList.replace('text-slate-500', 'text-white');
-        }
+        const b = document.getElementById('btn-f-'+f);
+        if(b) { b.classList.replace('bg-slate-100', 'bg-pink-500'); b.classList.replace('text-slate-500', 'text-white'); }
         document.getElementById('filterTgl').value = ''; 
       }
       renderRiwayat();
     }
 
     function renderRiwayat() {
-      const todayISO = getTodayISO();
-      const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-      const now = new Date();
-      
+      const todayISO = new Date().toLocaleDateString('en-CA');
       let filtered = dTransaksi;
-      let label = "Omset Semua";
+      let label = "Total Omset";
 
       if (currentFilter === 'hari_ini') {
-        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === todayISO);
+        filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO);
         label = "Omset Hari Ini";
       } else if (currentFilter === 'bulan_ini') {
-        const thisMonth = todayISO.substring(0, 7); // Hasil: YYYY-MM
-        filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal).startsWith(thisMonth));
-        label = "Omset " + monthNames[now.getMonth()] + " " + now.getFullYear();
+        filtered = dTransaksi.filter(t => parseISO(t.Tanggal).startsWith(todayISO.substring(0, 7)));
+        label = "Omset Bulan Ini";
       } else if (currentFilter === 'kalender') {
-        const tglPilihan = document.getElementById('filterTgl').value;
-        if (tglPilihan) {
-          filtered = dTransaksi.filter(t => parseDateToISO(t.Tanggal) === tglPilihan);
-          label = "Omset Tgl " + tglPilihan.split('-').reverse().join('/');
-        }
+        const v = document.getElementById('filterTgl').value;
+        if (v) { filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === v); label = "Omset Tgl " + v; }
       }
 
       let total = 0;
@@ -203,73 +271,60 @@
       filtered.slice().reverse().forEach(t => {
         const nilai = clean(t["Total Akhir"] || t["Total Tagihan"] || 0);
         total += nilai;
-        let tglAsli = t.Tanggal;
-        let tglRapi = !isNaN(new Date(tglAsli).getTime()) ? new Date(tglAsli).toLocaleDateString('id-ID') : tglAsli;
+        let tglTampil = !isNaN(new Date(t.Tanggal).getTime()) ? new Date(t.Tanggal).toLocaleDateString('id-ID') : t.Tanggal;
 
         html += `<div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex justify-between items-center transition-all">
                 <div>
-                  <p class="text-[10px] text-slate-400 font-bold">${tglRapi} • ${t["ID Nota"] || 'AS-00'}</p>
+                  <p class="text-[10px] text-slate-400 font-bold">${tglTampil} • ${t["Metode Pembayaran"] || 'Cash'}</p>
                   <p class="font-bold text-slate-700">${t.Pelanggan}</p>
+                  <p class="text-[9px] text-slate-400 uppercase tracking-tighter font-medium">${t.Kecamatan || ''} • ${t.Kelurahan || ''}</p>
                   <p class="text-xs text-pink-500 font-medium">${t.Treatment}</p>
                 </div>
                 <div class="text-right">
-                  <p class="font-black text-slate-800">Rp ${formatRp(nilai)}</p>
+                  <p class="font-black text-slate-800 text-lg">Rp ${formatRp(nilai)}</p>
                   <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1">Hapus</button>
                 </div>
               </div>`;
       });
-
       document.getElementById('labelOmset').innerText = label;
       document.getElementById('txtOmset').innerText = 'Rp ' + formatRp(total);
-      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Data tidak ditemukan.</p>';
-    }
-
-    function generateNotaID() {
-      const d = new Date();
-      const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
-      const dateKey = d.getFullYear() + tglBln;
-      let lastDate = localStorage.getItem('alesha_last_date');
-      let lastSeq = parseInt(localStorage.getItem('alesha_last_seq')) || 0;
-      if (lastDate !== dateKey) { lastSeq = 1; } else { lastSeq++; }
-      localStorage.setItem('alesha_last_date', dateKey);
-      localStorage.setItem('alesha_last_seq', lastSeq);
-      return `AS-${tglBln}-${String(lastSeq).padStart(2, '0')}`;
+      document.getElementById('listRiwayat').innerHTML = html || '<p class="text-center text-slate-400 py-10 italic text-sm">Tidak ada transaksi ditemukan.</p>';
     }
 
     async function simpan() {
       const nama = document.getElementById('inpNama').value;
       const hp = document.getElementById('inpHp').value;
-      const lay = document.getElementById('inpLayanan').value;
+      const kab = document.getElementById('inpKab').value;
+      const kec = document.getElementById('inpKec').value;
+      const kel = document.getElementById('inpKel').value;
+      let lay = document.getElementById('inpLayanan').value;
+      if(lay === 'Lainnya (Custom)') lay = document.getElementById('inpLayananLain').value;
       const harga = clean(document.getElementById('inpHarga').value);
       const diskon = clean(document.getElementById('inpDiskon').value);
       const total = harga - diskon;
 
-      if(!nama || !hp || !lay || harga <= 0) return alert('Mohon lengkapi data!');
+      if(!nama || !hp || !kab || !lay || harga <= 0) return alert('Mohon lengkapi data transaksi!');
       
-      let id = generateNotaID();
-      let waHp = hp.startsWith('0') ? '62' + hp.substring(1) : hp;
-      const tgl = new Date().toLocaleDateString('id-ID');
-
       showLoader(true);
+      const d = new Date();
+      const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
+      const id = 'AS-' + tglBln + '-' + Math.floor(Math.random()*90 + 10);
+      const tgl = d.toLocaleDateString('id-ID');
+
       try {
         await fetch(SHEETS_URL, {
           method: 'POST',
-          body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: waHp, layanan: lay, diskon: diskon, totalAkhir: total })
+          body: JSON.stringify({ 
+            tanggal: tgl, idNota: id, pelanggan: nama, noWa: hp, 
+            kabupaten: kab, kecamatan: kec, kelurahan: kel, 
+            layanan: lay, diskon: diskon, totalAkhir: total, metodeBayar: mBayar 
+          })
         });
-        
-        const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A💰 *Total Akhir:* Rp ${formatRp(total)}%0A--------------------------------%0A_Terima kasih atas kunjungannya, ditunggu kedatangannya kembali! ✨_`;
-        
-        window.open(`https://wa.me/${waHp}?text=${msg}`, '_blank');
+        const msg = `*NOTA SALON ALESHA*%0A*ID:* ${id}%0A*Pelanggan:* ${nama}%0A*Layanan:* ${lay}%0A*Metode:* ${mBayar}%0A*Total:* Rp ${formatRp(total)}%0A%0A_Terima kasih! ✨_`;
+        window.open(`https://wa.me/${hp.replace('0','62')}?text=${msg}`, '_blank');
         location.reload();
-      } catch (e) { alert("Gagal kirim ke Cloud!"); }
+      } catch (e) { alert("Gagal Simpan!"); }
       showLoader(false);
-    }
-
-    async function hapus(id) {
-      if(!confirm('Hapus nota ini?')) return;
-      showLoader(true);
-      await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ action: 'DELETE', idNota: id }) });
-      muatData(true);
     }
 
     function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
