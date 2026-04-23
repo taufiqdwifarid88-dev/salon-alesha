@@ -155,6 +155,7 @@
       "Lainnya": { "Wilayah Lain": ["Lainnya"] }
     };
 
+    // GENERATE ID NOTA URUT (SEQUENTIAL)
     function generateNotaID() {
       const d = new Date();
       const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
@@ -170,7 +171,8 @@
     function setMetode(m) {
       mBayar = m;
       document.querySelectorAll('.btn-pay').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn' + m).classList.add('active');
+      const targetBtn = (m === 'Cash') ? 'btnCash' : 'btnQRIS';
+      document.getElementById(targetBtn).classList.add('active');
       document.getElementById('divTunai').classList.toggle('hidden', m === 'QRIS');
     }
 
@@ -207,6 +209,8 @@
 
     function parseISO(s) {
       if(!s) return "";
+      let str = String(s);
+      if (str.includes('T')) return str.split('T')[0];
       let d = new Date(s);
       return !isNaN(d.getTime()) ? d.toLocaleDateString('en-CA') : "";
     }
@@ -226,10 +230,12 @@
       const html = filtered.slice().reverse().map(t => {
         const nilai = clean(t["Total Akhir"] || 0);
         total += nilai;
-        const met = t["Metode Pembayaran"] || 'Cash';
+        const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
+        let tglTampil = parseISO(t.Tanggal).split('-').reverse().join('/');
+        
         return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center">
           <div class="space-y-1">
-            <p class="text-[9px] font-bold text-slate-400">${t.Tanggal} • ${t["ID Nota"] || 'AS'}</p>
+            <p class="text-[9px] font-bold text-slate-400">${tglTampil} • ${t["ID Nota"] || 'AS'}</p>
             <p class="font-bold text-slate-800 leading-none">${t.Pelanggan}</p>
             <p class="text-[10px] text-pink-500 font-medium">${t.Treatment}</p>
           </div>
