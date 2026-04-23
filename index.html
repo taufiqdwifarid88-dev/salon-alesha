@@ -13,7 +13,7 @@
     .tab-konten { display: none; opacity: 0; }
     .tab-konten.active { display: block; opacity: 1; transition: opacity 0.3s; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    .btn-pay.active { background-color: #db2777; color: white; border-color: #db2777; box-shadow: 0 8px 15px -3px rgba(219, 39, 119, 0.3); }
+    .btn-pay.active { background-color: #db2777 !important; color: white !important; border-color: #db2777 !important; box-shadow: 0 8px 15px -3px rgba(219, 39, 119, 0.3); }
     .btn-active-effect:active { transform: scale(0.96); }
   </style>
 </head>
@@ -73,6 +73,7 @@
             <option value="Hair Spa / Hair Mask">Hair Spa / Hair Mask</option>
             <option value="Smoothing / Matrix">Smoothing / Matrix</option>
             <option value="Coloring / Highlight">Coloring / Highlight</option>
+            <option value="Eyelash / Nail Art">Eyelash / Nail Art</option>
             <option value="Lainnya (Custom)">Lainnya (Custom)</option>
           </select>
           <input type="text" id="inpLayananLain" class="hidden w-full p-4 bg-pink-50 border-2 border-pink-100 rounded-2xl outline-none font-bold" placeholder="Nama treatment manual...">
@@ -117,7 +118,7 @@
           <button onclick="setFilter('bulan_ini')" id="btn-f-bulan_ini" class="filter-btn px-6 py-3 rounded-2xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Bulan Ini</button>
         </div>
         <div class="pt-3 border-t border-slate-50">
-          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block">Cari Tanggal Spesifik</label>
+          <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-1 block tracking-widest">Cari Tanggal Spesifik</label>
           <input type="date" id="filterTgl" onchange="setFilter('kalender')" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold border border-slate-200">
         </div>
       </div>
@@ -131,7 +132,9 @@
   </div>
 
   <script>
-    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxQ9vVxym-97RxnL8gncx4Y5ddL57bUWtN5ZZiF4osUeKTIWc6y3jWzFvOQpHbJvySs0A/exec"; 
+    // URL BARU ANDA
+    const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec"; 
+    
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'semua';
     let mBayar = 'Cash';
@@ -155,7 +158,6 @@
       "Lainnya": { "Wilayah Lain": ["Lainnya"] }
     };
 
-    // GENERATE ID NOTA URUT (SEQUENTIAL)
     function generateNotaID() {
       const d = new Date();
       const tglBln = String(d.getDate()).padStart(2, '0') + String(d.getMonth() + 1).padStart(2, '0');
@@ -171,8 +173,8 @@
     function setMetode(m) {
       mBayar = m;
       document.querySelectorAll('.btn-pay').forEach(b => b.classList.remove('active'));
-      const targetBtn = (m === 'Cash') ? 'btnCash' : 'btnQRIS';
-      document.getElementById(targetBtn).classList.add('active');
+      const idBtn = (m === 'Cash') ? 'btnCash' : 'btnQRIS';
+      document.getElementById(idBtn).classList.add('active');
       document.getElementById('divTunai').classList.toggle('hidden', m === 'QRIS');
     }
 
@@ -207,17 +209,20 @@
       document.getElementById('txtKembali').innerText = 'Rp ' + formatRp(Math.max(0, b - t));
     }
 
+    // LOGIKA PERBAIKAN TANGGAL: Mengonversi waktu Cloud agar sesuai zona WIB
     function parseISO(s) {
       if(!s) return "";
-      let str = String(s);
-      if (str.includes('T')) return str.split('T')[0];
-      let d = new Date(s);
-      return !isNaN(d.getTime()) ? d.toLocaleDateString('en-CA') : "";
+      let date = new Date(s);
+      // Jika string berisi T17:00, kemungkinan besar itu UTC shift dari jam 00:00 WIB
+      if (typeof s === 'string' && s.includes('T17:00')) {
+          date.setHours(date.getHours() + 7);
+      }
+      return date.toLocaleDateString('en-CA'); // Hasil: YYYY-MM-DD
     }
 
     function renderRiwayat() {
-      const todayISO = new Date().toLocaleDateString('en-CA');
       const listEl = document.getElementById('listRiwayat');
+      const todayISO = new Date().toLocaleDateString('en-CA');
       let total = 0, filtered = dTransaksi, label = "Omset Semua";
 
       if (currentFilter === 'hari_ini') { filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO); label = "Omset Hari Ini"; }
@@ -230,10 +235,14 @@
       const html = filtered.slice().reverse().map(t => {
         const nilai = clean(t["Total Akhir"] || 0);
         total += nilai;
+        // Baca QRIS/Cash dengan teliti
         const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
-        let tglTampil = parseISO(t.Tanggal).split('-').reverse().join('/');
         
-        return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center">
+        let dObj = new Date(t.Tanggal);
+        if (typeof t.Tanggal === 'string' && t.Tanggal.includes('T17:00')) dObj.setHours(dObj.getHours() + 7);
+        let tglTampil = isNaN(dObj.getTime()) ? t.Tanggal : dObj.toLocaleDateString('id-ID');
+
+        return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center active:bg-slate-50 transition-colors">
           <div class="space-y-1">
             <p class="text-[9px] font-bold text-slate-400">${tglTampil} • ${t["ID Nota"] || 'AS'}</p>
             <p class="font-bold text-slate-800 leading-none">${t.Pelanggan}</p>
@@ -278,7 +287,7 @@
         const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(hrg)}%0A🏷️ *Diskon:* -Rp ${formatRp(dsk)}%0A💰 *Total Akhir:* Rp ${formatRp(tot)}%0A💳 *Metode:* ${mBayar}%0A--------------------------------%0A_Terima kasih atas kunjungannya! ✨_`;
         window.open(`https://wa.me/${hp.replace('0','62')}?text=${msg}`, '_blank');
         location.reload();
-      } catch (e) { alert("Gagal!"); }
+      } catch (e) { alert("Gagal Simpan!"); }
       showLoader(false);
     }
 
