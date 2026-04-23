@@ -15,7 +15,6 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .btn-pay.active { background-color: #db2777 !important; color: white !important; border-color: #db2777 !important; box-shadow: 0 8px 15px -3px rgba(219, 39, 119, 0.3); }
     .btn-active-effect:active { transform: scale(0.96); }
-    select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -113,13 +112,11 @@
           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Laporan</p>
           <button onclick="muatData(true)" class="text-[10px] font-bold text-pink-600 bg-pink-50 px-4 py-2 rounded-full active:scale-90 transition-all btn-active-effect">SINKRON 🔄</button>
         </div>
-        
         <div class="space-y-3">
           <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
             <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="filter-btn px-6 py-3 rounded-2xl text-xs font-bold bg-pink-500 text-white shadow-md transition-all whitespace-nowrap">Hari Ini</button>
             <button onclick="setFilter('kalender')" id="btn-f-kalender" class="filter-btn px-6 py-3 rounded-2xl text-xs font-bold bg-slate-100 text-slate-500 transition-all whitespace-nowrap">Cari Tanggal 📅</button>
           </div>
-          
           <div class="pt-3 border-t border-slate-50">
             <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 mb-2 block tracking-widest">Filter Per Bulan</label>
             <div class="grid grid-cols-2 gap-2">
@@ -130,18 +127,15 @@
                 <option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
               </select>
               <select id="filterTahun" onchange="setFilter('bulan')" class="p-3 bg-slate-50 rounded-xl outline-none text-xs font-bold border border-slate-200">
-                <option value="2025">2025</option><option value="2026">2026</option>
-                <option value="2027">2027</option>
+                <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
               </select>
             </div>
           </div>
-
           <div id="divKalender" class="hidden pt-3 border-t border-slate-50 animate-fadeIn">
             <input type="date" id="filterTgl" onchange="renderRiwayat()" class="w-full p-3 bg-pink-50 rounded-xl outline-none text-sm font-bold border border-pink-100 text-pink-600">
           </div>
         </div>
       </div>
-
       <div class="bg-emerald-600 text-white p-8 rounded-[2.5rem] shadow-lg relative overflow-hidden">
         <p id="labelOmset" class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70 mb-1">Total Omset</p>
         <h4 id="txtOmset" class="text-4xl font-black">Rp 0</h4>
@@ -240,15 +234,11 @@
       const todayISO = new Date().toLocaleDateString('en-CA');
       let total = 0, filtered = dTransaksi, label = "Laporan Transaksi";
 
-      if (currentFilter === 'hari_ini') { 
-        filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO); 
-        label = "Omset Hari Ini"; 
-      }
+      if (currentFilter === 'hari_ini') { filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO); label = "Omset Hari Ini"; }
       else if (currentFilter === 'bulan') {
         const bln = document.getElementById('filterBulan').value;
         const thn = document.getElementById('filterTahun').value;
-        const target = `${thn}-${bln}`;
-        filtered = dTransaksi.filter(t => parseISO(t.Tanggal).startsWith(target));
+        filtered = dTransaksi.filter(t => parseISO(t.Tanggal).startsWith(`${thn}-${bln}`));
         label = "Omset " + document.getElementById('filterBulan').options[document.getElementById('filterBulan').selectedIndex].text + " " + thn;
       }
       else if (currentFilter === 'kalender') {
@@ -297,19 +287,21 @@
     }
 
     async function simpan() {
-      const nama = document.getElementById('inpNama').value, hp = document.getElementById('inpHp').value, kab = document.getElementById('inpKab').value;
-      const kec = document.getElementById('inpKec').value, kel = document.getElementById('inpKel').value;
+      const nama = document.getElementById('inpNama').value, hp = document.getElementById('inpHp').value, kab = document.getElementById('inpKab').value, kec = document.getElementById('inpKec').value, kel = document.getElementById('inpKel').value;
       let lay = document.getElementById('inpLayanan').value;
       if(lay === 'Lainnya (Custom)') lay = document.getElementById('inpLayananLain').value;
-      const hrg = clean(document.getElementById('inpHarga').value), dsk = clean(document.getElementById('inpDiskon').value), tot = hrg - dsk;
+      const harga = clean(document.getElementById('inpHarga').value), diskon = clean(document.getElementById('inpDiskon').value), total = harga - diskon;
 
-      if(!nama || !hp || !lay || hrg <= 0) return alert('Data belum lengkap!');
+      if(!nama || !hp || !lay || harga <= 0) return alert('Data belum lengkap!');
       showLoader(true);
       const id = generateNotaID(), tgl = new Date().toLocaleDateString('id-ID');
 
       try {
-        await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: hp, kabupaten: kab, kecamatan: kec, kelurahan: kel, layanan: lay, diskon: dsk, totalAkhir: tot, metodeBayar: mBayar }) });
-        const msg = `*NOTA SALON ALESHA* 💇‍♀️%0A--------------------------------%0A*ID Nota:* ${id}%0A*Tanggal:* ${tgl}%0A%0A👤 *Pelanggan:* ${nama}%0A✂️ *Treatment:* ${lay}%0A%0A💵 *Harga Normal:* Rp ${formatRp(hrg)}%0A🏷️ *Diskon:* -Rp ${formatRp(dsk)}%0A💰 *Total Akhir:* Rp ${formatRp(tot)}%0A💳 *Metode:* ${mBayar}%0A--------------------------------%0A_Terima kasih atas kunjungannya! ✨_`;
+        await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: hp, kabupaten: kab, kecamatan: kec, kelurahan: kel, layanan: lay, diskon: diskon, totalAkhir: total, metodeBayar: mBayar }) });
+        
+        // FORMAT NOTA WHATSAPP: TANPA DETAIL ALAMAT
+        const msg = `✨ *NOTA SALON ALESHA* ✨%0A-------------------------------------------%0A🧾 *No. Nota:* ${id}%0A📅 *Tanggal:* ${tgl}%0A-------------------------------------------%0A👤 *Pelanggan:* ${nama}%0A✂️ *Layanan:* ${lay}%0A%0A💵 *Harga:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A-------------------------------------------%0A💰 *TOTAL AKHIR:* *Rp ${formatRp(total)}*%0A💳 *Metode:* ${mBayar}%0A-------------------------------------------%0A%0ATerima kasih sudah perawatan di Salon Alesha! 🥰%0A%0AMohon dukungannya untuk memberikan *Rating Bintang 5* & ulasan positif di Google Maps kami ya Kak: %0A🔗 https://g.page/salonalesha/review%0A%0ASampai jumpa di treatment berikutnya! ✨`;
+
         window.open(`https://wa.me/${hp.replace('0','62')}?text=${msg}`, '_blank');
         location.reload();
       } catch (e) { alert("Gagal Simpan!"); }
@@ -337,9 +329,7 @@
     function setFilter(f) {
       currentFilter = f;
       document.querySelectorAll('.filter-btn').forEach(b => { b.classList.replace('bg-pink-500', 'bg-slate-100'); b.classList.replace('text-white', 'text-slate-500'); b.classList.remove('shadow-md'); });
-      
       document.getElementById('divKalender').classList.add('hidden');
-      
       if(f === 'hari_ini' || f === 'kalender') {
         const b = document.getElementById('btn-f-'+f);
         if(b) { b.classList.replace('bg-slate-100', 'bg-pink-500'); b.classList.replace('text-slate-500', 'text-white'); b.classList.add('shadow-md'); }
@@ -349,8 +339,6 @@
     }
 
     function showLoader(s) { document.getElementById('loader').classList.toggle('hidden', !s); }
-    
-    // Inisialisasi Dropdown Bulan & Tahun ke saat ini
     window.onload = () => {
       const now = new Date();
       document.getElementById('filterBulan').value = String(now.getMonth() + 1).padStart(2, '0');
