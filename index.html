@@ -237,8 +237,11 @@
 
     function parseISO(s) {
       if(!s) return "";
-      let d = new Date(s);
-      if (typeof s === 'string' && s.includes('T17:00')) d.setHours(d.getHours() + 7);
+      let parts = s.split(' '); // Memisahkan tanggal dan jam
+      let dParts = parts[0].split('/');
+      // Format d/m/y atau y-m-d
+      let iso = dParts.length === 3 ? `${dParts[2]}-${dParts[1].padStart(2,'0')}-${dParts[0].padStart(2,'0')}` : parts[0];
+      let d = new Date(iso);
       return isNaN(d.getTime()) ? "" : d.toLocaleDateString('en-CA');
     }
 
@@ -266,9 +269,14 @@
         const nilai = clean(t["Total Akhir"] || 0);
         total += nilai;
         const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
-        let dObj = new Date(t.Tanggal);
-        if (typeof t.Tanggal === 'string' && t.Tanggal.includes('T17:00')) dObj.setHours(dObj.getHours() + 7);
-        let tglTampil = isNaN(dObj.getTime()) ? t.Tanggal : dObj.toLocaleDateString('id-ID');
+        
+        // Tampilkan Tanggal & Jam jika tersedia
+        let tglTampil = t.Tanggal; 
+        if (tglTampil.includes('T17:00')) {
+             let dObj = new Date(tglTampil);
+             dObj.setHours(dObj.getHours() + 7);
+             tglTampil = dObj.toLocaleString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'}).replace(/\./g, ':');
+        }
 
         return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center active:bg-slate-50 transition-colors">
           <div class="space-y-1">
@@ -279,8 +287,8 @@
           <div class="text-right">
             <p class="font-black text-slate-900 text-lg tracking-tighter">Rp ${formatRp(nilai)}</p>
             <div class="flex flex-col items-end gap-1">
-               <p class="text-[9px] font-bold ${met === 'QRIS' ? 'text-blue-500' : 'text-emerald-600'} uppercase tracking-widest">${met}</p>
-               <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1 btn-active-effect">Hapus</button>
+                <p class="text-[9px] font-bold ${met === 'QRIS' ? 'text-blue-500' : 'text-emerald-600'} uppercase tracking-widest">${met}</p>
+                <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1 btn-active-effect">Hapus</button>
             </div>
           </div>
         </div>`;
@@ -310,12 +318,16 @@
 
       if(!nama || !hp || !lay || harga <= 0) return alert('Data belum lengkap!');
       showLoader(true);
-      const id = generateNotaID(), tgl = new Date().toLocaleDateString('id-ID');
+      
+      const id = generateNotaID();
+      // Simpan Tanggal beserta Jam
+      const now = new Date();
+      const tgl = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(/\./g, ':');
 
       try {
         await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: hp, kabupaten: kab, kecamatan: kec, kelurahan: kel, layanan: lay, diskon: diskon, totalAkhir: total, metodeBayar: mBayar }) });
         
-        const msg = `✨ *NOTA SALON ALESHA* ✨%0A-------------------------------------------%0A🧾 *No. Nota:* ${id}%0A📅 *Tanggal:* ${tgl}%0A-------------------------------------------%0A👤 *Pelanggan:* ${nama}%0A✂️ *Layanan:* ${lay}%0A%0A💵 *Harga:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A-------------------------------------------%0A💰 *TOTAL AKHIR:* *Rp ${formatRp(total)}*%0A💳 *Metode:* ${mBayar}%0A-------------------------------------------%0A%0ATerima kasih sudah perawatan di Salon Alesha! 🥰%0A%0AMohon dukungannya untuk memberikan *Rating Bintang 5* & ulasan positif di Google Maps kami ya Kak: %0A🔗 https://g.page/salonalesha/review%0A%0ASampai jumpa di treatment berikutnya! ✨`;
+        const msg = `✨ *NOTA SALON ALESHA* ✨%0A-------------------------------------------%0A🧾 *No. Nota:* ${id}%0A📅 *Waktu:* ${tgl}%0A-------------------------------------------%0A👤 *Pelanggan:* ${nama}%0A✂️ *Layanan:* ${lay}%0A%0A💵 *Harga:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A-------------------------------------------%0A💰 *TOTAL AKHIR:* *Rp ${formatRp(total)}*%0A💳 *Metode:* ${mBayar}%0A-------------------------------------------%0A%0ATerima kasih sudah perawatan di Salon Alesha! 🥰%0A%0AMohon dukungannya untuk memberikan *Rating Bintang 5* & ulasan positif di Google Maps kami ya Kak: %0A🔗 https://g.page/salonalesha/review%0A%0ASampai jumpa di treatment berikutnya! ✨`;
 
         window.open(`https://wa.me/${hp.replace('0','62')}?text=${msg}`, '_blank');
         location.reload();
