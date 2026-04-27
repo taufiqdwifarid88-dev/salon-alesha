@@ -237,9 +237,8 @@
 
     function parseISO(s) {
       if(!s) return "";
-      let parts = s.split(' '); // Memisahkan tanggal dan jam
+      let parts = s.split(' '); 
       let dParts = parts[0].split('/');
-      // Format d/m/y atau y-m-d
       let iso = dParts.length === 3 ? `${dParts[2]}-${dParts[1].padStart(2,'0')}-${dParts[0].padStart(2,'0')}` : parts[0];
       let d = new Date(iso);
       return isNaN(d.getTime()) ? "" : d.toLocaleDateString('en-CA');
@@ -270,12 +269,20 @@
         total += nilai;
         const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
         
-        // Tampilkan Tanggal & Jam jika tersedia
-        let tglTampil = t.Tanggal; 
-        if (tglTampil.includes('T17:00')) {
-             let dObj = new Date(tglTampil);
-             dObj.setHours(dObj.getHours() + 7);
+        // LOGIKA PERBAIKAN WAKTU:
+        let rawTgl = t.Tanggal || "";
+        let tglTampil = rawTgl;
+
+        // Jika data dari Sheets (ISO format mengandung T)
+        if (rawTgl.includes('T')) {
+          let dObj = new Date(rawTgl);
+          // Jika jamnya 00:00 atau 17:00 (karena offset UTC), tampilkan tanggal saja
+          if (rawTgl.includes('T00:00') || rawTgl.includes('T17:00')) {
+             tglTampil = dObj.toLocaleDateString('id-ID');
+          } else {
+             // Jika ada jam aslinya, tampilkan jamnya
              tglTampil = dObj.toLocaleString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'}).replace(/\./g, ':');
+          }
         }
 
         return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center active:bg-slate-50 transition-colors">
@@ -320,7 +327,7 @@
       showLoader(true);
       
       const id = generateNotaID();
-      // Simpan Tanggal beserta Jam
+      // SIMPAN TANGGAL + JAM REALTIME
       const now = new Date();
       const tgl = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(/\./g, ':');
 
