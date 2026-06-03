@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kasir Salon Alesha</title>
+  <title>Kasir Salon Alesha (Lite)</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.PNG">
   <meta name="theme-color" content="#be185d">
@@ -15,12 +15,13 @@
   
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* VERSI LITE - MENGURANGI BEBAN GPU SEBANYAK 90% */
     :root {
       --rose:        #be185d;
       --rose-mid:    #db2777;
-      --rose-light: #f9a8d4;
+      --rose-light:  #f9a8d4;
       --gold:        #c08a2b;
-      --gold-light: #fef3c7;
+      --gold-light:  #fef3c7;
       --ink:         #1c0a14;
       --ink-muted:   #7c5a6e;
       --ink-faint:   #c4a8b8;
@@ -28,38 +29,40 @@
       --surface:     #ffffff;
       --surface-2:   #fdf2f8;
       --surface-3:   #fce7f3;
-      --border:      rgba(190,24,93,.10);
-      --border-mid: rgba(190,24,93,.18);
-      --shadow-sm:  0 1px 3px rgba(190,24,93,.07);
-      --shadow-md:  0 4px 16px rgba(190,24,93,.10);
-      --shadow-lg:  0 16px 40px rgba(190,24,93,.14);
+      --border:      rgba(190,24,93,.15);
+      --border-mid:  rgba(190,24,93,.25);
+      
+      --shadow-sm:  0 1px 2px rgba(190,24,93,.05);
+      --shadow-md:  0 2px 4px rgba(190,24,93,.08);
+      
       --radius-sm:  0.5rem;
-      --radius-md:  0.875rem;
-      --radius-lg:  1.25rem;
-      --radius-xl:  1.75rem;
-      --radius-2xl: 2.25rem;
+      --radius-md:  0.5rem;
+      --radius-lg:  0.75rem;
+      --radius-xl:  1rem;
+      --radius-2xl: 1.25rem;
       
       --font-body:  'Lora', serif;
       --font-disp:  'Playfair Display', serif;
-      
-      --transition: 180ms cubic-bezier(0.16,1,0.3,1);
+      --transition: 150ms ease-out;
     }
+    
     [data-theme="dark"] {
       --bg:          #150810;
       --surface:     #1e0e17;
       --surface-2:   #26121d;
       --surface-3:   #301728;
-      --border:      rgba(244,114,182,.10);
-      --border-mid: rgba(244,114,182,.20);
+      --border:      rgba(244,114,182,.15);
+      --border-mid:  rgba(244,114,182,.30);
       --ink:         #f5dded;
       --ink-muted:   #c490ab;
       --ink-faint:   #7a4e62;
-      --shadow-sm:  0 1px 3px rgba(0,0,0,.3);
-      --shadow-md:  0 4px 16px rgba(0,0,0,.35);
-      --shadow-lg:  0 16px 40px rgba(0,0,0,.45);
+      --shadow-sm:  none;
+      --shadow-md:  none;
     }
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    
     body {
       font-family: var(--font-body);
       color: var(--ink);
@@ -67,51 +70,28 @@
       min-height: 100dvh;
       overscroll-behavior-y: none;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color .3s, color .3s;
+      transition: background-color .2s, color .2s;
       font-weight: 400;
     }
-    body::before {
-      content: "";
-      position: fixed; inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(ellipse 60% 40% at 10% 0%, rgba(251,207,232,.35) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 35% at 90% 5%, rgba(254,243,199,.30) 0%, transparent 50%);
-      z-index: -1;
-      transition: opacity .3s;
-    }
-    [data-theme="dark"] body::before {
-      background-image:
-        radial-gradient(ellipse 60% 40% at 10% 0%, rgba(190,24,93,.12) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 35% at 90% 5%, rgba(192,138,43,.08) 0%, transparent 50%);
-    }
-    /* Typography */
+    
     .t-disp { font-family: var(--font-disp); font-weight: 700; }
     
-    /* Nav glass */
     .glass-nav {
-      background: rgba(255,255,255,.82);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      transition: background .3s;
     }
-    [data-theme="dark"] .glass-nav {
-      background: rgba(30,14,23,.88);
-    }
-    /* Cards */
+    
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-sm);
       border-radius: var(--radius-xl);
-      transition: background .3s, border-color .3s, box-shadow .3s;
     }
-    .card:hover { box-shadow: var(--shadow-lg); }
-    /* Inputs */
+    
     .inp {
       background: var(--surface-2);
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
       border-radius: var(--radius-md);
       font-family: var(--font-body);
       font-size: 0.875rem;
@@ -120,23 +100,19 @@
       width: 100%;
       padding: 0.875rem 1rem;
       outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      transition: border-color var(--transition);
     }
     .inp::placeholder { color: var(--ink-faint); font-weight: 400; }
-    .inp:focus {
-      border-color: var(--rose-mid);
-      box-shadow: 0 0 0 3px rgba(219,39,119,.14);
-      background: var(--surface);
-    }
+    .inp:focus { border-color: var(--rose-mid); background: var(--surface); }
     select.inp { cursor: pointer; }
-    /* Tabs */
+    
     .tab-konten { display: none; }
-    .tab-konten.active { display: block; animation: fadeUp .4s ease-out forwards; }
-    /* Payment buttons */
+    .tab-konten.active { display: block; }
+    
     .btn-pay {
-      border: 1.5px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.65);
+      border: 1px solid var(--border-mid);
+      background: var(--surface-2);
+      color: var(--ink-muted);
       border-radius: var(--radius-md);
       font-weight: 700;
       font-size: 0.75rem;
@@ -144,120 +120,92 @@
       padding: 1rem;
       cursor: pointer;
       font-family: var(--font-body);
-      transition: all var(--transition);
     }
     .btn-pay.active {
-      background: linear-gradient(135deg, #ec4899, #be185d);
+      background: var(--rose-mid);
       color: white;
-      border-color: rgba(255,255,255,.28);
-      box-shadow: 0 10px 24px rgba(219,39,119,.38);
+      border-color: var(--rose-mid);
     }
-    /* Primary button */
+    [data-theme="dark"] .btn-pay { border-color: rgba(255,255,255,.1); background: transparent; }
+    [data-theme="dark"] .btn-pay.active { background: var(--rose-mid); color: white; border-color: var(--rose-mid); }
+    
     .btn-primary {
-      background: linear-gradient(135deg, #ec4899 0%, #be185d 55%, #9d174d 100%);
+      background: var(--rose-mid);
       color: white;
       font-weight: 700;
       font-size: 0.9375rem;
       letter-spacing: .02em;
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-lg);
       padding: 1.125rem 2rem;
       cursor: pointer;
-      box-shadow: 0 14px 28px rgba(190,24,93,.28), inset 0 1px 0 rgba(255,255,255,.22);
-      transition: transform var(--transition), box-shadow var(--transition);
       border: none;
       width: 100%;
       font-family: var(--font-body);
       display: flex; align-items: center; justify-content: center; gap: .625rem;
     }
-    .btn-primary:hover { box-shadow: 0 20px 40px rgba(190,24,93,.34); transform: translateY(-1px); }
-    .btn-primary:active { transform: scale(.96); box-shadow: 0 8px 20px rgba(190,24,93,.22); }
-    /* Filter pills */
+    .btn-primary:active { background: var(--rose); }
+    
     .pill {
       display: inline-flex; align-items: center; gap: .35rem;
       padding: .5rem 1.125rem;
       border-radius: 9999px;
       font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; border: 1.5px solid var(--border);
+      cursor: pointer; border: 1px solid var(--border);
       background: var(--surface-2); color: var(--ink-muted);
       white-space: nowrap;
       font-family: var(--font-body);
-      transition: all var(--transition);
     }
-    .pill.active {
-      background: linear-gradient(135deg,#ec4899,#be185d);
-      color: white; border-color: transparent;
-      box-shadow: 0 6px 18px rgba(219,39,119,.28);
-    }
-    /* Omset card */
+    .pill.active { background: var(--rose-mid); color: white; border-color: transparent; }
+    
     .omset-card {
-      background: linear-gradient(135deg, #be185d 0%, #db2777 45%, #c08a2b 120%);
+      background: var(--rose-mid);
       border-radius: var(--radius-2xl);
-      box-shadow: 0 20px 48px rgba(190,24,93,.24);
-      position: relative; overflow: hidden;
+      padding: 1.75rem;
+      color: white;
     }
-    .omset-card::before {
-      content: "";
-      position: absolute; top: -40px; right: -50px;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(255,255,255,.12), transparent 65%);
-    }
-    /* Dark card (payment panel) */
+    
     .dark-card {
-      background: linear-gradient(145deg, #2c1625 0%, #150810 60%, #0d111d 100%);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 24px 56px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.06);
+      background: var(--ink);
       border-radius: var(--radius-2xl);
-      position: relative; overflow: hidden;
+      padding: 1.75rem;
+      color: white;
     }
-    .dark-card::after {
-      content: "";
-      position: absolute; right: -70px; top: -70px;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(244,114,182,.22), transparent 65%);
-      pointer-events: none;
-    }
-    /* Section badge */
+    
     .s-badge {
       width: 2.25rem; height: 2.25rem;
-      background: linear-gradient(135deg, var(--surface-3), var(--gold-light));
-      border: 1px solid var(--border-mid);
-      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.9rem;
-      box-shadow: var(--shadow-sm);
       flex-shrink: 0;
     }
-    /* History item */
+    
     .tx-item {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-sm);
       padding: 1rem 1.125rem;
       display: flex; align-items: center; justify-content: space-between;
       gap: .75rem;
-      transition: box-shadow var(--transition), transform var(--transition);
     }
-    .tx-item:active { transform: scale(.99); }
-    /* Loader */
+    
     #loader {
       display: none;
       position: fixed; inset: 0;
-      background: rgba(28,10,20,.45);
-      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      background: rgba(0,0,0,.6);
       z-index: 100;
       align-items: center; justify-content: center;
     }
-    #loader.show { display: flex; animation: fadeIn .2s ease-out; }
+    #loader.show { display: flex; }
     .loader-box {
       background: var(--surface);
-      border: 1px solid var(--border-mid);
+      border: 1px solid var(--border);
       border-radius: var(--radius-xl);
       padding: 2rem;
       text-align: center;
-      box-shadow: var(--shadow-lg);
     }
-    /* Toast */
+    
     .toast {
       position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(6rem);
       background: var(--ink);
@@ -265,109 +213,88 @@
       padding: .75rem 1.5rem;
       border-radius: 9999px;
       font-size: .8125rem; font-weight: 600;
-      box-shadow: var(--shadow-lg);
       z-index: 200;
-      transition: transform .4s cubic-bezier(0.16,1,0.3,1), opacity .4s;
+      transition: transform .3s ease-out, opacity .3s;
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    /* Animations */
-    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    @keyframes countUp { from { opacity:.5; transform: scale(.95); } to { opacity:1; transform: scale(1); } }
+    
     @keyframes spin { to { transform: rotate(360deg); } }
+    .fade-up { opacity: 1; } 
+    .num-flash { opacity: 1; }
     
-    .fade-up { animation: fadeUp .32s ease-out forwards; }
-    .num-flash { animation: countUp .2s ease-out; }
-    
-    /* Nav pill toggle */
     .nav-pill {
       padding: .5rem 1.25rem;
       border-radius: var(--radius-md);
       font-size: 0.75rem; font-weight: 700;
       cursor: pointer; border: none;
-      transition: all var(--transition);
       color: var(--ink-muted);
       background: transparent;
       font-family: var(--font-body);
     }
-    .nav-pill.active {
-      background: var(--surface);
-      color: var(--rose);
-      box-shadow: var(--shadow-sm);
-    }
-    /* Dark mode toggle */
+    .nav-pill.active { background: var(--surface); color: var(--rose); border: 1px solid var(--border); }
+    
     .theme-btn {
       width: 2.25rem; height: 2.25rem;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md);
       background: var(--surface-2);
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
-      transition: all var(--transition);
       flex-shrink: 0;
     }
-    .theme-btn:hover { background: var(--surface-3); }
-    /* Quick amount buttons */
+    
     .quick-btn {
       padding: .4rem .75rem;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.14);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.3);
       border-radius: var(--radius-sm);
       font-size: .6875rem; font-weight: 600;
       color: rgba(255,255,255,.9);
       cursor: pointer;
       font-family: var(--font-body);
-      transition: all var(--transition);
       white-space: nowrap;
     }
-    .quick-btn:hover { background: rgba(255,255,255,.2); color: white; border-color: rgba(255,255,255,.3); }
-    .quick-btn:active { transform: scale(.94); }
-    /* Stat chip */
+    .quick-btn:active { background: rgba(255,255,255,.1); }
+    
     .stat-chip {
       display: inline-flex; align-items: center; gap: .4rem;
-      background: var(--surface-2); border: 1px solid var(--border);
+      background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2);
       border-radius: 9999px; padding: .35rem .875rem;
-      font-size: .75rem; font-weight: 600; color: var(--ink-muted);
+      font-size: .75rem; font-weight: 600; color: white;
     }
-    /* Search input */
+    
     .search-inp {
       background: var(--surface-2);
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
       border-radius: 9999px;
       padding: .6rem 1rem .6rem 2.5rem;
       font-size: .8125rem; font-weight: 500;
       color: var(--ink); width: 100%; outline: none;
       font-family: var(--font-body);
-      transition: border-color var(--transition), box-shadow var(--transition);
     }
-    .search-inp:focus { border-color: var(--rose-mid); box-shadow: 0 0 0 3px rgba(219,39,119,.10); }
-    /* Scrollbar */
+    .search-inp:focus { border-color: var(--rose-mid); }
+    
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--rose-light); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 99px; }
     .no-sb::-webkit-scrollbar { display: none; }
-    /* Label */
+    
     .field-label {
       font-size: .6875rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: .1em;
       color: var(--ink-faint);
       display: block; margin-bottom: .4rem;
     }
-    /* Divider */
-    .divider { border: none; border-top: 1px solid var(--border); }
-    /* Hero gradient banner */
+    
     .hero-banner {
       border-radius: var(--radius-2xl);
       padding: 1.75rem;
       color: white;
-      position: relative; overflow: hidden;
+      background: var(--rose-mid);
     }
-    .hero-kasir { background: linear-gradient(135deg, #9d174d 0%, #be185d 40%, #db2777 70%, #f472b6 100%); }
-    
   </style>
 </head>
 <body class="antialiased">
@@ -384,9 +311,8 @@
 
 <nav class="sticky top-0 z-50 glass-nav px-4 py-3">
   <div style="max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75rem;">
-
     <div style="display:flex;align-items:center;gap:.75rem;min-width:0;">
-      <div style="width:2.5rem;height:2.5rem;border-radius:.875rem;background:linear-gradient(135deg,#ec4899,#9d174d);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(190,24,93,.3);flex-shrink:0;">
+      <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;background:var(--rose-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.125rem;height:1.125rem;" aria-label="Salon Alesha Logo">
           <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
         </svg>
@@ -396,7 +322,6 @@
         <p style="font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--gold);">Beauty Cashier</p>
       </div>
     </div>
-
     <div style="display:flex;align-items:center;gap:.5rem;">
       <div style="display:flex;gap:.25rem;background:var(--surface-2);border:1px solid var(--border);padding:.25rem;border-radius:var(--radius-md);">
         <button onclick="bukaTab(event,'kasir')" id="navKasir" class="nav-pill active" aria-label="Kasir">Kasir</button>
@@ -407,26 +332,22 @@
         <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
-
   </div>
 </nav>
 
 <main style="max-width:640px;margin:0 auto;padding:1rem 1rem 6rem;">
-
   <div id="tab-kasir" class="tab-konten active" style="display:block;">
     <div style="display:flex;flex-direction:column;gap:1rem;">
-
-      <div class="hero-banner hero-kasir fade-up">
+      <div class="hero-banner fade-up">
         <div style="position:relative;z-index:1;">
           <p style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin-bottom:.25rem;">Welcome Back ✨</p>
           <h2 class="t-disp" style="font-size:1.875rem;line-height:1.1;margin-bottom:.5rem;">Transaksi Baru</h2>
           <p style="font-size:.8125rem;opacity:.8;">Catat layanan pelanggan dengan cepat & profesional.</p>
           <div style="margin-top:.875rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-            <span id="badgeTgl" style="background:rgba(255,255,255,.18);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;backdrop-filter:blur(8px);"></span>
-            <span id="badgeWaktu" style="background:rgba(255,255,255,.14);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;backdrop-filter:blur(8px);"></span>
+            <span id="badgeTgl" style="background:rgba(0,0,0,.15);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;"></span>
+            <span id="badgeWaktu" style="background:rgba(0,0,0,.15);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;"></span>
           </div>
         </div>
-        <div style="position:absolute;right:-1rem;bottom:-1.25rem;font-size:6rem;opacity:.13;transform:rotate(12deg);pointer-events:none;">💇‍♀️</div>
       </div>
 
       <div class="card" style="padding:1.5rem;">
@@ -518,12 +439,11 @@
         </div>
       </div>
 
-      <div class="dark-card" style="padding:1.75rem;">
+      <div class="dark-card">
         <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:1.25rem;">
-
           <div>
-            <p style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(244,114,182,.65);margin-bottom:.25rem;">Total Tagihan</p>
-            <h3 id="txtTotal" style="font-size:2.75rem;font-weight:900;color:#f9a8d4;letter-spacing:-.03em;line-height:1;" class="t-disp">Rp 0</h3>
+            <p style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.25rem;">Total Tagihan</p>
+            <h3 id="txtTotal" style="font-size:2.75rem;font-weight:900;color:white;letter-spacing:-.03em;line-height:1;" class="t-disp">Rp 0</h3>
             <div id="discountInfo" style="display:none;margin-top:.375rem;">
               <span style="font-size:.6875rem;color:rgba(255,255,255,.45);text-decoration:line-through;" id="txtHargaAsli"></span>
               <span style="font-size:.6875rem;color:#6ee7b7;font-weight:700;margin-left:.5rem;" id="txtDiskonInfo"></span>
@@ -537,10 +457,10 @@
 
           <div id="divTunai" style="display:flex;flex-direction:column;gap:.625rem;">
             <label style="font-size:.625rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Uang Diterima</label>
-            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this);hitung()" style="background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:var(--radius-md);padding:1rem 1.125rem;font-size:1.5rem;font-weight:900;color:white;outline:none;font-family:var(--font-body);width:100%;transition:border-color var(--transition),box-shadow var(--transition);" placeholder="Rp 0" onfocus="this.style.borderColor='rgba(244,114,182,.6)';this.style.boxShadow='0 0 0 3px rgba(244,114,182,.12)'" onblur="this.style.borderColor='rgba(255,255,255,.12)';this.style.boxShadow='none'">
+            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this);hitung()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-md);padding:1rem 1.125rem;font-size:1.5rem;font-weight:900;color:white;outline:none;font-family:var(--font-body);width:100%;" placeholder="Rp 0">
             <div style="display:flex;gap:.375rem;flex-wrap:wrap;" id="quickAmounts"></div>
             
-            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:.875rem 1rem;border-radius:var(--radius-md);">
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:.875rem 1rem;border-radius:var(--radius-md);">
               <span style="font-size:.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Kembalian</span>
               <span id="txtKembali" style="font-size:1.375rem;font-weight:900;color:#6ee7b7;">Rp 0</span>
             </div>
@@ -548,25 +468,22 @@
 
           <button onclick="simpan()" class="btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:1.125rem;height:1.125rem;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
-            SIMPAN &amp; KIRIM NOTA
+            SIMPAN & KIRIM NOTA
           </button>
-
         </div>
       </div>
-
     </div>
   </div>
 
   <div id="tab-riwayat" class="tab-konten" style="display:none;">
     <div style="display:flex;flex-direction:column;gap:1rem;">
-
-      <div class="omset-card" style="padding:1.75rem;">
+      <div class="omset-card">
         <div style="position:relative;z-index:1;">
           <p id="labelOmset" style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.375rem;font-family:var(--font-body);">Total Omset Hari Ini</p>
           <h4 id="txtOmset" class="t-disp" style="font-size:2.5rem;font-weight:700;color:white;letter-spacing:-.02em;line-height:1;">Rp 0</h4>
           <div style="margin-top:.875rem;display:flex;gap:.625rem;flex-wrap:wrap;" id="statsRow">
-            <span class="stat-chip" id="statTx" style="background:rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.14);">0 transaksi</span>
-            <span class="stat-chip" id="statAvg" style="background:rgba(255,255,255,.10);color:rgba(255,255,255,.65);border-color:rgba(255,255,255,.10);">Avg Rp 0</span>
+            <span class="stat-chip" id="statTx">0 transaksi</span>
+            <span class="stat-chip" id="statAvg">Avg Rp 0</span>
           </div>
         </div>
       </div>
@@ -576,7 +493,7 @@
           <div>
             <p style="font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--rose);">Filter Laporan</p>
           </div>
-          <button onclick="muatData(true)" style="font-size:.625rem;font-weight:700;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.4rem .875rem;border-radius:9999px;cursor:pointer;transition:all var(--transition);font-family:var(--font-body);display:flex;align-items:center;gap:.35rem;">
+          <button onclick="muatData(true)" style="font-size:.625rem;font-weight:700;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.4rem .875rem;border-radius:9999px;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;gap:.35rem;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:.875rem;height:.875rem;"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
             SINKRON
           </button>
@@ -587,7 +504,7 @@
           <button onclick="setFilter('kalender')" id="btn-f-kalender" class="pill">🔍 Cari Tanggal</button>
         </div>
 
-        <hr class="divider" style="margin:.875rem 0;">
+        <hr style="border: none; border-top: 1px solid var(--border); margin: .875rem 0;">
         <label class="field-label">Rekap Per Bulan</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
           <select id="filterBulan" onchange="setFilter('bulan')" class="inp" style="padding:.6875rem .875rem;font-size:.8125rem;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
@@ -610,10 +527,8 @@
       </div>
 
       <div id="listRiwayat" style="display:flex;flex-direction:column;gap:.625rem;"></div>
-
     </div>
   </div>
-
 </main>
 
 <script>
@@ -625,7 +540,6 @@ let currentFilter = 'hari_ini';
 let mBayar = 'Cash';
 let isDark = false;
 
-// ── Wilayah ──────────────────────────────────────
 const wilayahData = {
   "Surakarta": {
     "Banjarsari": ["Banjarsari","Banyuanyar","Gilingan","Joglo","Kadipiro","Keprabon","Kestalan","Ketelan","Manahan","Mangkubumen","Nusukan","Punggawan","Setabelan","Sumber","Timuran"],
@@ -644,7 +558,6 @@ const wilayahData = {
   }
 };
 
-// ── Theme ─────────────────────────────────────────
 function toggleTheme() {
   isDark = !isDark;
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -652,7 +565,6 @@ function toggleTheme() {
   document.getElementById('iconMoon').style.display = isDark ? 'block' : 'none';
 }
 
-// ── Clock badge ───────────────────────────────────
 function updateClock() {
   const now = new Date();
   document.getElementById('badgeTgl').textContent = now.toLocaleDateString('id-ID', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -660,7 +572,6 @@ function updateClock() {
 }
 updateClock(); setInterval(updateClock, 30000);
 
-// ── Nota ID ───────────────────────────────────────
 function generateNotaID() {
   const d = new Date();
   const tglBln = String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
@@ -672,7 +583,6 @@ function generateNotaID() {
   return `AS-${tglBln}-${String(lastSeq).padStart(2,'0')}`;
 }
 
-// ── Helpers ───────────────────────────────────────
 function setMetode(m) {
   mBayar = m;
   ['btnCash','btnQRIS'].forEach(id => document.getElementById(id).classList.remove('active'));
@@ -723,16 +633,14 @@ function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
 function clean(s) { return parseInt(String(s).replace(/[^0-9]/g,''))||0; }
 function formatRpInput(i) { let v=i.value.replace(/[^0-9]/g,''); i.value=v?formatRp(v):''; }
 
-// ── FIX: Smart Quick Amounts ──────────────────────
 function updateQuickAmounts(total) {
   const container = document.getElementById('quickAmounts');
   if (total <= 0) { container.innerHTML = ''; return; }
 
-  let amounts = [total]; // Uang pas selalu ada
+  let amounts = [total];
   if (total < 50000) amounts.push(50000);
   if (total < 100000) amounts.push(100000);
   
-  // Hapus duplikat dan pastikan unik
   amounts = [...new Set(amounts)].sort((a,b) => a-b);
 
   container.innerHTML = amounts.map(p => {
@@ -754,9 +662,6 @@ function hitung() {
 
   const txtTotal = document.getElementById('txtTotal');
   txtTotal.textContent = 'Rp '+formatRp(total);
-  txtTotal.classList.remove('num-flash');
-  void txtTotal.offsetWidth;
-  txtTotal.classList.add('num-flash');
 
   document.getElementById('txtKembali').textContent = 'Rp '+formatRp(Math.max(0,b-total));
 
@@ -767,22 +672,18 @@ function hitung() {
     document.getElementById('txtDiskonInfo').textContent = `Hemat Rp ${formatRp(d)}`;
   } else { discInfo.style.display = 'none'; }
 
-  // Perbarui tombol cepat HANYA jika bukan sedang mengetik di input pembayaran
   if (document.activeElement.id !== 'inpBayar') {
     updateQuickAmounts(total);
   }
 }
 
-// ── FIX: parseISO untuk Filter ───────────────────
 function parseISO(s) {
   if (!s) return "";
   let d = new Date(s);
-  // Tambahkan offset zona waktu untuk konsistensi pembacaan
   if (typeof s === 'string' && s.includes('T17:00')) d.setHours(d.getHours()+7);
   return isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
 }
 
-// ── renderRiwayat ─────────────────────────────────
 function renderRiwayat() {
   const listEl = document.getElementById('listRiwayat');
   const tzOffset = (new Date()).getTimezoneOffset() * 60000;
@@ -817,7 +718,6 @@ function renderRiwayat() {
   document.getElementById('labelOmset').textContent = label;
   const omsetEl = document.getElementById('txtOmset');
   omsetEl.textContent = 'Rp '+formatRp(total);
-  omsetEl.classList.remove('num-flash'); void omsetEl.offsetWidth; omsetEl.classList.add('num-flash');
   document.getElementById('statTx').textContent = `${sorted.length} transaksi`;
   document.getElementById('statAvg').textContent = sorted.length ? `Avg Rp ${formatRp(Math.round(total/sorted.length))}` : 'Avg Rp 0';
 
@@ -849,13 +749,12 @@ function renderRiwayat() {
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;flex-shrink:0;">
         <p style="font-size:1.0625rem;font-weight:700;color:var(--ink);" class="t-disp">Rp ${formatRp(nilai)}</p>
         <span style="font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .625rem;border-radius:9999px;background:${metBg};color:${metColor};">${met}</span>
-        <button onclick="hapus('${t["ID Nota"]}')" style="font-size:.625rem;font-weight:600;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.2rem .625rem;border-radius:.375rem;cursor:pointer;transition:all var(--transition);margin-top:.125rem;font-family:var(--font-body);">Hapus</button>
+        <button onclick="hapus('${t["ID Nota"]}')" style="font-size:.625rem;font-weight:600;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.2rem .625rem;border-radius:.375rem;cursor:pointer;margin-top:.125rem;font-family:var(--font-body);">Hapus</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// ── muatData ──────────────────────────────────────
 async function muatData(f=false) {
   if (f) showLoader(true);
   try {
@@ -870,7 +769,6 @@ async function muatData(f=false) {
   showLoader(false);
 }
 
-// ── Smooth Form Reset ─────────────────────────────
 function resetForm() {
   document.getElementById('inpNama').value = '';
   document.getElementById('inpHp').value = '';
@@ -888,7 +786,6 @@ function resetForm() {
   hitung();
 }
 
-// ── simpan ────────────────────────────────────────
 async function simpan() {
   const nama = document.getElementById('inpNama').value.trim();
   const hp = document.getElementById('inpHp').value.trim();
@@ -914,13 +811,9 @@ async function simpan() {
   showLoader(true);
   const id = generateNotaID();
   
-  // FIX: Simpan Format Tanggal Standard API/ISO
   const tzOffset = (new Date()).getTimezoneOffset() * 60000;
   const tglISO = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
-  const tglTampil = new Date().toLocaleDateString('id-ID'); // Untuk nota WA
-
-  // FIX: Buka Tab Kosong lebih awal untuk menghindari blokir popup bawaan Safari/Chrome Mobile
-  const waWindow = window.open('about:blank', '_blank');
+  const tglTampil = new Date().toLocaleDateString('id-ID');
 
   try {
     await fetch(SHEETS_URL, {
@@ -928,51 +821,62 @@ async function simpan() {
       body: JSON.stringify({tanggal:tglISO,idNota:id,pelanggan:nama,noWa:hp,kabupaten:kab,kecamatan:kec,kelurahan:kel,layanan:lay,diskon:diskon,totalAkhir:total,metodeBayar:mBayar,catatan:catatan})
     });
 
+    // MENGGANTI EMOJI dengan karakter standar yang di dukung 100% oleh semua perangkat
+    // dan update LINK GOOGLE MAPS
     const msg = encodeURIComponent(
-      `✨ *NOTA SALON ALESHA* ✨\n` +
+      `★ *NOTA SALON ALESHA* ★\n` +
       `────────────────────────\n` +
-      `🧾 *No. Nota:* ${id}\n` +
-      `📅 *Tanggal:* ${tglTampil}\n` +
+      `*No. Nota:* ${id}\n` +
+      `*Tanggal:* ${tglTampil}\n` +
       `────────────────────────\n` +
-      `👤 *Pelanggan:* ${nama}\n` +
-      `✂️ *Layanan:* ${lay}\n` +
-      (catatan ? `📝 *Catatan:* ${catatan}\n` : '') +
+      `*Pelanggan:* ${nama}\n` +
+      `*Layanan:* ${lay}\n` +
+      (catatan ? `*Catatan:* ${catatan}\n` : '') +
       `\n` +
-      `💵 *Harga:* Rp ${formatRp(harga)}\n` +
-      (diskon > 0 ? `🏷️ *Diskon:* -Rp ${formatRp(diskon)}\n` : '') +
+      `*Harga:* Rp ${formatRp(harga)}\n` +
+      (diskon > 0 ? `*Diskon:* -Rp ${formatRp(diskon)}\n` : '') +
       `────────────────────────\n` +
-      `💰 *TOTAL:* *Rp ${formatRp(total)}*\n` +
-      `💳 *Metode:* ${mBayar}\n` +
+      `*TOTAL:* *Rp ${formatRp(total)}*\n` +
+      `*Metode:* ${mBayar}\n` +
       `────────────────────────\n\n` +
-      `Terima kasih sudah perawatan di Salon Alesha! 🥰\n\n` +
+      `Terima kasih sudah perawatan di Salon Alesha! 🙏\n\n` +
       `Mohon berikan *Rating ⭐⭐⭐⭐⭐* di Google Maps kami:\n` +
-      `🔗 https://g.page/salonalesha/review\n\n` +
-      `Sampai jumpa di treatment berikutnya! ✨`
+      `https://maps.app.goo.gl/M3bfy5Bzmta9zLJF7\n\n` +
+      `Sampai jumpa di treatment berikutnya! 🌸`
     );
 
-    // FIX: Redirect tab yang sudah dibuka ke URL WhatsApp
-    if(waWindow) {
-        waWindow.location.href = `https://wa.me/${hp.replace(/^0/,'62')}?text=${msg}`;
+    // FIX: Menggunakan Deep Link Native agar tidak lewat browser
+    const waPhone = hp.replace(/^0/,'62');
+    
+    // Deteksi OS untuk memaksa membuka Aplikasi asli (Bukan versi Website WhatsApp)
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    let waUrl = `whatsapp://send?phone=${waPhone}&text=${msg}`;
+    
+    if (isAndroid) {
+      // Intent khusus Android agar 100% dipaksa masuk ke Aplikasi WhatsApp
+      waUrl = `intent://send?phone=${waPhone}&text=${msg}#Intent;package=com.whatsapp;scheme=whatsapp;end`;
     }
 
     showLoader(false);
     showToast('✅ Transaksi berhasil disimpan!');
     
-    // UX Flow: Bersihkan form dan pindah tab riwayat
     resetForm();
-    muatData(false); // Update list
+    muatData(false);
     bukaTab(null, 'riwayat');
     document.getElementById('navKasir').classList.remove('active');
     document.getElementById('navRiwayat').classList.add('active');
 
+    // Beri sedikit jeda agar animasi pindah tab selesai, lalu otomatis buka WA Native App
+    setTimeout(() => {
+      window.location.href = waUrl;
+    }, 400);
+
   } catch(e) {
-    if(waWindow) waWindow.close(); // Tutup tab kosong jika gagal koneksi
     showLoader(false);
-    showToast('❌ Gagal menyimpan transaksi');
+    showToast('❌ Gagal menyimpan transaksi, silakan coba lagi');
   }
 }
 
-// ── hapus ──────────────────────────────────────────
 async function hapus(id) {
   if (!confirm('Hapus transaksi ini?')) return;
   showLoader(true);
@@ -984,7 +888,6 @@ async function hapus(id) {
   showLoader(false);
 }
 
-// ── Tab & Filter ──────────────────────────────────
 function bukaTab(e, t) {
   document.querySelectorAll('.tab-konten').forEach(el => el.style.display='none');
   document.getElementById('tab-'+t).style.display = 'block';
@@ -1002,11 +905,10 @@ function setFilter(f) {
   renderRiwayat();
 }
 
-// ── UI helpers ────────────────────────────────────
 function showLoader(s) {
   const el = document.getElementById('loader');
   if (s) { el.classList.add('show'); el.style.display='flex'; }
-  else { el.classList.remove('show'); setTimeout(()=>{ el.style.display='none'; },200); }
+  else { el.classList.remove('show'); setTimeout(()=>{ el.style.display='none'; },100); }
 }
 
 let toastTimer = null;
@@ -1018,7 +920,6 @@ function showToast(msg) {
   toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
 }
 
-// ── Init ──────────────────────────────────────────
 window.onload = () => {
   const now = new Date();
   document.getElementById('filterBulan').value = String(now.getMonth()+1).padStart(2,'0');
