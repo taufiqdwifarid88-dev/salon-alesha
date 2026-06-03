@@ -10,19 +10,11 @@
   <meta name="theme-color" content="#db2777">
   <meta name="apple-mobile-web-app-capable" content="yes">
   
-  <script>
-    if (localStorage.getItem('alesha_dark_mode') === 'enabled') {
-      document.documentElement.classList.add('dark');
-    }
-  </script>
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overscroll-behavior-y: none; touch-action: pan-x pan-y; -webkit-tap-highlight-color: transparent; transition: background-color 0.3s, color 0.3s; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; overscroll-behavior-y: none; touch-action: pan-x pan-y; -webkit-tap-highlight-color: transparent; }
     .tab-konten { display: none; opacity: 0; }
     .tab-konten.active { display: block; opacity: 1; transition: opacity 0.3s; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -30,42 +22,19 @@
     .btn-active-effect:active { transform: scale(0.96); }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
-
-    /* ================= SYSTEM DARK MODE INJECTOR ================= */
-    .dark { background-color: #0f172a !important; color: #f1f5f9 !important; }
-    .dark body { background-color: #0f172a !important; color: #f1f5f9 !important; }
-    .dark nav { background-color: rgba(15, 23, 42, 0.9) !important; border-color: #1e293b !important; }
-    .dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
-    .dark .bg-slate-50, .dark input, .dark select { background-color: #0f172a !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; }
-    .dark select option { background-color: #0f172a !important; color: #f1f5f9 !important; }
-    .dark .text-slate-800 { color: #f1f5f9 !important; }
-    .dark .text-slate-700 { color: #cbd5e1 !important; }
-    .dark .text-slate-600 { color: #94a3b8 !important; }
-    .dark .text-slate-500 { color: #64748b !important; }
-    .dark .border-slate-100, .dark .border-slate-200, .dark .divide-slate-100 > * { border-color: #334155 !important; }
-    .dark .bg-slate-100 { background-color: #0f172a !important; }
-    .dark .nav-btn.bg-white { background-color: #db2777 !important; color: #ffffff !important; }
-    .dark #btn-dash-grafik.bg-pink-50, .dark #btn-dash-db.bg-pink-50 { background-color: rgba(219, 39, 119, 0.2) !important; color: #f472b6 !important; }
-    .dark .hover:bg-pink-50\/50:hover { background-color: rgba(219, 39, 119, 0.1) !important; }
-    .dark #loader .bg-white { background-color: #1e293b !important; }
   </style>
 </head>
 <body class="text-slate-800 antialiased">
 
   <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/50 p-4">
     <div class="max-w-5xl mx-auto flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <a href="./index.html" class="flex items-center py-1">
-          <img src="image_f24940.jpg" alt="Logo Griya Cantik Alesha" class="h-12 md:h-16 w-auto max-w-[140px] md:max-w-[200px] object-contain rounded-xl drop-shadow-sm transition-all">
-        </a>
-        <button onclick="toggleDarkMode()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs shadow-sm btn-active-effect flex items-center justify-center transition-all">
-          <span id="dark-icon">🌙</span>
-        </button>
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">💇‍♀️</span>
+        <h1 class="text-lg font-extrabold text-pink-600 uppercase tracking-tighter">Salon Alesha</h1>
       </div>
-      <div class="flex gap-1 bg-slate-100 p-1 rounded-2xl overflow-x-auto no-scrollbar">
-        <button onclick="bukaTab(event, 'kasir')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-pink-600 shadow-sm btn-active-effect whitespace-nowrap">Kasir</button>
-        <button onclick="bukaTab(event, 'dashboard')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 btn-active-effect whitespace-nowrap">Dashboard</button>
-        <button onclick="bukaTab(event, 'riwayat')" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 btn-active-effect whitespace-nowrap">Laporan</button>
+      <div class="flex gap-1 bg-slate-100 p-1 rounded-2xl">
+        <button onclick="bukaTab(event, 'kasir')" class="nav-btn px-5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-pink-600 shadow-sm btn-active-effect">Kasir</button>
+        <button onclick="bukaTab(event, 'riwayat')" class="nav-btn px-5 py-2 rounded-xl text-xs font-bold transition-all text-slate-500 btn-active-effect">Laporan</button>
       </div>
     </div>
   </nav>
@@ -77,9 +46,9 @@
     </div>
   </div>
 
-  <div class="max-w-5xl mx-auto p-4 pb-20">
+  <div class="max-w-2xl mx-auto p-4 pb-20">
     
-    <div id="tab-kasir" class="tab-konten active space-y-4 max-w-2xl mx-auto">
+    <div id="tab-kasir" class="tab-konten active space-y-4">
       <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 space-y-4">
         <h2 class="font-bold text-slate-700 flex items-center gap-2 text-sm uppercase tracking-wider"><span class="bg-pink-100 p-1.5 rounded-lg text-pink-600 text-xs">👤</span> Pelanggan</h2>
         <div class="grid gap-3">
@@ -145,94 +114,7 @@
       </div>
     </div>
 
-
-    <div id="tab-dashboard" class="tab-konten">
-      <div class="flex flex-col md:flex-row gap-4 items-start">
-        
-        <div class="w-full md:w-1/4 bg-white p-3 rounded-[2rem] shadow-sm border border-slate-100 flex md:flex-col gap-2 overflow-x-auto no-scrollbar sticky top-20">
-          <p class="hidden md:block text-[10px] text-slate-400 font-bold uppercase tracking-widest px-2 pt-2 mb-1">Menu Admin</p>
-          <button onclick="setDashMenu('grafik')" id="btn-dash-grafik" class="px-5 py-3 rounded-xl text-sm font-bold bg-pink-50 text-pink-600 text-left whitespace-nowrap transition-all flex items-center gap-2">📊 Dashboard</button>
-          <button onclick="setDashMenu('db')" id="btn-dash-db" class="px-5 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 text-left whitespace-nowrap transition-all flex items-center gap-2">🗄️ Database</button>
-        </div>
-
-        <div class="w-full md:w-3/4 space-y-4">
-          
-          <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 space-y-2">
-            <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 block tracking-widest">Filter Rentang Periode</label>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="space-y-1">
-                <span class="text-[9px] text-slate-400 font-bold ml-1">Dari Tanggal</span>
-                <input type="date" id="dashTglMulai" onchange="resetPageDanRender()" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-xs font-bold border border-slate-200 text-slate-600">
-              </div>
-              <div class="space-y-1">
-                <span class="text-[9px] text-slate-400 font-bold ml-1">Sampai Tanggal</span>
-                <input type="date" id="dashTglSelesai" onchange="resetPageDanRender()" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-xs font-bold border border-slate-200 text-slate-600">
-              </div>
-            </div>
-          </div>
-
-          <div id="view-dash-grafik" class="space-y-4 animate-fadeIn">
-            <div class="grid grid-cols-2 gap-3">
-              <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-center">
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Transaksi</p>
-                <h4 id="dashTotalTrx" class="text-3xl font-black text-slate-800">0</h4>
-              </div>
-              <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-center">
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Omset Periode</p>
-                <h4 id="dashTotalOmset" class="text-xl font-black text-pink-600">Rp 0</h4>
-              </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100">
-              <h3 class="text-xs font-bold text-slate-700 uppercase mb-4 flex items-center gap-2 tracking-wider">
-                <span class="bg-pink-100 p-1.5 rounded-lg text-pink-600 text-xs">📈</span> Grafik Omset Harian
-              </h3>
-              <div class="relative w-full h-64">
-                <canvas id="omsetChart"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div id="view-dash-db" class="hidden space-y-4 animate-fadeIn">
-            <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xs font-bold text-slate-700 uppercase flex items-center gap-2 tracking-wider">
-                  <span class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600 text-xs">🗄️</span> Database Nota
-                </h3>
-                <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded-md font-bold" id="dashTotalRow">0 Data</span>
-              </div>
-              
-              <div class="overflow-x-auto rounded-2xl border border-slate-100">
-                <table class="w-full text-left text-xs text-slate-600 min-w-[650px]">
-                  <thead class="bg-slate-50 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
-                    <tr>
-                      <th class="p-4 whitespace-nowrap">Waktu</th>
-                      <th class="p-4 whitespace-nowrap">ID Nota</th>
-                      <th class="p-4 whitespace-nowrap">Pelanggan</th>
-                      <th class="p-4 whitespace-nowrap">No. Customer</th>
-                      <th class="p-4 whitespace-nowrap">Treatment</th>
-                      <th class="p-4 whitespace-nowrap text-right">Total (Rp)</th>
-                    </tr>
-                  </thead>
-                  <tbody id="dbTableBody" class="divide-y divide-slate-100">
-                    </tbody>
-                </table>
-              </div>
-
-              <div class="flex justify-between items-center mt-4 px-2">
-                <button onclick="prevPage()" id="btnPrev" class="px-4 py-2 bg-slate-100 text-slate-500 rounded-lg text-xs font-bold disabled:opacity-50 transition-all hover:bg-slate-200 btn-active-effect">⬅️ Prev</button>
-                <span id="pageInfo" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Halaman 1 / 1</span>
-                <button onclick="nextPage()" id="btnNext" class="px-4 py-2 bg-pink-50 text-pink-600 rounded-lg text-xs font-bold disabled:opacity-50 transition-all hover:bg-pink-100 btn-active-effect">Next ➡️</button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <div id="tab-riwayat" class="tab-konten space-y-4 max-w-2xl mx-auto">
+    <div id="tab-riwayat" class="tab-konten space-y-4">
       <div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 space-y-4">
         <div class="flex justify-between items-center">
           <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Manajemen Laporan</p>
@@ -282,24 +164,25 @@
     let dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
     let currentFilter = 'hari_ini';
     let mBayar = 'Cash';
-    let chartInstance = null;
-
-    let currentPage = 1;
-    const rowsPerPage = 50;
 
     const wilayahData = {
-      "Surakarta": { "Banjarsari": ["Banjarsari", "Banyuanyar", "Gilingan", "Joglo", "Kadipiro", "Keprabon", "Kestalan", "Ketelan", "Manahan", "Mangkubumen", "Nusukan", "Punggawan", "Setabelan", "Sumber", "Timuran"], "Jebres": ["Gandekan", "Jagalan", "Jebres", "Kepatihan Kulon", "Kepatihan Wetan", "Mojosongo", "Pucangsawit", "Sewu", "Tegalharjo"], "Laweyan": ["Bumi", "Jajar", "Karangasem", "Kerten", "Laweyan", "Pajang", "Panularan", "Penumping", "Purwosari", "Sondakan", "Sriwedari"], "Pasar Kliwon": ["Baluwarti", "Gajahan", "Joyosuran", "Kampung Baru", "Kauman", "Kedung Lumbu", "Pasar Kliwon", "Sangkrah", "Semanggi"], "Serengan": ["Danukusuman", "Jayengan", "Joyotakan", "Kemlayan", "Kratonan", "Serengan", "Tipes"] },
-      "Sukoharjo": { "Grogol": ["Cemani", "Banaran", "Grogol", "Kadokan", "Kwarasan", "Langenharjo", "Madegondo", "Manang", "Pandeyan", "Parangjoro", "Pondok", "Sanggrahan", "Telukan"], "Kartasura": ["Gonilan", "Gumpang", "Kartasura", "Kertonatan", "Makamhaji", "Ngadirejo", "Ngemplak", "Ngabeyan", "Pabelan", "Pucangan", "Singopuran", "Wirogunan"], "Baki": ["Bakipandeyan", "Bentakan", "Duwet", "Gedongan", "Jetis", "Kadilangu", "Kudu", "Mancasan", "Menuran", "Ngrombo", "Siwal", "Waru"], "Sukoharjo": ["Sukoharjo", "Begajah", "Bulakrejo", "Bulakan", "Gayam", "Joho", "Kenep", "Kriwen", "Mandan"], "Mojolaban": ["Bekonang", "Cangkol", "Demakan", "Dukuh", "Gadingan", "Joho", "Palur", "Wirun"], "Gatak": ["Gatak", "Blimbing", "Geneng", "Krapyak", "Luwang", "Mayang", "Sanggung", "Taji", "Trangsan"] },
+      "Surakarta": {
+        "Banjarsari": ["Banjarsari", "Banyuanyar", "Gilingan", "Joglo", "Kadipiro", "Keprabon", "Kestalan", "Ketelan", "Manahan", "Mangkubumen", "Nusukan", "Punggawan", "Setabelan", "Sumber", "Timuran"],
+        "Jebres": ["Gandekan", "Jagalan", "Jebres", "Kepatihan Kulon", "Kepatihan Wetan", "Mojosongo", "Pucangsawit", "Sewu", "Tegalharjo"],
+        "Laweyan": ["Bumi", "Jajar", "Karangasem", "Kerten", "Laweyan", "Pajang", "Panularan", "Penumping", "Purwosari", "Sondakan", "Sriwedari"],
+        "Pasar Kliwon": ["Baluwarti", "Gajahan", "Joyosuran", "Kampung Baru", "Kauman", "Kedung Lumbu", "Pasar Kliwon", "Sangkrah", "Semanggi"],
+        "Serengan": ["Danukusuman", "Jayengan", "Joyotakan", "Kemlayan", "Kratonan", "Serengan", "Tipes"]
+      },
+      "Sukoharjo": {
+        "Grogol": ["Cemani", "Banaran", "Grogol", "Kadokan", "Kwarasan", "Langenharjo", "Madegondo", "Manang", "Pandeyan", "Parangjoro", "Pondok", "Sanggrahan", "Telukan"],
+        "Kartasura": ["Gonilan", "Gumpang", "Kartasura", "Kertonatan", "Makamhaji", "Ngadirejo", "Ngemplak", "Ngabeyan", "Pabelan", "Pucangan", "Singopuran", "Wirogunan"],
+        "Baki": ["Bakipandeyan", "Bentakan", "Duwet", "Gedongan", "Jetis", "Kadilangu", "Kudu", "Mancasan", "Menuran", "Ngrombo", "Siwal", "Waru"],
+        "Sukoharjo": ["Sukoharjo", "Begajah", "Bulakrejo", "Bulakan", "Gayam", "Joho", "Kenep", "Kriwen", "Mandan"],
+        "Mojolaban": ["Bekonang", "Cangkol", "Demakan", "Dukuh", "Gadingan", "Joho", "Palur", "Wirun"],
+        "Gatak": ["Gatak", "Blimbing", "Geneng", "Krapyak", "Luwang", "Mayang", "Sanggung", "Taji", "Trangsan"]
+      },
       "Lainnya": { "Wilayah Lain": ["Lainnya"] }
     };
-
-    // LOGIKA DI-UPGRADE: Fungsi Toggle Dark Mode Aman
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('alesha_dark_mode', isDark ? 'enabled' : 'disabled');
-      document.getElementById('dark-icon').innerText = isDark ? '☀️' : '🌙';
-      if (chartInstance) renderDashboard(); // Redraw grafik agar menyesuaikan warna teks dark mode
-    }
 
     function generateNotaID() {
       const d = new Date();
@@ -354,147 +237,9 @@
 
     function parseISO(s) {
       if(!s) return "";
-      let parts = s.split(' '); 
-      let dParts = parts[0].split('/');
-      let iso = dParts.length === 3 ? `${dParts[2]}-${dParts[1].padStart(2,'0')}-${dParts[0].padStart(2,'0')}` : parts[0];
-      let d = new Date(iso);
+      let d = new Date(s);
+      if (typeof s === 'string' && s.includes('T17:00')) d.setHours(d.getHours() + 7);
       return isNaN(d.getTime()) ? "" : d.toLocaleDateString('en-CA');
-    }
-
-    function setDashMenu(menu) {
-        document.getElementById('btn-dash-grafik').classList.remove('bg-pink-50', 'text-pink-600');
-        document.getElementById('btn-dash-grafik').classList.add('text-slate-500');
-        document.getElementById('btn-dash-db').classList.remove('bg-pink-50', 'text-pink-600');
-        document.getElementById('btn-dash-db').classList.add('text-slate-500');
-
-        document.getElementById('view-dash-grafik').classList.add('hidden');
-        document.getElementById('view-dash-db').classList.add('hidden');
-
-        if(menu === 'grafik') {
-            document.getElementById('btn-dash-grafik').classList.remove('text-slate-500');
-            document.getElementById('btn-dash-grafik').classList.add('bg-pink-50', 'text-pink-600');
-            document.getElementById('view-dash-grafik').classList.remove('hidden');
-        } else {
-            document.getElementById('btn-dash-db').classList.remove('text-slate-500');
-            document.getElementById('btn-dash-db').classList.add('bg-pink-50', 'text-pink-600');
-            document.getElementById('view-dash-db').classList.remove('hidden');
-        }
-    }
-
-    function resetPageDanRender() {
-      currentPage = 1;
-      renderDashboard();
-    }
-
-    function prevPage() { if (currentPage > 1) { currentPage--; renderDashboard(); } }
-    function nextPage() { currentPage++; renderDashboard(); }
-
-    function renderDashboard() {
-      let tglMulai = document.getElementById('dashTglMulai').value;
-      let tglSelesai = document.getElementById('dashTglSelesai').value;
-      
-      let filteredTrx = dTransaksi;
-      if (tglMulai) { filteredTrx = filteredTrx.filter(t => parseISO(t.Tanggal) >= tglMulai); }
-      if (tglSelesai) { filteredTrx = filteredTrx.filter(t => parseISO(t.Tanggal) <= tglSelesai); }
-
-      const totalTrx = filteredTrx.length;
-      const totalOmset = filteredTrx.reduce((sum, t) => sum + clean(t["Total Akhir"] || 0), 0);
-      
-      document.getElementById('dashTotalTrx').innerText = totalTrx;
-      document.getElementById('dashTotalRow').innerText = `${totalTrx} Data`;
-      document.getElementById('dashTotalOmset').innerText = 'Rp ' + formatRp(totalOmset);
-
-      // --- RENDER GRAFIK DENGAN PENYESUAIAN WARNA DARK MODE ---
-      let chartDataArray = [...filteredTrx].sort((a, b) => {
-          let dateA = new Date(parseISO(a.Tanggal));
-          let dateB = new Date(parseISO(b.Tanggal));
-          return dateA - dateB; 
-      });
-
-      const dailyData = {};
-      chartDataArray.forEach(t => {
-          let dateISO = parseISO(t.Tanggal) || t.Tanggal.split(' ')[0];
-          if(dateISO) {
-            let parts = dateISO.split('-');
-            let shortDate = parts.length === 3 ? `${parts[2]}/${parts[1]}` : dateISO;
-            if(!dailyData[shortDate]) dailyData[shortDate] = 0;
-            dailyData[shortDate] += clean(t["Total Akhir"] || 0);
-          }
-      });
-
-      const labels = Object.keys(dailyData); 
-      const dataPoints = labels.map(l => dailyData[l]);
-
-      // Ambil Status Tema Aktif saat ini untuk menentukan warna teks grafik
-      const isDark = document.documentElement.classList.contains('dark');
-      const labelColor = isDark ? '#cbd5e1' : '#64748b';
-      const gridLineColor = isDark ? 'rgba(51, 65, 85, 0.4)' : 'rgba(241, 245, 249, 1)';
-
-      if (chartInstance) chartInstance.destroy();
-      const ctx = document.getElementById('omsetChart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: labels,
-              datasets: [{
-                  label: 'Omset (Rp)',
-                  borderColor: '#db2777',
-                  backgroundColor: isDark ? 'rgba(219, 39, 119, 0.15)' : 'rgba(219, 39, 119, 0.1)',
-                  borderWidth: 3,
-                  pointBackgroundColor: '#db2777',
-                  pointBorderColor: isDark ? '#1e293b' : '#fff',
-                  pointRadius: 4,
-                  fill: true,
-                  tension: 0.4,
-                  data: dataPoints
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return 'Rp ' + formatRp(context.raw); } } } },
-              scales: {
-                  x: { grid: { display: false }, ticks: { color: labelColor, font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 } } },
-                  y: { border: { display: false }, grid: { color: gridLineColor }, ticks: { color: labelColor, font: { family: "'Plus Jakarta Sans', sans-serif", size: 10 }, callback: (v) => v >= 1000 ? (v/1000) + 'k' : v } }
-              }
-          }
-      });
-
-      // --- RENDER DATABASE PAGINASI ---
-      let reversedData = filteredTrx.slice().reverse(); 
-      let totalPages = Math.ceil(reversedData.length / rowsPerPage) || 1;
-      if (currentPage > totalPages) currentPage = totalPages;
-
-      let startIndex = (currentPage - 1) * rowsPerPage;
-      let paginatedData = reversedData.slice(startIndex, startIndex + rowsPerPage);
-
-      const tbody = document.getElementById('dbTableBody');
-      tbody.innerHTML = paginatedData.map(t => {
-          let rawTgl = t.Tanggal || "";
-          let tglTampil = rawTgl;
-          if (rawTgl.includes('T')) {
-              let dObj = new Date(rawTgl);
-              if (rawTgl.includes('T00:00') || rawTgl.includes('T17:00')) {
-                  tglTampil = dObj.toLocaleDateString('id-ID');
-              } else {
-                  tglTampil = dObj.toLocaleString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'}).replace(/\./g, ':');
-              }
-          }
-          const noCust = t["No WA"] || t["noWa"] || t["No HP"] || t["noHp"] || t["No. Customer"] || '-';
-          
-          return `<tr class="hover:bg-pink-50/50 transition-colors">
-              <td class="p-4 whitespace-nowrap text-[11px] font-semibold">${tglTampil}</td>
-              <td class="p-4 font-extrabold text-[11px] text-pink-600 whitespace-nowrap">${t["ID Nota"] || '-'}</td>
-              <td class="p-4 whitespace-nowrap font-semibold">${t.Pelanggan}</td>
-              <td class="p-4 whitespace-nowrap font-medium text-slate-400 dark:text-slate-400">${noCust}</td>
-              <td class="p-4 whitespace-nowrap text-[11px] max-w-[120px] truncate" title="${t.Treatment || t.layanan || '-'}">${t.Treatment || t.layanan || '-'}</td>
-              <td class="p-4 font-bold text-slate-800 whitespace-nowrap text-right">Rp ${formatRp(clean(t["Total Akhir"] || 0))}</td>
-          </tr>`;
-      }).join('') || '<tr><td colspan="6" class="p-6 text-center text-slate-400 italic font-medium">Belum ada data di database atau periode tidak cocok</td></tr>';
-
-      document.getElementById('pageInfo').innerText = `Halaman ${currentPage} / ${totalPages}`;
-      document.getElementById('btnPrev').disabled = (currentPage === 1);
-      document.getElementById('btnNext').disabled = (currentPage === totalPages);
     }
 
     function renderRiwayat() {
@@ -502,7 +247,10 @@
       const todayISO = new Date().toLocaleDateString('en-CA');
       let total = 0, filtered = dTransaksi, label = "Laporan Transaksi";
 
-      if (currentFilter === 'hari_ini') { filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO); label = "Omset Hari Ini"; }
+      if (currentFilter === 'hari_ini') { 
+        filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO); 
+        label = "Omset Hari Ini"; 
+      }
       else if (currentFilter === 'bulan') {
         const bln = document.getElementById('filterBulan').value;
         const thn = document.getElementById('filterTahun').value;
@@ -515,15 +263,12 @@
       }
 
       const html = filtered.slice().reverse().map(t => {
-        const nilai = clean(t["Total Akhir"] || 0); total += nilai;
+        const nilai = clean(t["Total Akhir"] || 0);
+        total += nilai;
         const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
-        
-        let rawTgl = t.Tanggal || ""; let tglTampil = rawTgl;
-        if (rawTgl.includes('T')) {
-          let dObj = new Date(rawTgl);
-          if (rawTgl.includes('T00:00') || rawTgl.includes('T17:00')) { tglTampil = dObj.toLocaleDateString('id-ID'); } 
-          else { tglTampil = dObj.toLocaleString('id-ID', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'}).replace(/\./g, ':'); }
-        }
+        let dObj = new Date(t.Tanggal);
+        if (typeof t.Tanggal === 'string' && t.Tanggal.includes('T17:00')) dObj.setHours(dObj.getHours() + 7);
+        let tglTampil = isNaN(dObj.getTime()) ? t.Tanggal : dObj.toLocaleDateString('id-ID');
 
         return `<div class="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-100 flex justify-between items-center active:bg-slate-50 transition-colors">
           <div class="space-y-1">
@@ -532,10 +277,10 @@
             <p class="text-[10px] text-pink-500 font-medium">${t.Treatment}</p>
           </div>
           <div class="text-right">
-            <p class="font-black text-slate-900 text-lg tracking-tighter dark:text-white">Rp ${formatRp(nilai)}</p>
+            <p class="font-black text-slate-900 text-lg tracking-tighter">Rp ${formatRp(nilai)}</p>
             <div class="flex flex-col items-end gap-1">
-                <p class="text-[9px] font-bold ${met === 'QRIS' ? 'text-blue-500' : 'text-emerald-600'} uppercase tracking-widest">${met}</p>
-                <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1 btn-active-effect">Hapus</button>
+               <p class="text-[9px] font-bold ${met === 'QRIS' ? 'text-blue-500' : 'text-emerald-600'} uppercase tracking-widest">${met}</p>
+               <button onclick="hapus('${t["ID Nota"]}')" class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-lg mt-1 btn-active-effect">Hapus</button>
             </div>
           </div>
         </div>`;
@@ -552,41 +297,30 @@
         const res = await fetch(SHEETS_URL);
         dTransaksi = await res.json();
         localStorage.setItem('alesha_data', JSON.stringify(dTransaksi));
-        renderRiwayat(); renderDashboard(); 
+        renderRiwayat();
       } catch (e) {}
       showLoader(false);
     }
 
     async function simpan() {
       const nama = document.getElementById('inpNama').value, hp = document.getElementById('inpHp').value, kab = document.getElementById('inpKab').value, kec = document.getElementById('inpKec').value, kel = document.getElementById('inpKel').value;
-      let lay = document.getElementById('inpLayanan').value; if(lay === 'Lainnya (Custom)') lay = document.getElementById('inpLayananLain').value;
+      let lay = document.getElementById('inpLayanan').value;
+      if(lay === 'Lainnya (Custom)') lay = document.getElementById('inpLayananLain').value;
       const harga = clean(document.getElementById('inpHarga').value), diskon = clean(document.getElementById('inpDiskon').value), total = harga - diskon;
 
       if(!nama || !hp || !lay || harga <= 0) return alert('Data belum lengkap!');
       showLoader(true);
-      const id = generateNotaID(); const now = new Date();
-      const tgl = now.toLocaleDateString('id-ID') + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(/\./g, ':');
-
-      let fHp = hp.trim().replace(/[^0-9+]/g, '');
-      if (fHp.startsWith('0')) fHp = '62' + fHp.slice(1);
-      else if (fHp.startsWith('+62')) fHp = '62' + fHp.slice(3);
-
-      const rawMsg = `✨ *NOTA SALON ALESHA* ✨\n-------------------------------------------\n🧾 *No. Nota:* ${id}\n📅 *Waktu:* ${tgl}\n-------------------------------------------\n👤 *Pelanggan:* ${nama}\n✂️ *Layanan:* ${lay}\n\n💵 *Harga:* Rp ${formatRp(harga)}\n🏷️ *Diskon:* -Rp ${formatRp(diskon)}\n-------------------------------------------\n💰 *TOTAL AKHIR:* *Rp ${formatRp(total)}*\n💳 *Metode:* ${mBayar}\n-------------------------------------------\n\nTerima kasih sudah perawatan di Salon Alesha! 🥰\n\nMohon dukungannya untuk memberikan *Rating Bintang 5* & ulasan positif di Google Maps kami ya Kak: \n🔗 https://g.page/salonalesha/review\n\nSampai jumpa di treatment berikutnya! ✨`;
-      
-      const waUrl = `https://wa.me/${fHp}?text=${encodeURIComponent(rawMsg)}`;
+      const id = generateNotaID(), tgl = new Date().toLocaleDateString('id-ID');
 
       try {
         await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ tanggal: tgl, idNota: id, pelanggan: nama, noWa: hp, kabupaten: kab, kecamatan: kec, kelurahan: kel, layanan: lay, diskon: diskon, totalAkhir: total, metodeBayar: mBayar }) });
         
-        const a = document.createElement('a');
-        a.href = waUrl; a.target = '_blank';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        const msg = `✨ *NOTA SALON ALESHA* ✨%0A-------------------------------------------%0A🧾 *No. Nota:* ${id}%0A📅 *Tanggal:* ${tgl}%0A-------------------------------------------%0A👤 *Pelanggan:* ${nama}%0A✂️ *Layanan:* ${lay}%0A%0A💵 *Harga:* Rp ${formatRp(harga)}%0A🏷️ *Diskon:* -Rp ${formatRp(diskon)}%0A-------------------------------------------%0A💰 *TOTAL AKHIR:* *Rp ${formatRp(total)}*%0A💳 *Metode:* ${mBayar}%0A-------------------------------------------%0A%0ATerima kasih sudah perawatan di Salon Alesha! 🥰%0A%0AMohon dukungannya untuk memberikan *Rating Bintang 5* & ulasan positif di Google Maps kami ya Kak: %0A🔗 https://g.page/salonalesha/review%0A%0ASampai jumpa di treatment berikutnya! ✨`;
 
-        setTimeout(() => { location.reload(); }, 1500);
-      } catch (e) { 
-        alert("Gagal Simpan!"); 
-        showLoader(false);
-      }
+        window.open(`https://wa.me/${hp.replace('0','62')}?text=${msg}`, '_blank');
+        location.reload();
+      } catch (e) { alert("Gagal Simpan!"); }
+      showLoader(false);
     }
 
     async function hapus(id) {
@@ -605,7 +339,6 @@
       document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('bg-white', 'text-pink-600', 'shadow-sm'); b.classList.add('text-slate-500'); });
       if(e) e.currentTarget.classList.add('bg-white', 'text-pink-600', 'shadow-sm');
       if(t === 'riwayat') renderRiwayat();
-      if(t === 'dashboard') renderDashboard();
     }
 
     function setFilter(f) {
@@ -626,12 +359,6 @@
       const now = new Date();
       document.getElementById('filterBulan').value = String(now.getMonth() + 1).padStart(2, '0');
       document.getElementById('filterTahun').value = now.getFullYear();
-      
-      // Sinkronisasi status Icon Button saat aplikasi dimuat pertama kali
-      if (document.documentElement.classList.contains('dark')) {
-        document.getElementById('dark-icon').innerText = '☀️';
-      }
-      
       muatData(true);
     };
   </script>
