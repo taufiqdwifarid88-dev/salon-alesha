@@ -172,7 +172,13 @@ function switchTab(tabId, element) {
 
 // --- FUNGSI BANTUAN ---
 function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
-function cleanNum(s) { return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; }
+
+// Perbaikan pembaca angka agar kebal terhadap string Rp, titik, koma, atau spasi dari kasir
+function cleanNum(s) { 
+  if(!s) return 0;
+  let clean = String(s).replace(/[^0-9]/g, '');
+  return parseInt(clean) || 0; 
+}
 
 function getStandardDate(dateStr) {
   if (!dateStr) return "1970-01-01";
@@ -184,47 +190,31 @@ function getStandardDate(dateStr) {
   return dateStr;
 }
 
-// --- UPGRADE: BOT KATEGORISASI (Menyesuaikan dengan nama menu Kasir) ---
+// --- BOT KATEGORISASI ---
 function kategorikan(teks) {
     const t = (teks || "").toLowerCase().trim();
-    
-    // 1. Potong Rambut
     if (t.match(/(potong|ptg|gunting|pangkas|trim|haircut|hc)/)) return 'Potong Rambut';
-    
-    // 2. Cuci Catok / Blow
     if (t.match(/(cuci|catok|blow|curly|ccb|wash|dry|styling|catuk)/)) return 'Cuci Catok / Blow';
-    
-    // 3. Creambath
     if (t.match(/(cream|crbath|cb|creambat)/)) return 'Creambath';
-    
-    // 4. Hair Spa / Hair Mask
     if (t.match(/(spa|mask|masker)/)) return 'Hair Spa / Hair Mask';
-    
-    // 5. Smoothing / Matrix
     if (t.match(/(smooth|matrix|rebonding|lurus|keratin)/)) return 'Smoothing / Matrix';
-    
-    // 6. Coloring / Highlight
     if (t.match(/(color|warna|cat|highlight|bleach|semir|ombre|balayage)/)) return 'Coloring / Highlight';
-    
-    // 7. Eyelash / Nail Art
     if (t.match(/(eye|lash|nail|kuku|ext|bulu mata|meni|pedi)/)) return 'Eyelash / Nail Art';
-    
-    // 8. Make Up / Facial (Tambahan jika ada yang custom)
     if (t.match(/(makeup|make up|mua|facial|muka|wajah)/)) return 'Make Up / Facial';
-
-    // Lainnya (Sesuai drop-down terakhir)
     return 'Lainnya';
 }
 
+// KUNCI ASLI KASIR (Dipastikan sama persis dengan index.html tanpa typo j)
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
 
 // --- INIT APP ---
 async function initDashboard() {
   try {
-    const res = await fetch(SHEETS_URL);
+    // Dipastikan menarik data segar terbaru dari server cloud
+    const res = await fetch(SHEETS_URL + "?cacheBust=" + Date.now());
     globalData = await res.json();
     applyFilter();
-    loadTreatments(); // Memuat menu internal tab Products
+    loadTreatments(); 
   } catch(e) {
     console.error("Gagal memuat data", e);
   }
@@ -238,7 +228,7 @@ function applyFilter() {
 
   if (start && end) {
     filteredData = globalData.filter(d => {
-      let tgl = getStandardDate(d.Tanggal);
+      let tgl = getStandardDate(d.Tanggal || d.tanggal);
       return tgl >= start && tgl <= end;
     });
   }
@@ -258,24 +248,28 @@ function renderDashboard(data) {
   let dailyRev = {};
 
   data.forEach(d => {
-    let val = cleanNum(d["Total Akhir"]);
+    // Sinkronisasi field name agar membaca kolom spreadsheet dengan toleransi besar/kecil huruf
+    let namaPelanggan = d.Pelanggan || d.pelanggan || '-';
+    let txTreatment = d.Treatment || d.layanan || d.treatment || '-';
+    let valAkhir = d["Total Akhir"] || d.totalAkhir || 0;
+    
+    let val = cleanNum(valAkhir);
     revenue += val;
 
     let hp = d.noWa || d["No WA"] || d["No Wa"] || d.NoWa || d.NoHp || '-';
     let wilayah = d.kabupaten || d.Kabupaten || d.Wilayah || d.Alamat || d.kota || '-';
 
-    if (!custMap[d.Pelanggan]) {
-      custMap[d.Pelanggan] = { count: 0, hp: hp, wilayah: wilayah, lastTx: d.Treatment, totalSpend: 0 };
+    if (!custMap[namaPelanggan]) {
+      custMap[namaPelanggan] = { count: 0, hp: hp, wilayah: wilayah, lastTx: txTreatment, totalSpend: 0 };
     }
-    custMap[d.Pelanggan].count += 1;
-    custMap[d.Pelanggan].totalSpend += val;
-    custMap[d.Pelanggan].lastTx = d.Treatment;
+    custMap[namaPelanggan].count += 1;
+    custMap[namaPelanggan].totalSpend += val;
+    custMap[namaPelanggan].lastTx = txTreatment;
 
-    // Disinilah bot kategorisasi bekerja
-    let cat = kategorikan(d.Treatment);
+    let cat = kategorikan(txTreatment);
     treatMap[cat] = (treatMap[cat] || 0) + 1;
 
-    let tgl = getStandardDate(d.Tanggal);
+    let tgl = getStandardDate(d.Tanggal || d.tanggal);
     dailyRev[tgl] = (dailyRev[tgl] || 0) + val;
   });
 
@@ -315,7 +309,7 @@ function renderDashboard(data) {
   currentCustArray = Object.keys(custMap).map(c => ({
     nama: c,
     ...custMap[c]
-  })).sort((a,b) => b.totalSpend - a.totalSpend); // Sort by biggest spender
+  })).sort((a,b) => b.totalSpend - a.totalSpend);
   
   currentPage = 1;
   renderTablePage(); 
