@@ -21,6 +21,7 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
 <body>
 <div class="flex min-h-screen">
   
+<!-- SIDEBAR -->
 <aside class="w-72 bg-white border-r p-6">
   <h1 class="text-3xl font-extrabold text-indigo-600">Alesha AI</h1>
   <p class="text-slate-500 text-sm">Business Intelligence Platform</p>
@@ -35,9 +36,11 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
 </aside>
 
 <main class="flex-1 p-8">
+  <!-- TOPBAR DENGAN FILTER TANGGAL -->
   <div class="flex justify-between items-center mb-6 gap-4">
     <input class="w-72 bg-white rounded-2xl px-5 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Search...">
     
+    <!-- Filter Tanggal Universal -->
     <div class="flex items-center gap-2 bg-white p-2 rounded-2xl border shadow-sm">
       <input type="date" id="filterStart" class="bg-transparent px-2 py-1 text-sm text-slate-600 outline-none font-medium">
       <span class="text-slate-300">-</span>
@@ -48,7 +51,9 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
     <div class="flex gap-4 items-center text-xl cursor-pointer"><span>🔔</span><span>⚙️</span><span>👤</span></div>
   </div>
 
+  <!-- TAB: DASHBOARD -->
   <div id="tab-dashboard" class="tab-content active">
+    <!-- Stats Row -->
     <div class="grid grid-cols-4 gap-5">
       <div class="card"><p class="text-slate-500">Revenue</p><h2 class="text-4xl font-bold text-indigo-600" id="revenue">Rp 0</h2></div>
       <div class="card"><p class="text-slate-500">Transactions</p><h2 class="text-4xl font-bold" id="trx">0</h2></div>
@@ -56,11 +61,13 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
       <div class="card"><p class="text-slate-500">Avg / Tx</p><h2 class="text-4xl font-bold text-green-500" id="growth">Rp 0</h2></div>
     </div>
 
+    <!-- Charts Row -->
     <div class="grid grid-cols-3 gap-6 mt-6">
       <div class="card col-span-2"><div id="revenueChart"></div></div>
       <div class="card"><div id="donutChart"></div></div>
     </div>
 
+    <!-- Bottom Row -->
     <div class="grid grid-cols-3 gap-6 mt-6">
       <div class="card">
         <h3 class="font-bold text-lg mb-4">🤖 Quick AI Insights</h3>
@@ -86,6 +93,7 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
     </div>
   </div>
 
+  <!-- TAB: CUSTOMERS (DATABASE) -->
   <div id="tab-customers" class="tab-content">
     <div class="card">
       <div class="flex justify-between items-center mb-6">
@@ -98,9 +106,11 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
             <tr><th class="pb-3 pt-2">Nama</th><th class="pb-3 pt-2">No HP</th><th class="pb-3 pt-2">Wilayah</th><th class="pb-3 pt-2">Treatment Terakhir</th><th class="pb-3 pt-2 text-right">Total Transaksi</th></tr>
           </thead>
           <tbody id="dbBody" class="divide-y divide-slate-100 text-slate-700">
-            </tbody>
+            <!-- Render via JS -->
+          </tbody>
         </table>
       </div>
+      <!-- PAGINASI UI -->
       <div class="flex justify-between items-center mt-6">
         <button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:opacity-50 transition">⬅️ Sebelumnya</button>
         <span id="pageInfo" class="text-xs font-medium text-slate-500">Halaman 1 dari 1</span>
@@ -109,6 +119,7 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
     </div>
   </div>
 
+  <!-- TAB: DEEP AI INSIGHT -->
   <div id="tab-insights" class="tab-content">
     <div class="flex justify-between items-end mb-6">
       <div>
@@ -118,9 +129,11 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
     </div>
 
     <div class="grid grid-cols-2 gap-6" id="ai-deep-container">
-      </div>
+      <!-- Di render via JS -->
+    </div>
   </div>
 
+  <!-- TAB: PRODUCTS (MANAJEMEN LAYANAN) -->
   <div id="tab-products" class="tab-content">
     <div class="card max-w-2xl mx-auto">
       <h2 class="text-2xl font-bold text-indigo-600 mb-2">Manajemen Treatment</h2>
@@ -144,6 +157,7 @@ box-shadow:0 10px 40px rgba(108,99,255,.08)}
     </div>
   </div>
 
+  <!-- TAB: PLACEHOLDERS LAINNYA -->
   <div id="tab-analytics" class="tab-content"><div class="card h-64 flex items-center justify-center text-slate-400 font-bold text-xl">📈 Analytics Module - Coming Soon</div></div>
   <div id="tab-settings" class="tab-content"><div class="card h-64 flex items-center justify-center text-slate-400 font-bold text-xl">⚙️ System Settings</div></div>
 
@@ -173,19 +187,37 @@ function switchTab(tabId, element) {
 // --- FUNGSI BANTUAN ---
 function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
 
-// Perbaikan pembaca angka agar kebal terhadap string Rp, titik, koma, atau spasi dari kasir
 function cleanNum(s) { 
   if(!s) return 0;
   let clean = String(s).replace(/[^0-9]/g, '');
   return parseInt(clean) || 0; 
 }
 
+// PERBAIKAN BUG ZONA WAKTU (PENYEBAB FILTER TANGGAL TIDAK SINKRON)
 function getStandardDate(dateStr) {
   if (!dateStr) return "1970-01-01";
-  if (dateStr.includes('T')) return dateStr.split('T')[0];
-  if (dateStr.includes('/')) {
-    let parts = dateStr.split(' ')[0].split('/'); 
-    if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+  
+  let d = new Date(dateStr);
+  if (!isNaN(d.getTime())) {
+    // Menetralkan bug UTC dari Google Sheets (jika mengandung 'T17:00' atau 'T16:00')
+    if (typeof dateStr === 'string' && (dateStr.includes('T17:00') || dateStr.includes('T16:00'))) {
+      d.setHours(d.getHours() + 7);
+    }
+    
+    // Pastikan selalu dirender ke format lokal YYYY-MM-DD dengan aman
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // Fallback cadangan jika tidak terdeteksi sebagai Date (Murni String)
+  if (typeof dateStr === 'string') {
+    if (dateStr.includes('T')) return dateStr.split('T')[0];
+    if (dateStr.includes('/')) {
+      let parts = dateStr.split(' ')[0].split('/'); 
+      if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+    }
   }
   return dateStr;
 }
@@ -204,13 +236,11 @@ function kategorikan(teks) {
     return 'Lainnya';
 }
 
-// KUNCI ASLI KASIR (Dipastikan sama persis dengan index.html tanpa typo j)
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
 
 // --- INIT APP ---
 async function initDashboard() {
   try {
-    // Dipastikan menarik data segar terbaru dari server cloud
     const res = await fetch(SHEETS_URL + "?cacheBust=" + Date.now());
     globalData = await res.json();
     applyFilter();
@@ -248,7 +278,6 @@ function renderDashboard(data) {
   let dailyRev = {};
 
   data.forEach(d => {
-    // Sinkronisasi field name agar membaca kolom spreadsheet dengan toleransi besar/kecil huruf
     let namaPelanggan = d.Pelanggan || d.pelanggan || '-';
     let txTreatment = d.Treatment || d.layanan || d.treatment || '-';
     let valAkhir = d["Total Akhir"] || d.totalAkhir || 0;
@@ -388,24 +417,28 @@ function generateDeepAI(data, revenue, custMap, treatMap, sortedTreat, top3, dai
     `Retensi pelanggan di angka <b>${loyaltyRate}%</b>. Coba tawarkan voucher khusus kunjungan kedua sebelum pelanggan pulang.`;
 
   const html = `
+    <!-- Card 1 -->
     <div class="card border-l-4 border-indigo-500">
       <div class="flex items-center gap-3 mb-3"><span class="text-2xl">📈</span><h3 class="font-bold text-lg">Analisis Performa</h3></div>
       <p class="text-slate-600 text-sm leading-relaxed">
         ${trendText} Hari tersibuk adalah tanggal <b>${busiestDay || '-'}</b> dengan penghasilan <b>Rp ${formatRp(dailyRev[busiestDay] || 0)}</b>. ${healthText}
       </p>
     </div>
+    <!-- Card 2 -->
     <div class="card border-l-4 border-green-500">
       <div class="flex items-center gap-3 mb-3"><span class="text-2xl">👥</span><h3 class="font-bold text-lg">Perilaku Pelanggan</h3></div>
       <p class="text-slate-600 text-sm leading-relaxed">
         ${retentionInsight} VIP Spender Anda, <b>${top3[0] || '-'}</b>, memiliki pengaruh besar dan perlu diapresiasi secara khusus (misal: free hair mask di kedatangan berikutnya).
       </p>
     </div>
+    <!-- Card 3 -->
     <div class="card border-l-4 border-purple-500">
       <div class="flex items-center gap-3 mb-3"><span class="text-2xl">✂️</span><h3 class="font-bold text-lg">Tren Layanan</h3></div>
       <p class="text-slate-600 text-sm leading-relaxed">
         Layanan "Pahlawan" Anda saat ini adalah <b>${sortedTreat[0] || '-'}</b> (${treatMap[sortedTreat[0]] || 0} Tx). Jika Anda berencana menaikkan harga (misal Rp 5.000), mulailah dari layanan ini karena minatnya sangat tinggi dan tak tergoyahkan.
       </p>
     </div>
+    <!-- Card 4 -->
     <div class="card border-l-4 border-orange-500">
       <div class="flex items-center gap-3 mb-3"><span class="text-2xl">💡</span><h3 class="font-bold text-lg">Action Plan (Eksekusi AI)</h3></div>
       <p class="text-slate-600 text-sm leading-relaxed">
