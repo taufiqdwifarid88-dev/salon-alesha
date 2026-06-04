@@ -408,15 +408,7 @@
           <div>
             <label class="field-label" for="inpLayanan">Pilih Treatment</label>
             <select id="inpLayanan" onchange="cekLayananLain()" class="inp" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.5rem;">
-              <option value="">-- Pilih Treatment --</option>
-              <option value="Potong Rambut">✂️ Potong Rambut</option>
-              <option value="Cuci Catok / Blow">💨 Cuci Catok / Blow</option>
-              <option value="Creambath">🧴 Creambath</option>
-              <option value="Hair Spa / Hair Mask">🌿 Hair Spa / Hair Mask</option>
-              <option value="Smoothing / Matrix">💎 Smoothing / Matrix</option>
-              <option value="Coloring / Highlight">🎨 Coloring / Highlight</option>
-              <option value="Eyelash / Nail Art">💅 Eyelash / Nail Art</option>
-              <option value="Lainnya (Custom)">✏️ Lainnya (Custom)</option>
+              <option value="">-- Memuat Menu Treatment... --</option>
             </select>
           </div>
           <input type="text" id="inpLayananLain" class="inp" style="display:none;background:var(--surface-3);border-color:var(--rose-mid);" placeholder="Nama treatment manual…">
@@ -532,7 +524,7 @@
 </main>
 
 <script>
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAm;WRyryryoIBv5R4WUwOAouQ/exec";
 
 let dTransaksi = [];
 try { dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || []; } catch(e) {}
@@ -931,11 +923,47 @@ function showToast(msg) {
   toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
 }
 
+// --- INTEGRASI CLOUD DATABASE: LOAD MENU LAYANAN DINAMIS ---
+async function loadMenuLayanan() {
+  try {
+    const res = await fetch(SHEETS_URL + "?action=get_layanan");
+    const layanan = await res.json();
+    
+    const sel = document.getElementById('inpLayanan');
+    sel.innerHTML = '<option value="">-- Pilih Treatment --</option>';
+    
+    layanan.forEach(item => {
+      sel.innerHTML += `<option value="${item}">✨ ${item}</option>`;
+    });
+    
+    // Opsi custom manual tetap dipertahankan di bagian paling bawah
+    sel.innerHTML += '<option value="Lainnya (Custom)">✏️ Lainnya (Custom)</option>';
+  } catch(e) {
+    console.error("Gagal memuat menu dari server", e);
+    // Jika gagal terhubung ke server cloud, fallback menggunakan daftar menu default agar operasional kasir aman
+    const sel = document.getElementById('inpLayanan');
+    sel.innerHTML = `
+      <option value="">-- Pilih Treatment --</option>
+      <option value="Potong Rambut">✂️ Potong Rambut</option>
+      <option value="Cuci Catok / Blow">💨 Cuci Catok / Blow</option>
+      <option value="Creambath">🧴 Creambath</option>
+      <option value="Hair Spa / Hair Mask">🌿 Hair Spa / Hair Mask</option>
+      <option value="Smoothing / Matrix">💎 Smoothing / Matrix</option>
+      <option value="Coloring / Highlight">🎨 Coloring / Highlight</option>
+      <option value="Eyelash / Nail Art">💅 Eyelash / Nail Art</option>
+      <option value="Lainnya (Custom)">✏️ Lainnya (Custom)</option>
+    `;
+  }
+}
+
 window.onload = () => {
   const now = new Date();
   document.getElementById('filterBulan').value = String(now.getMonth()+1).padStart(2,'0');
   document.getElementById('filterTahun').value = String(now.getFullYear());
   document.getElementById('tab-kasir').style.display = 'block';
+  
+  // Menarik menu terupdate secara otomatis saat aplikasi kasir dibuka
+  loadMenuLayanan();
   muatData(true);
 };
 </script>
