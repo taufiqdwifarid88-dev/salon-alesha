@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alesha AI SaaS Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:Inter,sans-serif;background:#f6f8fc}
+.card{background:rgba(255,255,255,.92);border-radius:24px;padding:24px;backdrop-filter:blur(18px);
+box-shadow:0 10px 40px rgba(108,99,255,.08)}
+.tab-content { display: none; animation: fadeIn 0.3s ease-out forwards; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.menu-item { cursor: pointer; transition: all 0.2s; }
+.menu-item.active { background-color: #eef2ff; color: #4f46e5; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="flex min-h-screen">
+  
+<aside class="w-72 bg-white border-r p-6">
+  <h1 class="text-3xl font-extrabold text-indigo-600">Alesha AI</h1>
+  <p class="text-slate-500 text-sm">Business Intelligence Platform</p>
+  <div class="mt-8 space-y-2">
+    <div onclick="switchTab('dashboard', this)" class="menu-item active p-3 rounded-xl">📊 Dashboard</div>
+    <div onclick="switchTab('customers', this)" class="menu-item p-3 rounded-xl text-slate-600">👥 Customers</div>
+    <div onclick="switchTab('insights', this)" class="menu-item p-3 rounded-xl text-slate-600">🤖 AI Insight</div>
+    <div onclick="switchTab('analytics', this)" class="menu-item p-3 rounded-xl text-slate-600">📈 Analytics</div>
+    <div onclick="switchTab('products', this)" class="menu-item p-3 rounded-xl text-slate-600">🛒 Products</div>
+    <div onclick="switchTab('settings', this)" class="menu-item p-3 rounded-xl text-slate-600">⚙️ Settings</div>
+  </div>
+</aside>
+
+<main class="flex-1 p-8">
+  <div class="flex justify-between items-center mb-6 gap-4">
+    <input class="w-72 bg-white rounded-2xl px-5 py-3 border focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Search...">
+    
+    <div class="flex items-center gap-2 bg-white p-2 rounded-2xl border shadow-sm">
+      <input type="date" id="filterStart" class="bg-transparent px-2 py-1 text-sm text-slate-600 outline-none font-medium">
+      <span class="text-slate-300">-</span>
+      <input type="date" id="filterEnd" class="bg-transparent px-2 py-1 text-sm text-slate-600 outline-none font-medium">
+      <button onclick="applyFilter()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-xl text-sm font-bold transition">Filter</button>
+    </div>
+
+    <div class="flex gap-4 items-center text-xl cursor-pointer"><span>🔔</span><span>⚙️</span><span>👤</span></div>
+  </div>
+
+  <div id="tab-dashboard" class="tab-content active">
+    <div class="grid grid-cols-4 gap-5">
+      <div class="card"><p class="text-slate-500">Revenue</p><h2 class="text-4xl font-bold text-indigo-600" id="revenue">Rp 0</h2></div>
+      <div class="card"><p class="text-slate-500">Transactions</p><h2 class="text-4xl font-bold" id="trx">0</h2></div>
+      <div class="card"><p class="text-slate-500">Customers</p><h2 class="text-4xl font-bold" id="cust">0</h2></div>
+      <div class="card"><p class="text-slate-500">Avg / Tx</p><h2 class="text-4xl font-bold text-green-500" id="growth">Rp 0</h2></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 mt-6">
+      <div class="card col-span-2"><div id="revenueChart"></div></div>
+      <div class="card"><div id="donutChart"></div></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 mt-6">
+      <div class="card">
+        <h3 class="font-bold text-lg mb-4">🤖 Quick AI Insights</h3>
+        <div class="space-y-3 text-sm">
+          <div class="bg-green-50 p-3 rounded-xl text-green-700 font-medium" id="quick-ai-1">Menganalisis...</div>
+          <div class="bg-blue-50 p-3 rounded-xl text-blue-700 font-medium" id="quick-ai-2">Menganalisis...</div>
+          <div class="bg-purple-50 p-3 rounded-xl text-purple-700 font-medium" id="quick-ai-3">Menganalisis...</div>
+        </div>
+      </div>
+
+      <div class="card text-center flex flex-col justify-center">
+        <p class="text-slate-500 mb-2">Business Health</p>
+        <div class="text-7xl font-extrabold text-indigo-600" id="biz-health">100</div>
+        <p class="text-green-500 font-semibold mt-2" id="biz-status">Excellent</p>
+      </div>
+
+      <div class="card">
+        <h3 class="font-bold mb-3">Top Customers</h3>
+        <ul class="space-y-2 text-slate-700 font-medium" id="top-customers">
+          <li class="text-slate-400 italic">Memuat data...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-customers" class="tab-content">
+    <div class="card">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-indigo-600">Customer Database</h2>
+        <span class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full" id="cust-count-badge">0 Terdaftar</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-slate-400 uppercase text-[10px] border-b">
+            <tr><th class="pb-3 pt-2">Nama</th><th class="pb-3 pt-2">No HP</th><th class="pb-3 pt-2">Wilayah</th><th class="pb-3 pt-2">Treatment Terakhir</th><th class="pb-3 pt-2 text-right">Total Transaksi</th></tr>
+          </thead>
+          <tbody id="dbBody" class="divide-y divide-slate-100 text-slate-700">
+            </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-6">
+        <button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:opacity-50 transition">⬅️ Sebelumnya</button>
+        <span id="pageInfo" class="text-xs font-medium text-slate-500">Halaman 1 dari 1</span>
+        <button id="btnNext" onclick="changePage(1)" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-600 disabled:opacity-50 transition">Selanjutnya ➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-insights" class="tab-content">
+    <div class="flex justify-between items-end mb-6">
+      <div>
+        <h2 class="text-3xl font-extrabold text-indigo-600">Deep AI Insight</h2>
+        <p class="text-slate-500 mt-1">Analisis mendalam adaptif berdasarkan data dan performa saat ini.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6" id="ai-deep-container">
+      </div>
+  </div>
+
+  <div id="tab-products" class="tab-content">
+    <div class="card max-w-2xl mx-auto">
+      <h2 class="text-2xl font-bold text-indigo-600 mb-2">Manajemen Treatment</h2>
+      <p class="text-sm text-slate-500 mb-6">Tambahkan atau hapus menu treatment di sini. Aplikasi Kasir akan otomatis ter-update.</p>
+      
+      <div class="flex gap-2 mb-6">
+        <input type="text" id="newTreatment" class="flex-1 bg-slate-50 border rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Ketik nama treatment baru (Contoh: Hair Spa L'Oreal)">
+        <button onclick="addTreatment()" id="btnAddTreat" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition">Tambah Menu</button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-slate-400 uppercase text-[10px] border-b">
+            <tr><th class="pb-3 pt-2">Nama Treatment / Jasa</th><th class="pb-3 pt-2 text-right">Aksi</th></tr>
+          </thead>
+          <tbody id="treatmentList" class="divide-y divide-slate-100 text-slate-700">
+            <tr><td colspan="2" class="py-4 text-center text-slate-400 italic">Memuat database layanan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-analytics" class="tab-content"><div class="card h-64 flex items-center justify-center text-slate-400 font-bold text-xl">📈 Analytics Module - Coming Soon</div></div>
+  <div id="tab-settings" class="tab-content"><div class="card h-64 flex items-center justify-center text-slate-400 font-bold text-xl">⚙️ System Settings</div></div>
+
+</main>
+</div>
+
+<script>
+// --- VARIABEL GLOBAL ---
+let globalData = [];
+let chartArea, chartDonut;
+let currentCustArray = [];
+let currentPage = 1;
+const rowsPerPage = 10;
+
+// --- NAVIGASI TAB ---
+function switchTab(tabId, element) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.querySelectorAll('.menu-item').forEach(el => {
+    el.classList.remove('active', 'text-indigo-600', 'bg-indigo-50');
+    el.classList.add('text-slate-600');
+  });
+  element.classList.add('active');
+  element.classList.remove('text-slate-600');
+}
+
+// --- FUNGSI BANTUAN ---
+function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
+function cleanNum(s) { return parseInt(String(s).replace(/[^0-9]/g, '')) || 0; }
+
+function getStandardDate(dateStr) {
+  if (!dateStr) return "1970-01-01";
+  if (dateStr.includes('T')) return dateStr.split('T')[0];
+  if (dateStr.includes('/')) {
+    let parts = dateStr.split(' ')[0].split('/'); 
+    if (parts.length === 3) return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+  }
+  return dateStr;
+}
+
+// --- UPGRADE: BOT KATEGORISASI (Menyesuaikan dengan nama menu Kasir) ---
+function kategorikan(teks) {
+    const t = (teks || "").toLowerCase().trim();
+    
+    // 1. Potong Rambut
+    if (t.match(/(potong|ptg|gunting|pangkas|trim|haircut|hc)/)) return 'Potong Rambut';
+    
+    // 2. Cuci Catok / Blow
+    if (t.match(/(cuci|catok|blow|curly|ccb|wash|dry|styling|catuk)/)) return 'Cuci Catok / Blow';
+    
+    // 3. Creambath
+    if (t.match(/(cream|crbath|cb|creambat)/)) return 'Creambath';
+    
+    // 4. Hair Spa / Hair Mask
+    if (t.match(/(spa|mask|masker)/)) return 'Hair Spa / Hair Mask';
+    
+    // 5. Smoothing / Matrix
+    if (t.match(/(smooth|matrix|rebonding|lurus|keratin)/)) return 'Smoothing / Matrix';
+    
+    // 6. Coloring / Highlight
+    if (t.match(/(color|warna|cat|highlight|bleach|semir|ombre|balayage)/)) return 'Coloring / Highlight';
+    
+    // 7. Eyelash / Nail Art
+    if (t.match(/(eye|lash|nail|kuku|ext|bulu mata|meni|pedi)/)) return 'Eyelash / Nail Art';
+    
+    // 8. Make Up / Facial (Tambahan jika ada yang custom)
+    if (t.match(/(makeup|make up|mua|facial|muka|wajah)/)) return 'Make Up / Facial';
+
+    // Lainnya (Sesuai drop-down terakhir)
+    return 'Lainnya';
+}
+
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
+
+// --- INIT APP ---
+async function initDashboard() {
+  try {
+    const res = await fetch(SHEETS_URL);
+    globalData = await res.json();
+    applyFilter();
+    loadTreatments(); // Memuat menu internal tab Products
+  } catch(e) {
+    console.error("Gagal memuat data", e);
+  }
+}
+
+// --- LOGIKA FILTER ---
+function applyFilter() {
+  let start = document.getElementById('filterStart').value;
+  let end = document.getElementById('filterEnd').value;
+  let filteredData = globalData;
+
+  if (start && end) {
+    filteredData = globalData.filter(d => {
+      let tgl = getStandardDate(d.Tanggal);
+      return tgl >= start && tgl <= end;
+    });
+  }
+  renderDashboard(filteredData);
+}
+
+// --- RENDER SEMUA KOMPONEN DENGAN DATA TER-FILTER ---
+function renderDashboard(data) {
+  if (data.length === 0) {
+    alert("Tidak ada data pada rentang tanggal tersebut.");
+    return;
+  }
+
+  let revenue = 0;
+  let custMap = {};
+  let treatMap = {};
+  let dailyRev = {};
+
+  data.forEach(d => {
+    let val = cleanNum(d["Total Akhir"]);
+    revenue += val;
+
+    let hp = d.noWa || d["No WA"] || d["No Wa"] || d.NoWa || d.NoHp || '-';
+    let wilayah = d.kabupaten || d.Kabupaten || d.Wilayah || d.Alamat || d.kota || '-';
+
+    if (!custMap[d.Pelanggan]) {
+      custMap[d.Pelanggan] = { count: 0, hp: hp, wilayah: wilayah, lastTx: d.Treatment, totalSpend: 0 };
+    }
+    custMap[d.Pelanggan].count += 1;
+    custMap[d.Pelanggan].totalSpend += val;
+    custMap[d.Pelanggan].lastTx = d.Treatment;
+
+    // Disinilah bot kategorisasi bekerja
+    let cat = kategorikan(d.Treatment);
+    treatMap[cat] = (treatMap[cat] || 0) + 1;
+
+    let tgl = getStandardDate(d.Tanggal);
+    dailyRev[tgl] = (dailyRev[tgl] || 0) + val;
+  });
+
+  // 1. UPDATE STATS ROW
+  let totalCust = Object.keys(custMap).length;
+  document.getElementById('revenue').innerText = "Rp " + formatRp(revenue);
+  document.getElementById('trx').innerText = data.length;
+  document.getElementById('cust').innerText = totalCust;
+  document.getElementById('growth').innerText = "Rp " + formatRp(data.length ? revenue/data.length : 0);
+
+  // 2. KUSTOMISASI KESEHATAN BISNIS
+  let avgSpend = totalCust ? revenue / totalCust : 0;
+  let healthScore = Math.min(100, Math.floor((data.length / (totalCust || 1)) * 40 + 50)); 
+  document.getElementById('biz-health').innerText = healthScore;
+  document.getElementById('biz-status').innerText = healthScore > 80 ? "Excellent" : (healthScore > 60 ? "Good" : "Needs Review");
+  document.getElementById('biz-status').className = `font-semibold mt-2 ${healthScore > 80 ? 'text-green-500' : (healthScore > 60 ? 'text-yellow-500' : 'text-rose-500')}`;
+
+  // 3. TOP CUSTOMERS & QUICK AI
+  let sortedCust = Object.keys(custMap).sort((a,b) => custMap[b].totalSpend - custMap[a].totalSpend);
+  let top3 = sortedCust.slice(0, 3);
+  document.getElementById('top-customers').innerHTML = top3.map(c => `
+    <li class="flex justify-between">
+      <span class="text-indigo-600 font-bold">${c}</span>
+      <span class="text-slate-400 text-xs">${custMap[c].count}x (Rp ${formatRp(custMap[c].totalSpend/1000)}k)</span>
+    </li>`).join('');
+  
+  let sortedTreat = Object.keys(treatMap).sort((a,b) => treatMap[b] - treatMap[a]);
+  let topService = sortedTreat[0] || "-";
+  
+  document.getElementById('quick-ai-1').innerText = `✨ Rp ${formatRp(avgSpend)} rata-rata uang dihabiskan tiap pelanggan.`;
+  document.getElementById('quick-ai-2').innerText = `🏆 ${top3[0] || 'Belum ada'} adalah top spender Anda di periode ini!`;
+  document.getElementById('quick-ai-3').innerText = `📈 Layanan "${topService}" mendominasi ${Math.round((treatMap[topService]/data.length)*100 || 0)}% transaksi.`;
+
+  // 4. SIAPKAN DATA UNTUK PAGINASI DATABASE
+  document.getElementById('cust-count-badge').innerText = `${totalCust} Terdaftar`;
+  
+  currentCustArray = Object.keys(custMap).map(c => ({
+    nama: c,
+    ...custMap[c]
+  })).sort((a,b) => b.totalSpend - a.totalSpend); // Sort by biggest spender
+  
+  currentPage = 1;
+  renderTablePage(); 
+
+  // 5. DEEP AI INSIGHT GENERATOR
+  generateDeepAI(data, revenue, custMap, treatMap, sortedTreat, top3, dailyRev);
+
+  // 6. RENDER CHARTS
+  renderCharts(dailyRev, treatMap);
+}
+
+// --- FUNGSI PAGINASI ---
+function renderTablePage() {
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const paginatedData = currentCustArray.slice(start, end);
+
+  document.getElementById('dbBody').innerHTML = paginatedData.map(c => `
+      <tr class="hover:bg-slate-50 transition border-b border-slate-50">
+        <td class="py-4 font-semibold text-indigo-900">${c.nama}</td>
+        <td class="py-4 font-mono text-slate-500 text-xs">${c.hp}</td>
+        <td class="py-4">${c.wilayah || '-'}</td>
+        <td class="py-4"><span class="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg text-[10px] font-bold tracking-wide">${kategorikan(c.lastTx)}</span></td>
+        <td class="py-4 text-right font-black text-slate-800">Rp ${formatRp(c.totalSpend)}</td>
+      </tr>
+  `).join('');
+
+  const totalPages = Math.ceil(currentCustArray.length / rowsPerPage) || 1;
+  document.getElementById('pageInfo').innerText = `Halaman ${currentPage} dari ${totalPages}`;
+  
+  document.getElementById('btnPrev').disabled = currentPage === 1;
+  document.getElementById('btnNext').disabled = currentPage === totalPages || currentCustArray.length === 0;
+}
+
+function changePage(dir) {
+  currentPage += dir;
+  renderTablePage();
+}
+
+// --- FUNGSI AI INSIGHT DINAMIS ---
+function generateDeepAI(data, revenue, custMap, treatMap, sortedTreat, top3, dailyRev) {
+  let dates = Object.keys(dailyRev).sort();
+  let trendText = ""; let actionText = ""; let healthText = "";
+
+  if(dates.length >= 2) {
+    let mid = Math.ceil(dates.length/2);
+    let firstHalf = dates.slice(0, mid).reduce((sum, d) => sum + dailyRev[d], 0);
+    let secondHalf = dates.slice(mid).reduce((sum, d) => sum + dailyRev[d], 0);
+    
+    if (secondHalf > firstHalf * 1.1) {
+      trendText = "Grafik menunjukkan <b>Tren Positif 📈</b>. Terdapat lonjakan transaksi yang signifikan pada akhir periode yang dipilih.";
+      actionText = `Momentum sedang sangat bagus! Lakukan <i>upselling</i> (tawarkan paket tambahan) kepada pelanggan yang datang untuk layanan <b>${sortedTreat[0]}</b> agar omset makin maksimal.`;
+      healthText = "Kondisi finansial salon berkembang dengan pesat.";
+    } else if (secondHalf < firstHalf * 0.9) {
+      trendText = "Grafik menunjukkan <b>Tren Menurun 📉</b>. Transaksi melambat di pertengahan hingga akhir periode.";
+      actionText = `Buat <b>Promo Flash Sale</b> untuk hari kerja (Senin-Kamis). Lakukan broadcast WhatsApp ke pelanggan pasif untuk menawarkan diskon layanan <b>${sortedTreat[1] || sortedTreat[0]}</b>.`;
+      healthText = "Ada perlambatan omset. Aksi marketing cepat sangat diperlukan.";
+    } else {
+      trendText = "Grafik menunjukkan <b>Tren Stabil ➡️</b>. Aliran omset berjalan konstan tanpa fluktuasi tajam.";
+      actionText = `Kestabilan adalah waktu yang tepat untuk berinovasi. Luncurkan program <b>Membership/Loyalty Card</b> agar pelanggan tetap setia pada Alesha Salon.`;
+      healthText = "Operasional salon terjaga dengan aman dan konsisten.";
+    }
+  } else {
+    trendText = "Data yang difilter terlalu singkat untuk mendeteksi tren panjang.";
+    actionText = "Perlebar filter tanggal untuk melihat rekomendasi promosi dari AI secara komprehensif.";
+    healthText = "Performa berjalan wajar sesuai data.";
+  }
+
+  let busiestDay = dates.reduce((a, b) => dailyRev[a] > dailyRev[b] ? a : b, dates[0]);
+  let totalCust = Object.keys(custMap).length;
+  let repeatCust = Object.values(custMap).filter(c => c.count > 1).length;
+  let loyaltyRate = totalCust ? Math.round((repeatCust / totalCust) * 100) : 0;
+  
+  let retentionInsight = loyaltyRate > 30 ? 
+    `Retensi pelanggan luar biasa di angka <b>${loyaltyRate}%</b>! Banyak pelanggan lama yang kembali.` : 
+    `Retensi pelanggan di angka <b>${loyaltyRate}%</b>. Coba tawarkan voucher khusus kunjungan kedua sebelum pelanggan pulang.`;
+
+  const html = `
+    <div class="card border-l-4 border-indigo-500">
+      <div class="flex items-center gap-3 mb-3"><span class="text-2xl">📈</span><h3 class="font-bold text-lg">Analisis Performa</h3></div>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        ${trendText} Hari tersibuk adalah tanggal <b>${busiestDay || '-'}</b> dengan penghasilan <b>Rp ${formatRp(dailyRev[busiestDay] || 0)}</b>. ${healthText}
+      </p>
+    </div>
+    <div class="card border-l-4 border-green-500">
+      <div class="flex items-center gap-3 mb-3"><span class="text-2xl">👥</span><h3 class="font-bold text-lg">Perilaku Pelanggan</h3></div>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        ${retentionInsight} VIP Spender Anda, <b>${top3[0] || '-'}</b>, memiliki pengaruh besar dan perlu diapresiasi secara khusus (misal: free hair mask di kedatangan berikutnya).
+      </p>
+    </div>
+    <div class="card border-l-4 border-purple-500">
+      <div class="flex items-center gap-3 mb-3"><span class="text-2xl">✂️</span><h3 class="font-bold text-lg">Tren Layanan</h3></div>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        Layanan "Pahlawan" Anda saat ini adalah <b>${sortedTreat[0] || '-'}</b> (${treatMap[sortedTreat[0]] || 0} Tx). Jika Anda berencana menaikkan harga (misal Rp 5.000), mulailah dari layanan ini karena minatnya sangat tinggi dan tak tergoyahkan.
+      </p>
+    </div>
+    <div class="card border-l-4 border-orange-500">
+      <div class="flex items-center gap-3 mb-3"><span class="text-2xl">💡</span><h3 class="font-bold text-lg">Action Plan (Eksekusi AI)</h3></div>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        ${actionText} Manfaatkan Database Nomor WhatsApp di tab "Customers" untuk langsung mengeksekusi kampanye promo ini hari ini juga.
+      </p>
+    </div>
+  `;
+  document.getElementById('ai-deep-container').innerHTML = html;
+}
+
+function renderCharts(dailyRev, treatMap) {
+  let dates = Object.keys(dailyRev).sort();
+  let revData = dates.map(d => dailyRev[d]);
+
+  if(chartArea) chartArea.destroy();
+  if(chartDonut) chartDonut.destroy();
+
+  chartArea = new ApexCharts(document.querySelector("#revenueChart"),{
+    chart:{type:'area',height:350,toolbar:{show:false}, fontFamily: 'Inter, sans-serif'},
+    series:[{name:'Omset', data: revData}],
+    xaxis: { categories: dates.map(d => d.slice(-5).replace('-','/')), labels: { style: { colors: '#94a3b8' } } },
+    yaxis: { labels: { formatter: (val) => "Rp" + (val/1000) + "k", style: { colors: '#94a3b8' } } },
+    dataLabels: { enabled: false },
+    stroke:{curve:'smooth',width:4},
+    colors:['#6C63FF'],
+    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 100] } }
+  });
+  chartArea.render();
+
+  let donutLabels = Object.keys(treatMap);
+  let donutSeries = Object.values(treatMap);
+
+  chartDonut = new ApexCharts(document.querySelector("#donutChart"),{
+    chart:{type:'donut',height:320, fontFamily: 'Inter, sans-serif'},
+    series: donutSeries,
+    labels: donutLabels,
+    colors: ['#6C63FF', '#22c55e', '#f59e0b', '#ec4899', '#0ea5e9', '#8b5cf6', '#f43f5e', '#14b8a6'],
+    plotOptions: { pie: { donut: { size: '75%' } } },
+    dataLabels: { enabled: false },
+    legend: { position: 'bottom' }
+  });
+  chartDonut.render();
+}
+
+// --- REAL-TIME CLOUD MASTER TREATMENT DATA MODULE ---
+async function loadTreatments() {
+  try {
+    const res = await fetch(SHEETS_URL + "?action=get_layanan");
+    const data = await res.json();
+    document.getElementById('treatmentList').innerHTML = data.map(item => `
+      <tr class="hover:bg-slate-50 transition border-b border-slate-50">
+        <td class="py-4 font-bold text-slate-700">${item}</td>
+        <td class="py-4 text-right">
+          <button onclick="deleteTreatment('${item}')" class="text-rose-500 hover:bg-rose-50 px-3 py-1 rounded-lg text-xs font-bold transition">Hapus</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    document.getElementById('treatmentList').innerHTML = '<tr><td colspan="2" class="py-4 text-center text-rose-500">Gagal memuat database layanan</td></tr>';
+  }
+}
+
+async function addTreatment() {
+  const inp = document.getElementById('newTreatment');
+  const val = inp.value.trim();
+  if(!val) return alert("Nama treatment tidak boleh kosong!");
+  
+  const btn = document.getElementById('btnAddTreat');
+  btn.innerText = "Menyimpan..."; btn.disabled = true;
+
+  try {
+    await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ action: "add_layanan", nama: val }) });
+    inp.value = "";
+    await loadTreatments();
+    alert("Menu baru berhasil didaftarkan ke cloud!");
+  } catch(e) { alert("Gagal menambah data ke server cloud"); }
+  
+  btn.innerText = "Tambah Menu"; btn.disabled = false;
+}
+
+async function deleteTreatment(nama) {
+  if(!confirm(`Hapus layanan "${nama}" dari menu kasir?`)) return;
+  
+  try {
+    document.getElementById('treatmentList').innerHTML = '<tr><td colspan="2" class="py-4 text-center text-slate-400 italic">Menghapus...</td></tr>';
+    await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify({ action: "delete_layanan", nama: nama }) });
+    await loadTreatments();
+  } catch(e) { alert("Gagal menghapus data dari server cloud"); loadTreatments(); }
+}
+
+initDashboard();
+</script>
+</body>
+</html>
