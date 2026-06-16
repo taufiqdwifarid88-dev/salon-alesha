@@ -49,575 +49,290 @@ tailwind.config = {
   --accent: #818cf8;
   --accent-light: rgba(99,102,241,0.15);
 }
-
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); transition: background 0.3s, color 0.3s; }
 .card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; backdrop-filter: blur(20px); box-shadow: var(--shadow); transition: all 0.3s ease; }
 .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
-.dark .card { background: var(--card); border-color: var(--border); }
-
 .tab-content { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
 .menu-item { cursor: pointer; transition: all 0.25s; border-radius: 14px; padding: 12px 16px; margin-bottom: 4px; display: flex; align-items: center; gap: 12px; font-weight: 500; color: var(--text-secondary); position: relative; overflow: hidden; }
 .menu-item:hover { background: var(--accent-light); color: var(--accent); }
 .menu-item.active { background: var(--accent-light); color: var(--accent); font-weight: 700; }
 .menu-item.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 4px; height: 24px; background: var(--accent); border-radius: 0 4px 4px 0; }
-
 .sidebar { background: var(--sidebar); border-right: 1px solid var(--border); transition: all 0.3s; }
-.dark .sidebar { background: var(--sidebar); }
-
 .topbar { background: var(--card-solid); border: 1px solid var(--border); transition: all 0.3s; }
-.dark .topbar { background: var(--card-solid); }
-
 .stat-card .icon-box { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: transform 0.3s; }
 .stat-card:hover .icon-box { transform: scale(1.1) rotate(-5deg); }
-
 .btn-primary { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,70,229,0.4); }
-.dark .btn-primary { box-shadow: 0 4px 14px rgba(99,102,241,0.25); }
-
 input, select { background: var(--card-solid); border: 1px solid var(--border); color: var(--text); transition: all 0.2s; }
 input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
-.dark input, .dark select { background: #1e293b; }
-
 table thead { border-bottom: 2px solid var(--border); }
 table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.2s; }
 table tbody tr:hover { background: var(--accent-light); }
-
 .badge { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; }
-
 .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
 .toast { background: var(--card-solid); border: 1px solid var(--border); color: var(--text); padding: 14px 20px; border-radius: 14px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; animation: slideIn 0.4s cubic-bezier(0.16,1,0.3,1); min-width: 280px; font-weight: 500; font-size: 13px; }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 .toast.success { border-left: 4px solid #10b981; }
 .toast.error { border-left: 4px solid #ef4444; }
 .toast.info { border-left: 4px solid #3b82f6; }
-
-.loading-skeleton { background: linear-gradient(90deg, var(--border) 25%, var(--card-solid) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
 .toggle-switch { width: 44px; height: 24px; background: #cbd5e1; border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s; }
-.dark .toggle-switch { background: #475569; }
 .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .toggle-switch.active { background: var(--accent); }
 .toggle-switch.active::after { transform: translateX(20px); }
-
 .collapsed-sidebar { width: 80px !important; }
 .collapsed-sidebar .menu-text, .collapsed-sidebar .brand-text { display: none; }
 .collapsed-sidebar .menu-item { justify-content: center; padding: 12px; }
 .collapsed-sidebar .menu-item.active::before { display: none; }
-.collapsed-sidebar .menu-item.active { border-radius: 12px; }
-
 .progress-ring { transform: rotate(-90deg); }
 .progress-ring-circle { transition: stroke-dashoffset 0.8s cubic-bezier(0.16,1,0.3,1); }
-
+.preset-chip { padding: 8px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--border); font-size: 11px; font-weight: 700; color: var(--text-secondary); cursor: pointer; transition: all .2s; }
+.preset-chip:hover, .preset-chip.active { background: var(--accent-light); color: var(--accent); border-color: rgba(99,102,241,.25); }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-.dark ::-webkit-scrollbar-thumb { background: #475569; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
 @media (max-width: 1024px) {
   .sidebar { position: fixed; z-index: 50; height: 100vh; transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
   .overlay.open { display: block; }
 }
-
-/* Custom fade animation for dropdown */
 .dropdown-enter { animation: dropFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes dropFadeIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 </style>
 </head>
 <body class="antialiased">
-
 <div class="overlay" id="mobileOverlay" onclick="toggleMobileSidebar()"></div>
-
 <div class="flex min-h-screen">
-
 <aside id="sidebar" class="sidebar w-72 fixed lg:static h-screen flex flex-col p-5 z-50 transition-all">
   <div class="flex items-center justify-between mb-8 px-2">
     <div class="flex items-center gap-3 brand-text">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/30">A</div>
-      <div>
-        <h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">Alesha AI</h1>
-        <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Business Intelligence</p>
-      </div>
+      <div><h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">Alesha AI</h1><p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Business Intelligence</p></div>
     </div>
-    <div class="lg:hidden cursor-pointer text-slate-400 hover:text-slate-600" onclick="toggleMobileSidebar()">
-      <i class="fa-solid fa-xmark text-xl"></i>
-    </div>
-    <button onclick="toggleSidebar()" class="hidden lg:block text-slate-400 hover:text-slate-600 transition">
-      <i class="fa-solid fa-bars-staggered text-lg"></i>
-    </button>
+    <div class="lg:hidden cursor-pointer text-slate-400 hover:text-slate-600" onclick="toggleMobileSidebar()"><i class="fa-solid fa-xmark text-xl"></i></div>
+    <button onclick="toggleSidebar()" class="hidden lg:block text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-bars-staggered text-lg"></i></button>
   </div>
-
   <nav class="flex-1 space-y-1">
-    <div onclick="switchTab('dashboard', this)" class="menu-item active">
-      <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-      <span class="menu-text">Dashboard</span>
-    </div>
-    <div onclick="switchTab('customers', this)" class="menu-item">
-      <i class="fa-solid fa-users w-5 text-center"></i>
-      <span class="menu-text">Customers</span>
-    </div>
-    <div onclick="switchTab('insights', this)" class="menu-item">
-      <i class="fa-solid fa-robot w-5 text-center"></i>
-      <span class="menu-text">AI Insight</span>
-    </div>
-    <div onclick="switchTab('analytics', this)" class="menu-item">
-      <i class="fa-solid fa-chart-line w-5 text-center"></i>
-      <span class="menu-text">Analytics</span>
-    </div>
-    <div onclick="switchTab('products', this)" class="menu-item">
-      <i class="fa-solid fa-bag-shopping w-5 text-center"></i>
-      <span class="menu-text">Products</span>
-    </div>
-    <div onclick="switchTab('settings', this)" class="menu-item">
-      <i class="fa-solid fa-gear w-5 text-center"></i>
-      <span class="menu-text">Settings</span>
-    </div>
+    <div onclick="switchTab('dashboard', this)" class="menu-item active"><i class="fa-solid fa-chart-pie w-5 text-center"></i><span class="menu-text">Dashboard</span></div>
+    <div onclick="switchTab('customers', this)" class="menu-item"><i class="fa-solid fa-users w-5 text-center"></i><span class="menu-text">Customers</span></div>
+    <div onclick="switchTab('insights', this)" class="menu-item"><i class="fa-solid fa-robot w-5 text-center"></i><span class="menu-text">AI Insight</span></div>
+    <div onclick="switchTab('analytics', this)" class="menu-item"><i class="fa-solid fa-chart-line w-5 text-center"></i><span class="menu-text">Analytics</span></div>
+    <div onclick="switchTab('products', this)" class="menu-item"><i class="fa-solid fa-bag-shopping w-5 text-center"></i><span class="menu-text">Products</span></div>
+    <div onclick="switchTab('settings', this)" class="menu-item"><i class="fa-solid fa-gear w-5 text-center"></i><span class="menu-text">Settings</span></div>
   </nav>
-
   <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700/50">
-    <div class="card !p-4 !bg-gradient-to-br !from-indigo-500 !to-violet-600 !border-0 !text-white">
-      <div class="flex items-center gap-3 mb-2">
-        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fa-solid fa-crown text-xs"></i></div>
-        <span class="font-bold text-sm menu-text">Pro Plan</span>
-      </div>
-      <p class="text-xs text-indigo-100 mb-3 menu-text">Akses fitur AI prediktif & analytics tanpa batas.</p>
-      <button class="w-full py-2 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition menu-text">Upgrade</button>
-    </div>
-    <div class="flex items-center gap-3 mt-4 px-2">
-      <img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-700 shadow-sm">
-      <div class="menu-text">
-        <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Administrator</p>
-        <p class="text-[11px] text-slate-400 font-medium">alesha@studio.id</p>
-      </div>
-    </div>
+    <div class="flex items-center gap-3 mt-4 px-2"><img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-700 shadow-sm"><div class="menu-text"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Administrator</p><p class="text-[11px] text-slate-400 font-medium">alesha@studio.id</p></div></div>
   </div>
 </aside>
-
 <main class="flex-1 p-4 lg:p-8 min-w-0">
   <div class="topbar flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 px-5 py-3.5 rounded-2xl sticky top-4 z-30">
     <div class="flex items-center gap-3">
-      <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-      <div>
-        <h2 class="text-lg font-bold text-slate-800 dark:text-white" id="pageTitle">Dashboard Overview</h2>
-        <p class="text-xs text-slate-400 font-medium" id="currentDate">Memuat tanggal...</p>
-      </div>
+      <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"><i class="fa-solid fa-bars"></i></button>
+      <div><h2 class="text-lg font-bold text-slate-800 dark:text-white" id="pageTitle">Dashboard Overview</h2><p class="text-xs text-slate-400 font-medium" id="currentDate">Memuat tanggal...</p><p class="text-[11px] text-emerald-500 font-semibold mt-1" id="lastUpdated">Belum ada sinkronisasi</p></div>
     </div>
-
     <div class="flex items-center gap-3 w-full lg:w-auto">
-      <div id="dateFilterContainer" class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700/50 flex-1 lg:flex-none transition-all">
+      <div id="dateFilterContainer" class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700/50 flex-1 lg:flex-none transition-all flex-wrap">
         <i class="fa-regular fa-calendar text-slate-400 ml-2 text-xs"></i>
-        <input type="date" id="filterStart" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-32">
+        <input type="date" id="filterStart" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-36">
         <span class="text-slate-300 text-xs">→</span>
-        <input type="date" id="filterEnd" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-32">
+        <input type="date" id="filterEnd" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-36">
+        <select id="serviceFilter" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-44"><option value="">Semua layanan</option></select>
         <button onclick="applyFilter()" class="btn-primary !py-1.5 !px-3 !rounded-lg text-xs"><i class="fa-solid fa-filter mr-1"></i>Filter</button>
       </div>
-
-      <button onclick="exportCSV()" class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-600 transition shadow-sm">
-        <i class="fa-solid fa-download"></i> Export
-      </button>
-
-      <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-yellow-400 transition hover:scale-105 shadow-sm">
-        <i class="fa-solid fa-moon dark:hidden"></i>
-        <i class="fa-solid fa-sun hidden dark:block"></i>
-      </button>
-
+      <button onclick="exportCSV()" class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-600 transition shadow-sm"><i class="fa-solid fa-download"></i> Export</button>
+      <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-yellow-400 transition hover:scale-105 shadow-sm"><i class="fa-solid fa-moon dark:hidden"></i><i class="fa-solid fa-sun hidden dark:block"></i></button>
       <div class="relative" id="notifContainer">
-        <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition hover:scale-105 shadow-sm focus:outline-none">
-          <i class="fa-regular fa-bell"></i>
-        </button>
+        <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition hover:scale-105 shadow-sm focus:outline-none"><i class="fa-regular fa-bell"></i></button>
         <span id="notifBadge" class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white dark:ring-slate-900 transition-opacity duration-300"></span>
-        
         <div id="notifDropdown" class="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl z-50 hidden flex-col overflow-hidden origin-top-right dropdown-enter">
-          <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-            <h4 class="font-bold text-slate-800 dark:text-white text-sm">Transaksi Terbaru</h4>
-            <span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 px-2 py-1 rounded-full font-bold">10 Teratas</span>
-          </div>
-          <div id="notifList" class="max-h-80 overflow-y-auto p-2 flex flex-col gap-1">
-            </div>
-          <div class="p-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50 dark:bg-slate-800">
-            <button onclick="switchTab('analytics', document.querySelectorAll('.menu-item')[3]); toggleNotif();" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 transition">Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></button>
-          </div>
+          <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50"><h4 class="font-bold text-slate-800 dark:text-white text-sm">Transaksi Terbaru</h4><span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 px-2 py-1 rounded-full font-bold">10 Teratas</span></div>
+          <div id="notifList" class="max-h-80 overflow-y-auto p-2 flex flex-col gap-1"></div>
+          <div class="p-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50 dark:bg-slate-800"><button onclick="switchTab('analytics', document.querySelectorAll('.menu-item')[3]); toggleNotif();" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 transition">Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></button></div>
         </div>
       </div>
-
       <img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-10 h-10 rounded-xl ring-2 ring-white dark:ring-slate-700 shadow-sm cursor-pointer">
     </div>
   </div>
 
+  <div class="mb-5 flex flex-wrap gap-2" id="presetFilters">
+    <button class="preset-chip" data-preset="today">Hari ini</button>
+    <button class="preset-chip" data-preset="7d">7 hari</button>
+    <button class="preset-chip active" data-preset="30d">30 hari</button>
+    <button class="preset-chip" data-preset="thisMonth">Bulan ini</button>
+    <button class="preset-chip" data-preset="lastMonth">Bulan lalu</button>
+    <button class="preset-chip" data-preset="clear">Reset</button>
+  </div>
+
   <div id="tab-dashboard" class="tab-content active">
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
-      <div class="card stat-card flex items-center gap-4">
-        <div class="icon-box bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"><i class="fa-solid fa-sack-dollar"></i></div>
-        <div>
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Revenue</p>
-          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="revenue">Rp 0</h2>
-          <p class="text-[11px] font-semibold text-emerald-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span id="revTrend">+12.5%</span> vs bulan lalu</p>
-        </div>
-      </div>
-      <div class="card stat-card flex items-center gap-4">
-        <div class="icon-box bg-violet-50 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400"><i class="fa-solid fa-receipt"></i></div>
-        <div>
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transactions</p>
-          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="trx">0</h2>
-          <p class="text-[11px] font-semibold text-emerald-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> <span id="trxTrend">+8.2%</span> vs bulan lalu</p>
-        </div>
-      </div>
-      <div class="card stat-card flex items-center gap-4">
-        <div class="icon-box bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"><i class="fa-solid fa-user-group"></i></div>
-        <div>
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Customers</p>
-          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="cust">0</h2>
-          <p class="text-[11px] font-semibold text-slate-400 mt-1"><span class="text-emerald-500 font-bold">+24</span> baru minggu ini</p>
-        </div>
-      </div>
-      <div class="card stat-card flex items-center gap-4">
-        <div class="icon-box bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-wallet"></i></div>
-        <div>
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Transaction</p>
-          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="growth">Rp 0</h2>
-          <p class="text-[11px] font-semibold text-rose-500 mt-1 flex items-center gap-1"><i class="fa-solid fa-arrow-trend-down"></i> <span id="avgTrend">-2.1%</span> vs bulan lalu</p>
-        </div>
-      </div>
+      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"><i class="fa-solid fa-sack-dollar"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Revenue</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="revenue">Rp 0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="revTrendWrap"><i class="fa-solid fa-minus"></i> <span id="revTrend">0%</span> vs bulan lalu</p></div></div>
+      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-violet-50 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400"><i class="fa-solid fa-receipt"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transactions</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="trx">0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="trxTrendWrap"><i class="fa-solid fa-minus"></i> <span id="trxTrend">0%</span> vs bulan lalu</p></div></div>
+      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"><i class="fa-solid fa-user-group"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Customers</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="cust">0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="custTrendWrap"><i class="fa-solid fa-minus"></i> <span id="custTrend">0%</span> vs bulan lalu</p></div></div>
+      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-wallet"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Transaction</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="growth">Rp 0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="avgTrendWrap"><i class="fa-solid fa-minus"></i> <span id="avgTrend">0%</span> vs bulan lalu</p></div></div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <div class="card lg:col-span-2">
-        <div class="flex justify-between items-center mb-6">
-          <div>
-            <h3 class="font-bold text-slate-800 dark:text-white">Revenue Trend</h3>
-            <p class="text-xs text-slate-400 font-medium mt-0.5">Pendapatan harian dalam periode aktif</p>
-          </div>
-          <div class="flex gap-2">
-            <span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5"></span>Omset</span>
-          </div>
-        </div>
-        <div id="revenueChart"></div>
-      </div>
+      <div class="card lg:col-span-2"><div class="flex justify-between items-center mb-6"><div><h3 class="font-bold text-slate-800 dark:text-white">Revenue Trend</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Pendapatan harian dalam periode aktif</p></div><div class="flex gap-2"><span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5"></span>Omset</span></div></div><div id="revenueChart"></div></div>
+      <div class="card"><div class="mb-6"><h3 class="font-bold text-slate-800 dark:text-white">Service Mix</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Distribusi kategori treatment</p></div><div id="donutChart"></div></div>
+    </div>
+
+    <div class="card mb-6"><div class="flex justify-between items-center mb-6"><div><h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-regular fa-clock text-indigo-500"></i> Peak Hour Analysis</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Jam sibuk berdasarkan frekuensi transaksi</p></div><button class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Detail</button></div><div id="hourChart"></div></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <div class="card">
-        <div class="mb-6">
-          <h3 class="font-bold text-slate-800 dark:text-white">Service Mix</h3>
-          <p class="text-xs text-slate-400 font-medium mt-0.5">Distribusi kategori treatment</p>
-        </div>
-        <div id="donutChart"></div>
+        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-wand-magic-sparkles"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Quick AI Insights</h3></div>
+        <div class="space-y-3"><div class="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 p-4 rounded-xl" id="quick-ai-1"></div><div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 p-4 rounded-xl" id="quick-ai-2"></div><div class="bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 p-4 rounded-xl" id="quick-ai-3"></div></div>
       </div>
+      <div class="card flex flex-col items-center justify-center text-center relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 dark:from-indigo-500/10 dark:to-violet-500/10"></div><div class="relative z-10"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Business Health Score</p><div class="relative w-40 h-40 mx-auto mb-3"><svg class="progress-ring w-40 h-40" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8" class="text-slate-100 dark:text-slate-700"/><circle id="healthRing" cx="60" cy="60" r="54" fill="none" stroke="url(#healthGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="0" class="progress-ring-circle"/><defs><linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs></svg><div class="absolute inset-0 flex flex-col items-center justify-center"><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400" id="biz-health">100</div><div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Score</div></div></div><p class="text-sm font-bold text-emerald-500 dark:text-emerald-400" id="biz-status">Excellent Performance</p><p class="text-[11px] text-slate-400 mt-1 max-w-[200px]">Bisnis Anda berada di jalur yang sangat baik bulan ini.</p></div></div>
+      <div class="card"><div class="flex justify-between items-center mb-5"><h3 class="font-bold text-slate-800 dark:text-white">Top Customers</h3><button class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Semua</button></div><ul class="space-y-3" id="top-customers"><li class="text-slate-400 italic text-sm">Memuat data...</li></ul></div>
     </div>
 
-    <div class="card mb-6">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-regular fa-clock text-indigo-500"></i> Peak Hour Analysis</h3>
-          <p class="text-xs text-slate-400 font-medium mt-0.5">Jam sibuk berdasarkan frekuensi transaksi</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card">
+        <div class="flex justify-between items-center mb-5"><h3 class="font-bold text-slate-800 dark:text-white">Top Service Ranking</h3><span class="text-[11px] font-bold text-slate-400">Periode aktif</span></div>
+        <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
+          <table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">#</th><th class="px-5 py-4">Kategori</th><th class="px-5 py-4 text-right">Transaksi</th><th class="px-5 py-4 text-right">Share</th></tr></thead><tbody id="topServiceBody"></tbody></table>
         </div>
-        <button class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Detail</button>
       </div>
-      <div id="hourChart"></div>
+      <div class="card"><div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-xs shadow-lg shadow-sky-500/20"><i class="fa-solid fa-bullseye"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Ringkasan Filter Aktif</h3></div><div class="space-y-3 text-sm text-slate-600 dark:text-slate-300"><div class="flex items-center justify-between"><span>Rentang tanggal</span><span class="font-bold" id="activeDateLabel">-</span></div><div class="flex items-center justify-between"><span>Layanan</span><span class="font-bold" id="activeServiceLabel">Semua layanan</span></div><div class="flex items-center justify-between"><span>Baris export</span><span class="font-bold" id="activeExportRows">0</span></div><div class="pt-3 border-t border-slate-100 dark:border-slate-700"><p class="text-xs text-slate-400">Export sekarang mengikuti filter aktif dashboard agar file CSV lebih relevan dan ringan.</p></div></div></div>
     </div>
+  </div>
 
+  <div id="tab-customers" class="tab-content"><div class="card"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"><div><h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Customer Database</h2><p class="text-xs text-slate-400 font-medium mt-1">Kelola dan monitor data pelanggan aktif</p></div><div class="flex items-center gap-3 flex-wrap"><input type="text" id="customerSearch" placeholder="Cari nama / kontak / wilayah..." class="px-4 py-2.5 rounded-xl text-sm w-72 max-w-full border border-slate-200 dark:border-slate-700"><select id="customerSort" class="px-3 py-2.5 rounded-xl text-sm border border-slate-200 dark:border-slate-700"><option value="spend_desc">Spend tertinggi</option><option value="spend_asc">Spend terendah</option><option value="visit_desc">Kunjungan terbanyak</option><option value="name_asc">Nama A-Z</option></select><span class="badge bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" id="cust-count-badge">0 Terdaftar</span><button onclick="exportCustomerCSV()" class="btn-primary !py-2 !px-4 text-xs"><i class="fa-solid fa-file-csv mr-1.5"></i>Export CSV</button></div></div><div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50"><table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">Pelanggan</th><th class="px-5 py-4">Kontak</th><th class="px-5 py-4">Wilayah</th><th class="px-5 py-4">Treatment Terakhir</th><th class="px-5 py-4 text-right">Total Spend</th><th class="px-5 py-4 text-center">Status</th></tr></thead><tbody id="dbBody" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody></table></div><div class="flex justify-between items-center mt-6"><button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2"><i class="fa-solid fa-chevron-left"></i> Sebelumnya</button><span id="pageInfo" class="text-xs font-bold text-slate-400">Halaman 1 dari 1</span><button id="btnNext" onclick="changePage(1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2">Selanjutnya <i class="fa-solid fa-chevron-right"></i></button></div></div></div>
+
+  <div id="tab-insights" class="tab-content"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4"><div><div class="flex items-center gap-3 mb-2"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25"><i class="fa-solid fa-brain"></i></div><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Deep AI Insight</h2></div><p class="text-sm text-slate-400 font-medium">Analisis mendalam adaptif berdasarkan data dan performa saat ini.</p></div><button onclick="refreshInsights()" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Refresh Analysis</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-deep-container"></div></div>
+
+  <div id="tab-products" class="tab-content"><div class="max-w-3xl mx-auto"><div class="card mb-6"><div class="flex items-center gap-3 mb-2"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/20"><i class="fa-solid fa-spa"></i></div><div><h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Manajemen Treatment</h2><p class="text-xs text-slate-400 font-medium">Tambahkan, hapus, atau kelola layanan bisnis Anda.</p></div></div></div><div class="card"><div class="flex gap-3 mb-6"><input type="text" id="newTreatment" class="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Nama treatment baru..."><button onclick="addTreatment()" id="btnAddTreat" class="btn-primary !py-3 !px-5"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Menu</button></div><div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50"><table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">Nama Treatment / Jasa</th><th class="px-5 py-4 text-right">Aksi</th></tr></thead><tbody id="treatmentList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody></table></div></div></div></div>
+
+  <div id="tab-analytics" class="tab-content">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="card">
-        <div class="flex items-center gap-2 mb-5">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-          <h3 class="font-bold text-slate-800 dark:text-white">Quick AI Insights</h3>
-        </div>
-        <div class="space-y-3">
-          <div class="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 p-4 rounded-xl" id="quick-ai-1">
-            <div class="flex items-start gap-3">
-              <div class="w-6 h-6 rounded-full bg-emerald-200 dark:bg-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 text-[10px] mt-0.5"><i class="fa-solid fa-check"></i></div>
-              <p class="text-sm font-semibold text-emerald-800 dark:text-emerald-300 leading-relaxed">Menganalisis pola pelanggan...</p>
-            </div>
-          </div>
-          <div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 p-4 rounded-xl" id="quick-ai-2">
-            <div class="flex items-start gap-3">
-              <div class="w-6 h-6 rounded-full bg-blue-200 dark:bg-blue-500/30 flex items-center justify-center text-blue-700 dark:text-blue-300 text-[10px] mt-0.5"><i class="fa-solid fa-lightbulb"></i></div>
-              <p class="text-sm font-semibold text-blue-800 dark:text-blue-300 leading-relaxed">Menganalisis tren pendapatan...</p>
-            </div>
-          </div>
-          <div class="bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 p-4 rounded-xl" id="quick-ai-3">
-            <div class="flex items-start gap-3">
-              <div class="w-6 h-6 rounded-full bg-violet-200 dark:bg-violet-500/30 flex items-center justify-center text-violet-700 dark:text-violet-300 text-[10px] mt-0.5"><i class="fa-solid fa-chart-simple"></i></div>
-              <p class="text-sm font-semibold text-violet-800 dark:text-violet-300 leading-relaxed">Menganalisis performa layanan...</p>
-            </div>
-          </div>
+      <div class="card lg:col-span-2">
+        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs shadow-lg shadow-indigo-500/20"><i class="fa-solid fa-lightbulb"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Saran Pengembangan Analytics</h3></div>
+        <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">1. Revenue Forecast Mingguan</p><p>Tambahkan prediksi omzet 7-30 hari ke depan berdasarkan tren harian agar analytics benar-benar membantu perencanaan operasional.</p></div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">2. Repeat vs New Customer</p><p>Pisahkan pelanggan baru dan pelanggan kembali untuk melihat kualitas retensi, bukan hanya total pelanggan aktif.</p></div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">3. Service Profitability</p><p>Tampilkan layanan paling ramai, layanan paling menguntungkan, dan layanan yang performanya rendah agar keputusan promosi lebih tepat.</p></div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">4. Idle Hour Opportunity</p><p>Analisis jam sepi untuk rekomendasi promo slot kosong, penyesuaian staffing, atau bundling treatment.</p></div>
         </div>
       </div>
-
-      <div class="card flex flex-col items-center justify-center text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 dark:from-indigo-500/10 dark:to-violet-500/10"></div>
-        <div class="relative z-10">
-          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Business Health Score</p>
-          <div class="relative w-40 h-40 mx-auto mb-3">
-            <svg class="progress-ring w-40 h-40" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8" class="text-slate-100 dark:text-slate-700"/>
-              <circle id="healthRing" cx="60" cy="60" r="54" fill="none" stroke="url(#healthGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="0" class="progress-ring-circle"/>
-              <defs><linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-              <div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400" id="biz-health">100</div>
-              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Score</div>
-            </div>
-          </div>
-          <p class="text-sm font-bold text-emerald-500 dark:text-emerald-400" id="biz-status">Excellent Performance</p>
-          <p class="text-[11px] text-slate-400 mt-1 max-w-[200px]">Bisnis Anda berada di jalur yang sangat baik bulan ini.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="flex justify-between items-center mb-5">
-          <h3 class="font-bold text-slate-800 dark:text-white">Top Customers</h3>
-          <button class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Semua</button>
-        </div>
-        <ul class="space-y-3" id="top-customers">
-          <li class="text-slate-400 italic text-sm">Memuat data...</li>
+      <div class="card h-full">
+        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-chart-line"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Prioritas Implementasi</h3></div>
+        <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+          <li class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"><span class="font-bold">Tinggi:</span> repeat customer rate, top service profitability.</li>
+          <li class="p-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20"><span class="font-bold">Menengah:</span> forecast omzet mingguan dan alert penurunan performa.</li>
+          <li class="p-3 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20"><span class="font-bold">Lanjutan:</span> cohort pelanggan, heatmap reservasi, staffing recommendation.</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div id="tab-customers" class="tab-content">
-    <div class="card">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <div>
-          <h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Customer Database</h2>
-          <p class="text-xs text-slate-400 font-medium mt-1">Kelola dan monitor data pelanggan aktif</p>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="badge bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" id="cust-count-badge">0 Terdaftar</span>
-          <button onclick="exportCustomerCSV()" class="btn-primary !py-2 !px-4 text-xs"><i class="fa-solid fa-file-csv mr-1.5"></i>Export CSV</button>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
-        <table class="w-full text-left text-sm">
-          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold">
-            <tr>
-              <th class="px-5 py-4">Pelanggan</th>
-              <th class="px-5 py-4">Kontak</th>
-              <th class="px-5 py-4">Wilayah</th>
-              <th class="px-5 py-4">Treatment Terakhir</th>
-              <th class="px-5 py-4 text-right">Total Spend</th>
-              <th class="px-5 py-4 text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody id="dbBody" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium">
-          </tbody>
-        </table>
-      </div>
-
-      <div class="flex justify-between items-center mt-6">
-        <button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2"><i class="fa-solid fa-chevron-left"></i> Sebelumnya</button>
-        <span id="pageInfo" class="text-xs font-bold text-slate-400">Halaman 1 dari 1</span>
-        <button id="btnNext" onclick="changePage(1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2">Selanjutnya <i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-insights" class="tab-content">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25"><i class="fa-solid fa-brain"></i></div>
-          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Deep AI Insight</h2>
-        </div>
-        <p class="text-sm text-slate-400 font-medium">Analisis mendalam adaptif berdasarkan data dan performa saat ini.</p>
-      </div>
-      <button onclick="refreshInsights()" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition flex items-center gap-2">
-        <i class="fa-solid fa-rotate"></i> Refresh Analysis
-      </button>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-deep-container"></div>
-  </div>
-
-  <div id="tab-products" class="tab-content">
-    <div class="max-w-3xl mx-auto">
-      <div class="card mb-6">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/20"><i class="fa-solid fa-spa"></i></div>
-          <div>
-            <h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Manajemen Treatment</h2>
-            <p class="text-xs text-slate-400 font-medium">Tambahkan, hapus, atau kelola layanan bisnis Anda.</p>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="flex gap-3 mb-6">
-          <input type="text" id="newTreatment" class="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Nama treatment baru...">
-          <button onclick="addTreatment()" id="btnAddTreat" class="btn-primary !py-3 !px-5"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Menu</button>
-        </div>
-        <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold">
-              <tr><th class="px-5 py-4">Nama Treatment / Jasa</th><th class="px-5 py-4 text-right">Aksi</th></tr>
-            </thead>
-            <tbody id="treatmentList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-analytics" class="tab-content">
-    <div class="card h-96 flex flex-col items-center justify-center text-slate-400 relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 dark:from-indigo-500/10 dark:to-violet-500/10"></div>
-      <div class="relative z-10 text-center">
-        <div class="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-3xl mb-4 mx-auto"><i class="fa-solid fa-chart-line text-slate-400"></i></div>
-        <h3 class="text-xl font-bold text-slate-600 dark:text-slate-300 mb-2">Analytics Module</h3>
-        <p class="text-sm max-w-md">Fitur analytics lanjutan dengan prediksi AI & forecasting sedang dalam pengembangan. Stay tuned!</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-settings" class="tab-content">
-    <div class="max-w-2xl mx-auto space-y-6">
-      <div class="card">
-        <h3 class="font-bold text-slate-800 dark:text-white mb-1">Preferences</h3>
-        <p class="text-xs text-slate-400 mb-6">Atur tampilan dan perilaku dashboard sesuai kebutuhan Anda.</p>
-
-        <div class="space-y-5">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Night Mode</p>
-              <p class="text-xs text-slate-400">Beralih antara tampilan terang dan gelap</p>
-            </div>
-            <div class="toggle-switch" id="darkToggle" onclick="toggleDarkMode()"></div>
-          </div>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Auto Refresh</p>
-              <p class="text-xs text-slate-400">Update data otomatis setiap 30 detik (Realtime)</p>
-            </div>
-            <div class="toggle-switch active" id="refreshToggle" onclick="toggleAutoRefresh(this)"></div>
-          </div>
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Notifikasi</p>
-              <p class="text-xs text-slate-400">Tampilkan alert untuk transaksi baru</p>
-            </div>
-            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 class="font-bold text-slate-800 dark:text-white mb-1">Data Management</h3>
-        <p class="text-xs text-slate-400 mb-6">Kelola sumber data dan export.</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <button onclick="exportCSV()" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition">
-            <i class="fa-solid fa-download text-indigo-500"></i> Export All Data
-          </button>
-          <button onclick="initDashboard(false); showToast('Data berhasil dimuat ulang', 'success')" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition">
-            <i class="fa-solid fa-rotate text-indigo-500"></i> Reload Data
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <div id="tab-settings" class="tab-content"><div class="max-w-2xl mx-auto space-y-6"><div class="card"><h3 class="font-bold text-slate-800 dark:text-white mb-1">Preferences</h3><p class="text-xs text-slate-400 mb-6">Atur tampilan dan perilaku dashboard sesuai kebutuhan Anda.</p><div class="space-y-5"><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Night Mode</p><p class="text-xs text-slate-400">Beralih antara tampilan terang dan gelap</p></div><div class="toggle-switch" id="darkToggle" onclick="toggleDarkMode()"></div></div><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Auto Refresh</p><p class="text-xs text-slate-400">Update data otomatis setiap 30 detik (Realtime)</p></div><div class="toggle-switch active" id="refreshToggle" onclick="toggleAutoRefresh(this)"></div></div><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Notifikasi</p><p class="text-xs text-slate-400">Tampilkan alert untuk transaksi baru</p></div><div class="toggle-switch active" onclick="this.classList.toggle('active')"></div></div></div></div><div class="card"><h3 class="font-bold text-slate-800 dark:text-white mb-1">Data Management</h3><p class="text-xs text-slate-400 mb-6">Kelola sumber data dan export.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><button onclick="exportCSV()" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition"><i class="fa-solid fa-download text-indigo-500"></i> Export All Data</button><button onclick="initDashboard(false); showToast('Data berhasil dimuat ulang', 'success')" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition"><i class="fa-solid fa-rotate text-indigo-500"></i> Reload Data</button></div></div></div></div>
 </main>
 </div>
-
 <div class="toast-container" id="toastContainer"></div>
-
 <script>
 let globalData = [];
+let filteredDashboardData = [];
 let chartArea, chartDonut, chartHour;
 let currentCustArray = [];
+let filteredCustArray = [];
 let currentPage = 1;
 const rowsPerPage = 10;
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
 let isSidebarCollapsed = false;
-
-// Variables for Realtime Polling
 let lastDataCount = 0;
 let isFirstLoad = true;
 let autoRefreshInterval = null;
-
-// Dark Mode
+let activePeriod = null;
+const dom = {
+  darkToggle: () => document.getElementById('darkToggle'),
+  refreshToggle: () => document.getElementById('refreshToggle'),
+  serviceFilter: () => document.getElementById('serviceFilter'),
+  customerSearch: () => document.getElementById('customerSearch'),
+  customerSort: () => document.getElementById('customerSort'),
+  lastUpdated: () => document.getElementById('lastUpdated')
+};
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
   const isDark = document.documentElement.classList.contains('dark');
-  localStorage.setItem('alesha_dark', isDark ? '1' : '0');
-  document.getElementById('darkToggle')?.classList.toggle('active', isDark);
-  setTimeout(() => { if(chartArea) chartArea.updateOptions({theme:{mode:isDark?'dark':'light'}}); if(chartDonut) chartDonut.updateOptions({theme:{mode:isDark?'dark':'light'}}); if(chartHour) chartHour.updateOptions({theme:{mode:isDark?'dark':'light'}}); }, 100);
+  try { localStorage.setItem('alesha_dark', isDark ? '1' : '0'); } catch(e) {}
+  dom.darkToggle()?.classList.toggle('active', isDark);
+  setTimeout(() => {
+    if (chartArea) chartArea.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' } });
+    if (chartDonut) chartDonut.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' } });
+    if (chartHour) chartHour.updateOptions({ theme: { mode: isDark ? 'dark' : 'light' } });
+  }, 100);
 }
-
-if (localStorage.getItem('alesha_dark') === '1') {
-  document.documentElement.classList.add('dark');
-  document.getElementById('darkToggle')?.classList.add('active');
-}
-
-// Sidebar
-function toggleSidebar() {
-  const sb = document.getElementById('sidebar');
-  isSidebarCollapsed = !isSidebarCollapsed;
-  sb.classList.toggle('collapsed-sidebar', isSidebarCollapsed);
-}
-function toggleMobileSidebar() {
-  const sb = document.getElementById('sidebar');
-  const ov = document.getElementById('mobileOverlay');
-  sb.classList.toggle('open');
-  ov.classList.toggle('open');
-}
-
-// Date
+try { if (localStorage.getItem('alesha_dark') === '1') document.documentElement.classList.add('dark'); } catch(e) {}
+function syncDarkToggle() { dom.darkToggle()?.classList.toggle('active', document.documentElement.classList.contains('dark')); }
+function toggleSidebar() { const sb = document.getElementById('sidebar'); isSidebarCollapsed = !isSidebarCollapsed; sb.classList.toggle('collapsed-sidebar', isSidebarCollapsed); }
+function toggleMobileSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('open'); }
 const now = new Date();
 document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-// Tab Switching
 function switchTab(tabId, element) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
-  document.querySelectorAll('.menu-item').forEach(el => {
-    el.classList.remove('active');
-    el.classList.add('text-slate-600');
-  });
-  element.classList.add('active');
-  element.classList.remove('text-slate-600');
+  document.querySelectorAll('.menu-item').forEach(el => { el.classList.remove('active'); el.classList.add('text-slate-600'); });
+  element.classList.add('active'); element.classList.remove('text-slate-600');
   const titles = { dashboard: 'Dashboard Overview', customers: 'Customer Database', insights: 'Deep AI Insight', analytics: 'Analytics', products: 'Product Management', settings: 'System Settings' };
   document.getElementById('pageTitle').textContent = titles[tabId] || 'Dashboard';
-  
-  const df = document.getElementById('dateFilterContainer');
-  if (tabId === 'products' || tabId === 'settings') {
-    df.style.display = 'none';
-  } else {
-    df.style.display = 'flex';
-  }
-
+  document.getElementById('dateFilterContainer').style.display = (tabId === 'products' || tabId === 'settings') ? 'none' : 'flex';
+  document.getElementById('presetFilters').style.display = (tabId === 'products' || tabId === 'settings') ? 'none' : 'flex';
   if(window.innerWidth < 1024) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('open'); }
 }
-
-function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
-function cleanNum(s) { let clean = String(s).replace(/[^0-9]/g, ''); return parseInt(clean) || 0; }
-
+function formatRp(n) { return new Intl.NumberFormat('id-ID').format(Math.round(n || 0)); }
+function cleanNum(s) { return parseInt(String(s ?? '').replace(/[^0-9]/g, '')) || 0; }
 function getStandardDate(dateStr) {
-  if (!dateStr) return "1970-01-01";
-  let d = new Date(dateStr);
-  if (!isNaN(d.getTime())) {
-    if (typeof dateStr === 'string' && (dateStr.includes('T17:00') || dateStr.includes('T16:00'))) d.setHours(d.getHours() + 7);
-    return d.toISOString().split('T')[0];
-  }
+  if (!dateStr) return '1970-01-01';
+  const d = new Date(dateStr);
+  if (!isNaN(d.getTime())) return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().split('T')[0];
   return dateStr;
 }
-
-function kategorikan(teks) {
-    const t = (teks || "").toLowerCase().trim();
-    if (t.match(/(potong|ptg|gunting|pangkas|trim|haircut|hc)/)) return 'Potong Rambut';
-    if (t.match(/(cuci|catok|blow|curly|ccb|wash|dry|styling|catuk)/)) return 'Cuci Catok / Blow';
-    if (t.match(/(cream|crbath|cb|creambat)/)) return 'Creambath';
-    if (t.match(/(spa|mask|masker)/)) return 'Hair Spa / Hair Mask';
-    if (t.match(/(smooth|matrix|rebonding|lurus|keratin)/)) return 'Smoothing / Matrix';
-    if (t.match(/(color|warna|cat|highlight|bleach|semir|ombre|balayage)/)) return 'Coloring / Highlight';
-    if (t.match(/(eye|lash|nail|kuku|ext|bulu mata|meni|pedi)/)) return 'Eyelash / Nail Art';
-    return 'Lainnya';
+function parseDateSafe(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? null : d;
 }
-
+function formatTimeActual(d) {
+  const raw = d.Timestamp || d.timestamp || d.Waktu || d.waktu || '';
+  const rawStr = String(raw || '');
+  const match = rawStr.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
+  if (match) return `${String(match[1]).padStart(2,'0')}:${match[2]}`;
+  const parsed = parseDateSafe(raw);
+  if (parsed) return parsed.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+  const fallbackHour = extractHourValue(d);
+  return `${String(fallbackHour).padStart(2,'0')}:00`;
+}
+function extractHourValue(d) {
+  const raw = d.Timestamp || d.timestamp || d.Waktu || d.waktu || '';
+  const rawStr = String(raw || '');
+  const match = rawStr.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
+  if (match) {
+    const h = parseInt(match[1], 10);
+    if (h >= 0 && h <= 23) return h;
+  }
+  const dateObj = parseDateSafe(raw) || parseDateSafe(d.Tanggal || d.tanggal);
+  if (dateObj) {
+    const h = dateObj.getHours();
+    if (h >= 1 && h <= 23) return h;
+  }
+  const note = String(d['ID Nota'] || d.idNota || d.Pelanggan || d.pelanggan || 'guest');
+  let hash = 0;
+  for (let i = 0; i < note.length; i++) hash = (hash + note.charCodeAt(i) * (i + 1)) % 997;
+  return 9 + (hash % 12);
+}
+function kategorikan(teks) {
+  const t = (teks || '').toLowerCase().trim();
+  if (t.match(/(potong|ptg|gunting|pangkas|trim|haircut|hc)/)) return 'Potong Rambut';
+  if (t.match(/(cuci|catok|blow|curly|ccb|wash|dry|styling|catuk)/)) return 'Cuci Catok / Blow';
+  if (t.match(/(cream|crbath|cb|creambat)/)) return 'Creambath';
+  if (t.match(/(spa|mask|masker)/)) return 'Hair Spa / Hair Mask';
+  if (t.match(/(smooth|matrix|rebonding|lurus|keratin)/)) return 'Smoothing / Matrix';
+  if (t.match(/(color|warna|cat|highlight|bleach|semir|ombre|balayage)/)) return 'Coloring / Highlight';
+  if (t.match(/(eye|lash|nail|kuku|ext|bulu mata|meni|pedi)/)) return 'Eyelash / Nail Art';
+  return 'Lainnya';
+}
 function showToast(message, type='info') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
@@ -627,404 +342,300 @@ function showToast(message, type='info') {
   container.appendChild(toast);
   setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateX(100%)'; setTimeout(()=>toast.remove(), 300); }, 4000);
 }
-
-// BUG FIX: Fitur Notifikasi Lonceng
 function toggleNotif() {
   const dropdown = document.getElementById('notifDropdown');
   const badge = document.getElementById('notifBadge');
-  
-  if (dropdown.classList.contains('hidden')) {
-    // Sedang dibuka
-    dropdown.classList.remove('hidden');
-    dropdown.classList.add('flex');
-    badge.style.opacity = '0'; // Sembunyikan titik merah
-    renderNotifList();
-  } else {
-    // Sedang ditutup
-    dropdown.classList.add('hidden');
-    dropdown.classList.remove('flex');
-  }
+  if (dropdown.classList.contains('hidden')) { dropdown.classList.remove('hidden'); dropdown.classList.add('flex'); badge.style.opacity = '0'; renderNotifList(); }
+  else { dropdown.classList.add('hidden'); dropdown.classList.remove('flex'); }
 }
-
-// Tutup notif jika klik di luar area container lonceng
 document.addEventListener('click', function(e) {
   const container = document.getElementById('notifContainer');
   const dropdown = document.getElementById('notifDropdown');
-  if (dropdown && !dropdown.classList.contains('hidden') && !container.contains(e.target)) {
-    dropdown.classList.add('hidden');
-    dropdown.classList.remove('flex');
-  }
+  if (dropdown && !dropdown.classList.contains('hidden') && !container.contains(e.target)) { dropdown.classList.add('hidden'); dropdown.classList.remove('flex'); }
 });
-
 function renderNotifList() {
   const list = document.getElementById('notifList');
-  if (!globalData || globalData.length === 0) {
-    list.innerHTML = '<div class="p-4 text-center text-xs text-slate-400">Belum ada transaksi bulan ini</div>';
-    return;
-  }
-  
-  // Ambil 10 transaksi terakhir (data di-reverse karena yang terbaru biasanya di bawah Google Sheets)
+  if (!globalData.length) { list.innerHTML = '<div class="p-4 text-center text-xs text-slate-400">Belum ada transaksi bulan ini</div>'; return; }
   const recentTx = [...globalData].reverse().slice(0, 10);
-  
   list.innerHTML = recentTx.map(tx => {
-    let nama = tx.Pelanggan || tx.pelanggan || 'Guest';
-    let layanan = tx.Treatment || tx.layanan || '-';
-    let nilai = cleanNum(tx["Total Akhir"] || tx.totalAkhir);
-    
-    return `
-      <div class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition cursor-pointer">
-        <div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-          <i class="fa-solid fa-receipt"></i>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">${nama}</p>
-          <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate">${layanan}</p>
-        </div>
-        <div class="text-right shrink-0">
-          <p class="text-xs font-black text-indigo-600 dark:text-indigo-400">Rp ${formatRp(nilai)}</p>
-        </div>
-      </div>
-    `;
+    const nama = tx.Pelanggan || tx.pelanggan || 'Guest';
+    const layanan = tx.Treatment || tx.layanan || '-';
+    const nilai = cleanNum(tx['Total Akhir'] || tx.totalAkhir);
+    const jam = formatTimeActual(tx);
+    return `<div class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition cursor-pointer"><div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-receipt"></i></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2"><p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">${nama}</p><span class="text-[10px] text-slate-400 font-semibold shrink-0">${jam}</span></div><p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate">${layanan}</p></div><div class="text-right shrink-0"><p class="text-xs font-black text-indigo-600 dark:text-indigo-400">Rp ${formatRp(nilai)}</p></div></div>`;
   }).join('');
 }
-
-
+function updateLastSyncLabel() { dom.lastUpdated().textContent = 'Sinkron terakhir: ' + new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+function populateServiceFilter(data) {
+  const select = dom.serviceFilter();
+  const current = select.value;
+  const services = [...new Set(data.map(d => kategorikan(d.Treatment || d.layanan || '')).filter(Boolean))].sort();
+  select.innerHTML = '<option value="">Semua layanan</option>' + services.map(s => `<option value="${s}">${s}</option>`).join('');
+  if ([...select.options].some(opt => opt.value === current)) select.value = current;
+}
 async function initDashboard(isSilent = false) {
   if(!isSilent) showToast('Memuat data dari server...', 'info');
   try {
-    const res = await fetch(SHEETS_URL + "?cacheBust=" + Date.now());
+    const res = await fetch(SHEETS_URL + '?cacheBust=' + Date.now());
     const newData = await res.json();
-    
-    // Notifikasi auto-refresh badge trigger
     if (!isFirstLoad && newData.length > lastDataCount) {
-        const diff = newData.length - lastDataCount;
-        showToast(`🛎️ ${diff} Transaksi Baru Masuk!`, 'success');
-        document.getElementById('notifBadge').style.opacity = '1'; // Tampilkan titik merah kembali
+      const diff = newData.length - lastDataCount;
+      showToast(`🛎️ ${diff} Transaksi Baru Masuk!`, 'success');
+      document.getElementById('notifBadge').style.opacity = '1';
     }
-
-    globalData = newData;
+    globalData = Array.isArray(newData) ? newData : [];
     lastDataCount = globalData.length;
     isFirstLoad = false;
-
+    populateServiceFilter(globalData);
+    updateLastSyncLabel();
+    applyDefaultPresetOnFirstLoad();
     applyFilter();
-    if(!isSilent) {
-      loadTreatments();
-      showToast('Data berhasil dimuat', 'success');
-    }
+    if(!isSilent) { loadTreatments(); showToast('Data berhasil dimuat', 'success'); }
   } catch(e) {
     if(!isSilent) showToast('Gagal memuat data: ' + e.message, 'error');
   }
 }
-
 function toggleAutoRefresh(element) {
-    element.classList.toggle('active');
-    const isActive = element.classList.contains('active');
-    showToast('Auto refresh ' + (isActive ? 'diaktifkan' : 'dinonaktifkan'), 'info');
-
-    if (isActive) {
-        autoRefreshInterval = setInterval(() => {
-            initDashboard(true);
-        }, 30000);
-    } else {
-        clearInterval(autoRefreshInterval);
-    }
+  element.classList.toggle('active');
+  const isActive = element.classList.contains('active');
+  showToast('Auto refresh ' + (isActive ? 'diaktifkan' : 'dinonaktifkan'), 'info');
+  clearInterval(autoRefreshInterval);
+  if (isActive) autoRefreshInterval = setInterval(() => initDashboard(true), 30000);
 }
-
-function applyFilter() {
-  let start = document.getElementById('filterStart').value;
-  let end = document.getElementById('filterEnd').value;
-  let filteredData = globalData;
-  if (start && end) {
-    filteredData = globalData.filter(d => {
-      let tgl = getStandardDate(d.Tanggal || d.tanggal);
-      return tgl >= start && tgl <= end;
-    });
+function getFilterPeriod(data) {
+  const startInput = document.getElementById('filterStart').value;
+  const endInput = document.getElementById('filterEnd').value;
+  if (startInput && endInput) return { start: new Date(startInput + 'T00:00:00'), end: new Date(endInput + 'T00:00:00') };
+  if (!data.length) {
+    const today = new Date();
+    return { start: new Date(today.getFullYear(), today.getMonth(), 1), end: today };
   }
-  renderDashboard(filteredData);
+  const dates = data.map(d => parseDateSafe(d.Tanggal || d.tanggal)).filter(Boolean).sort((a,b) => a - b);
+  return { start: new Date(dates[0].getFullYear(), dates[0].getMonth(), dates[0].getDate()), end: new Date(dates[dates.length - 1].getFullYear(), dates[dates.length - 1].getMonth(), dates[dates.length - 1].getDate()) };
 }
-
-function renderDashboard(data) {
+function shiftMonth(date, deltaMonths) {
+  const d = new Date(date);
+  const originalDay = d.getDate();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + deltaMonths);
+  const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  d.setDate(Math.min(originalDay, lastDay));
+  return d;
+}
+function getComparisonWindow(period) { return { start: shiftMonth(period.start, -1), end: shiftMonth(period.end, -1) }; }
+function isDateWithin(dateObj, start, end) {
+  if (!dateObj) return false;
+  const d = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()).getTime();
+  return d >= start.getTime() && d <= end.getTime();
+}
+function setPresetRange(type) {
+  const today = new Date();
+  let start, end;
+  if (type === 'today') { start = end = today; }
+  else if (type === '7d') { end = today; start = new Date(today); start.setDate(today.getDate() - 6); }
+  else if (type === '30d') { end = today; start = new Date(today); start.setDate(today.getDate() - 29); }
+  else if (type === 'thisMonth') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = today; }
+  else if (type === 'lastMonth') { start = new Date(today.getFullYear(), today.getMonth() - 1, 1); end = new Date(today.getFullYear(), today.getMonth(), 0); }
+  else if (type === 'clear') { document.getElementById('filterStart').value = ''; document.getElementById('filterEnd').value = ''; activePeriod = null; syncPresetButtons(type); applyFilter(); return; }
+  document.getElementById('filterStart').value = start.toISOString().split('T')[0];
+  document.getElementById('filterEnd').value = end.toISOString().split('T')[0];
+  activePeriod = { start, end };
+  syncPresetButtons(type);
+  applyFilter();
+}
+function syncPresetButtons(active) { document.querySelectorAll('.preset-chip').forEach(btn => btn.classList.toggle('active', btn.dataset.preset === active)); }
+function applyDefaultPresetOnFirstLoad() {
+  const start = document.getElementById('filterStart').value;
+  const end = document.getElementById('filterEnd').value;
+  if (!start && !end) setPresetRange('30d');
+}
+function applyFilter() {
+  const selectedService = dom.serviceFilter().value;
+  const period = getFilterPeriod(globalData);
+  filteredDashboardData = globalData.filter(d => {
+    const txDate = parseDateSafe(d.Tanggal || d.tanggal);
+    const service = kategorikan(d.Treatment || d.layanan || '');
+    return isDateWithin(txDate, period.start, period.end) && (!selectedService || service === selectedService);
+  });
+  renderDashboard(filteredDashboardData, period);
+}
+function summarizeMetrics(data) {
+  let revenue = 0;
+  const customerSet = new Set();
+  data.forEach(d => { revenue += cleanNum(d['Total Akhir'] || d.totalAkhir); customerSet.add(d.Pelanggan || d.pelanggan || '-'); });
+  return { revenue, trx: data.length, customers: customerSet.size, avg: data.length ? revenue / data.length : 0 };
+}
+function calcPercentChange(current, previous) { if (previous === 0 && current === 0) return 0; if (previous === 0) return 100; return ((current - previous) / previous) * 100; }
+function updateTrend(idWrap, idValue, pct) {
+  const wrap = document.getElementById(idWrap);
+  const icon = pct > 0 ? 'fa-arrow-trend-up' : pct < 0 ? 'fa-arrow-trend-down' : 'fa-minus';
+  const color = pct > 0 ? 'text-emerald-500' : pct < 0 ? 'text-rose-500' : 'text-slate-400';
+  wrap.className = `text-[11px] font-semibold mt-1 flex items-center gap-1 ${color}`;
+  wrap.innerHTML = `<i class="fa-solid ${icon}"></i> <span id="${idValue}">${pct.toFixed(1)}%</span> vs bulan lalu`;
+}
+function computeHealthScore(totalTx, totalCustomers, avgSpend, topServiceShare) {
+  const txScore = Math.min(30, totalTx * 1.2);
+  const custScore = Math.min(25, totalCustomers * 1.5);
+  const spendScore = Math.min(25, avgSpend / 20000);
+  const mixScore = Math.max(0, 20 - Math.max(0, topServiceShare - 65));
+  return Math.max(0, Math.min(100, Math.round(txScore + custScore + spendScore + mixScore)));
+}
+function renderTopServiceTable(treatMap, totalTx) {
+  const body = document.getElementById('topServiceBody');
+  const entries = Object.entries(treatMap).sort((a,b)=>b[1]-a[1]);
+  if (!entries.length) { body.innerHTML = '<tr><td colspan="4" class="px-5 py-6 text-center text-slate-400">Belum ada data layanan</td></tr>'; return; }
+  body.innerHTML = entries.map(([name, count], idx) => `<tr><td class="px-5 py-4 font-black text-slate-500">${idx+1}</td><td class="px-5 py-4 font-bold text-slate-800 dark:text-slate-200">${name}</td><td class="px-5 py-4 text-right font-bold">${count}</td><td class="px-5 py-4 text-right text-indigo-600 dark:text-indigo-400 font-black">${totalTx ? ((count/totalTx)*100).toFixed(1) : '0.0'}%</td></tr>`).join('');
+}
+function updateActiveFilterSummary(period, selectedService, exportRows) {
+  document.getElementById('activeDateLabel').textContent = `${period.start.toLocaleDateString('id-ID')} - ${period.end.toLocaleDateString('id-ID')}`;
+  document.getElementById('activeServiceLabel').textContent = selectedService || 'Semua layanan';
+  document.getElementById('activeExportRows').textContent = exportRows;
+}
+function renderDashboard(data, period) {
   let revenue = 0, custMap = {}, treatMap = {}, dailyRev = {}, hourMap = {};
-  
   data.forEach(d => {
-    let val = cleanNum(d["Total Akhir"] || d.totalAkhir);
+    const val = cleanNum(d['Total Akhir'] || d.totalAkhir);
     revenue += val;
-    let nama = d.Pelanggan || d.pelanggan || '-';
-    let tx = d.Treatment || d.layanan || '-';
-    
-    let hpRaw = d["No WhatsApp"] || d["No WA"] || d["no WA"] || d["noWa"] || d.noWa || d.Kontak || d.hp || d["Nomor WhatsApp"];
-    let wilayahRaw = d["Kabupaten"] || d["Kota/Kabupaten"] || d["Kota / Kabupaten"] || d.kabupaten || d.Kota || d.Wilayah;
-
-    if (!hpRaw || hpRaw === "undefined" || hpRaw === "null" || String(hpRaw).trim() === "") hpRaw = "-";
-    if (!wilayahRaw || wilayahRaw === "undefined" || wilayahRaw === "null" || String(wilayahRaw).trim() === "") wilayahRaw = "-";
-
-    let dObj = new Date(d.Timestamp || d.timestamp || d.Waktu || d.waktu || d.Tanggal || d.tanggal);
-    let jam = dObj.getHours();
-    
-    if (jam === 0 && dObj.getMinutes() === 0) { 
-        let hash = String(d["ID Nota"] || d.idNota || nama).charCodeAt(0) || 0;
-        jam = 10 + (hash % 11);
-    }
-
+    const nama = d.Pelanggan || d.pelanggan || '-';
+    const tx = d.Treatment || d.layanan || '-';
+    let hpRaw = d['No WhatsApp'] || d['No WA'] || d['no WA'] || d['noWa'] || d.noWa || d.Kontak || d.hp || d['Nomor WhatsApp'];
+    let wilayahRaw = d['Kabupaten'] || d['Kota/Kabupaten'] || d['Kota / Kabupaten'] || d.kabupaten || d.Kota || d.Wilayah;
+    if (!hpRaw || String(hpRaw).trim() === '' || hpRaw === 'undefined' || hpRaw === 'null') hpRaw = '-';
+    if (!wilayahRaw || String(wilayahRaw).trim() === '' || wilayahRaw === 'undefined' || wilayahRaw === 'null') wilayahRaw = '-';
+    const jam = extractHourValue(d);
     hourMap[jam] = (hourMap[jam] || 0) + 1;
-    
-    custMap[nama] = { 
-        count: (custMap[nama]?.count || 0) + 1, 
-        hp: (hpRaw !== '-' ? hpRaw : custMap[nama]?.hp) || '-', 
-        wilayah: (wilayahRaw !== '-' ? wilayahRaw : custMap[nama]?.wilayah) || '-', 
-        lastTx: tx, 
-        totalSpend: (custMap[nama]?.totalSpend || 0) + val 
-    };
-    
-    treatMap[kategorikan(tx)] = (treatMap[kategorikan(tx)] || 0) + 1;
+    custMap[nama] = { count: (custMap[nama]?.count || 0) + 1, hp: (hpRaw !== '-' ? hpRaw : custMap[nama]?.hp) || '-', wilayah: (wilayahRaw !== '-' ? wilayahRaw : custMap[nama]?.wilayah) || '-', lastTx: tx, totalSpend: (custMap[nama]?.totalSpend || 0) + val };
+    const kategori = kategorikan(tx);
+    treatMap[kategori] = (treatMap[kategori] || 0) + 1;
     dailyRev[getStandardDate(d.Tanggal || d.tanggal)] = (dailyRev[getStandardDate(d.Tanggal || d.tanggal)] || 0) + val;
   });
-
-  document.getElementById('revenue').innerText = "Rp " + formatRp(revenue);
-  document.getElementById('trx').innerText = data.length;
-  document.getElementById('cust').innerText = Object.keys(custMap).length;
-  document.getElementById('growth').innerText = "Rp " + formatRp(data.length ? revenue/data.length : 0);
-
-  const healthScore = Math.min(100, Math.round((data.length > 0 ? 85 : 0) + (Math.random()*15)));
+  const currentSummary = summarizeMetrics(data);
+  const compareWindow = getComparisonWindow(period);
+  const selectedService = dom.serviceFilter().value;
+  const previousData = globalData.filter(d => {
+    const txDate = parseDateSafe(d.Tanggal || d.tanggal);
+    const service = kategorikan(d.Treatment || d.layanan || '');
+    return isDateWithin(txDate, compareWindow.start, compareWindow.end) && (!selectedService || service === selectedService);
+  });
+  const previousSummary = summarizeMetrics(previousData);
+  document.getElementById('revenue').innerText = 'Rp ' + formatRp(currentSummary.revenue);
+  document.getElementById('trx').innerText = currentSummary.trx;
+  document.getElementById('cust').innerText = currentSummary.customers;
+  document.getElementById('growth').innerText = 'Rp ' + formatRp(currentSummary.avg);
+  updateTrend('revTrendWrap', 'revTrend', calcPercentChange(currentSummary.revenue, previousSummary.revenue));
+  updateTrend('trxTrendWrap', 'trxTrend', calcPercentChange(currentSummary.trx, previousSummary.trx));
+  updateTrend('custTrendWrap', 'custTrend', calcPercentChange(currentSummary.customers, previousSummary.customers));
+  updateTrend('avgTrendWrap', 'avgTrend', calcPercentChange(currentSummary.avg, previousSummary.avg));
+  const topService = Object.entries(treatMap).sort((a,b)=>b[1]-a[1])[0];
+  const topServiceShare = data.length && topService ? Math.round(topService[1]/data.length*100) : 0;
+  const healthScore = computeHealthScore(data.length, Object.keys(custMap).length, data.length ? revenue/data.length : 0, topServiceShare);
   document.getElementById('biz-health').textContent = healthScore;
-  const circumference = 339.292;
-  const offset = circumference - (healthScore/100) * circumference;
-  document.getElementById('healthRing').style.strokeDashoffset = offset;
+  document.getElementById('healthRing').style.strokeDashoffset = 339.292 - (healthScore/100) * 339.292;
   const statusEl = document.getElementById('biz-status');
   if(healthScore >= 90) { statusEl.textContent = 'Excellent Performance'; statusEl.className = 'text-sm font-bold text-emerald-500 dark:text-emerald-400'; }
   else if(healthScore >= 75) { statusEl.textContent = 'Good Performance'; statusEl.className = 'text-sm font-bold text-blue-500 dark:text-blue-400'; }
   else { statusEl.textContent = 'Needs Attention'; statusEl.className = 'text-sm font-bold text-amber-500 dark:text-amber-400'; }
-
-  currentCustArray = Object.keys(custMap).map(c => ({nama: c, ...custMap[c]})).sort((a,b) => b.totalSpend - a.totalSpend);
+  currentCustArray = Object.keys(custMap).map(c => ({nama: c, ...custMap[c]}));
   currentPage = 1;
-  renderTablePage();
-  renderTopCustomers(currentCustArray.slice(0,5));
+  applyCustomerTools();
+  renderTopCustomers(filteredCustArray.slice(0,5));
   renderCharts(dailyRev, treatMap, hourMap);
+  renderTopServiceTable(treatMap, data.length);
+  updateActiveFilterSummary(period, selectedService, data.length);
   generateQuickInsights(data, revenue, custMap, treatMap);
 }
-
 function renderTopCustomers(list) {
   const container = document.getElementById('top-customers');
   if(!list.length) { container.innerHTML = '<li class="text-slate-400 italic text-sm">Tidak ada data</li>'; return; }
-  container.innerHTML = list.map((c,i) => `
-    <li class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/30 transition cursor-pointer group">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold shadow-md">${c.nama.charAt(0)}</div>
-        <div>
-          <p class="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 transition">${c.nama}</p>
-          <p class="text-[10px] text-slate-400 font-medium">${c.count} transaksi</p>
-        </div>
-      </div>
-      <span class="text-sm font-black text-slate-800 dark:text-slate-100">Rp ${formatRp(c.totalSpend)}</span>
-    </li>
-  `).join('');
+  container.innerHTML = list.map(c => `<li class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/30 transition cursor-pointer group"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold shadow-md">${c.nama.charAt(0)}</div><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 transition">${c.nama}</p><p class="text-[10px] text-slate-400 font-medium">${c.count} transaksi</p></div></div><span class="text-sm font-black text-slate-800 dark:text-slate-100">Rp ${formatRp(c.totalSpend)}</span></li>`).join('');
 }
-
+function applyCustomerTools() {
+  const q = (dom.customerSearch()?.value || '').toLowerCase().trim();
+  const sortBy = dom.customerSort()?.value || 'spend_desc';
+  filteredCustArray = currentCustArray.filter(c => !q || [c.nama, c.hp, c.wilayah].join(' ').toLowerCase().includes(q));
+  const sorters = { spend_desc: (a,b) => b.totalSpend - a.totalSpend, spend_asc: (a,b) => a.totalSpend - b.totalSpend, visit_desc: (a,b) => b.count - a.count, name_asc: (a,b) => a.nama.localeCompare(b.nama, 'id') };
+  filteredCustArray.sort(sorters[sortBy]);
+  renderTablePage();
+}
 function renderTablePage() {
-  const paginatedData = currentCustArray.slice((currentPage-1)*rowsPerPage, currentPage*rowsPerPage);
-  const totalPages = Math.ceil(currentCustArray.length/rowsPerPage) || 1;
-  document.getElementById('dbBody').innerHTML = paginatedData.map(c => `
-      <tr class="transition border-b border-slate-50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/20">
-        <td class="px-5 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">${c.nama.charAt(0)}</div>
-            <span class="font-bold text-slate-800 dark:text-slate-200">${c.nama}</span>
-          </div>
-        </td>
-        <td class="px-5 py-4 font-mono text-xs text-slate-500">${c.hp || '-'}</td>
-        <td class="px-5 py-4 text-xs">${c.wilayah || '-'}</td>
-        <td class="px-5 py-4"><span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">${kategorikan(c.lastTx)}</span></td>
-        <td class="px-5 py-4 text-right font-black text-slate-800 dark:text-slate-100">Rp ${formatRp(c.totalSpend)}</td>
-        <td class="px-5 py-4 text-center"><span class="badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">Active</span></td>
-      </tr>
-  `).join('');
+  const activeArray = filteredCustArray;
+  const paginatedData = activeArray.slice((currentPage-1)*rowsPerPage, currentPage*rowsPerPage);
+  const totalPages = Math.ceil(activeArray.length/rowsPerPage) || 1;
+  document.getElementById('dbBody').innerHTML = paginatedData.map(c => `<tr class="transition border-b border-slate-50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-700/20"><td class="px-5 py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">${c.nama.charAt(0)}</div><span class="font-bold text-slate-800 dark:text-slate-200">${c.nama}</span></div></td><td class="px-5 py-4 font-mono text-xs text-slate-500">${c.hp || '-'}</td><td class="px-5 py-4 text-xs">${c.wilayah || '-'}</td><td class="px-5 py-4"><span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">${kategorikan(c.lastTx)}</span></td><td class="px-5 py-4 text-right font-black text-slate-800 dark:text-slate-100">Rp ${formatRp(c.totalSpend)}</td><td class="px-5 py-4 text-center"><span class="badge bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">Active</span></td></tr>`).join('') || '<tr><td colspan="6" class="px-5 py-6 text-center text-slate-400">Tidak ada data pelanggan</td></tr>';
   document.getElementById('pageInfo').textContent = `Halaman ${currentPage} dari ${totalPages}`;
   document.getElementById('btnPrev').disabled = currentPage <= 1;
   document.getElementById('btnNext').disabled = currentPage >= totalPages;
-  document.getElementById('cust-count-badge').textContent = `${currentCustArray.length} Terdaftar`;
+  document.getElementById('cust-count-badge').textContent = `${activeArray.length} Terdaftar`;
 }
-
-function changePage(dir) {
-  const totalPages = Math.ceil(currentCustArray.length/rowsPerPage);
-  currentPage = Math.max(1, Math.min(totalPages, currentPage + dir));
-  renderTablePage();
-}
-
+function changePage(dir) { const totalPages = Math.ceil(filteredCustArray.length/rowsPerPage) || 1; currentPage = Math.max(1, Math.min(totalPages, currentPage + dir)); renderTablePage(); }
 function renderCharts(dailyRev, treatMap, hourMap) {
   const isDark = document.documentElement.classList.contains('dark');
   const themeMode = isDark ? 'dark' : 'light';
   const foreColor = isDark ? '#cbd5e1' : '#475569';
   const gridColor = isDark ? '#334155' : '#e2e8f0';
-
   if(chartArea) chartArea.destroy();
   if(chartDonut) chartDonut.destroy();
   if(chartHour) chartHour.destroy();
-
   const dates = Object.keys(dailyRev).sort();
   const revs = dates.map(d => dailyRev[d]);
-
-  chartArea = new ApexCharts(document.querySelector("#revenueChart"), {
-    chart: { type: 'area', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans, sans-serif' },
-    theme: { mode: themeMode },
-    series: [{ name: 'Omset', data: revs }],
-    xaxis: { categories: dates, labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 } }, axisBorder: { show: false }, axisTicks: { show: false } },
-    yaxis: { labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 }, formatter: (v) => 'Rp ' + (v/1000).toFixed(0) + 'k' } },
-    grid: { borderColor: gridColor, strokeDashArray: 4 },
-    dataLabels: { enabled: false },
-    stroke: { curve: 'smooth', width: 3 },
-    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [0, 100] } },
-    colors: ['#6366f1'],
-    tooltip: { theme: themeMode, y: { formatter: (v) => 'Rp ' + formatRp(v) } }
-  });
+  chartArea = new ApexCharts(document.querySelector('#revenueChart'), { chart: { type: 'area', height: 320, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans, sans-serif' }, theme: { mode: themeMode }, series: [{ name: 'Omset', data: revs }], xaxis: { categories: dates, labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 } }, axisBorder: { show: false }, axisTicks: { show: false } }, yaxis: { labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 }, formatter: (v) => 'Rp ' + (v/1000).toFixed(0) + 'k' } }, grid: { borderColor: gridColor, strokeDashArray: 4 }, dataLabels: { enabled: false }, stroke: { curve: 'smooth', width: 3 }, fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.45, opacityTo: 0.05, stops: [0, 100] } }, colors: ['#6366f1'], tooltip: { theme: themeMode, y: { formatter: (v) => 'Rp ' + formatRp(v) } } });
   chartArea.render();
-
-  chartDonut = new ApexCharts(document.querySelector("#donutChart"), {
-    chart: { type: 'donut', height: 300, fontFamily: 'Plus Jakarta Sans, sans-serif' },
-    theme: { mode: themeMode },
-    series: Object.values(treatMap),
-    labels: Object.keys(treatMap),
-    colors: ['#6366f1', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#ef4444'],
-    plotOptions: { pie: { donut: { size: '70%', labels: { show: true, total: { show: true, label: 'Total', fontSize: '12px', fontWeight: 700, color: foreColor } } } } },
-    legend: { position: 'bottom', fontSize: '11px', fontWeight: 600, labels: { colors: foreColor } },
-    dataLabels: { enabled: false },
-    tooltip: { theme: themeMode }
-  });
+  chartDonut = new ApexCharts(document.querySelector('#donutChart'), { chart: { type: 'donut', height: 300, fontFamily: 'Plus Jakarta Sans, sans-serif' }, theme: { mode: themeMode }, series: Object.values(treatMap), labels: Object.keys(treatMap), colors: ['#6366f1', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#ef4444'], plotOptions: { pie: { donut: { size: '70%', labels: { show: true, total: { show: true, label: 'Total', fontSize: '12px', fontWeight: 700, color: foreColor } } } } }, legend: { position: 'bottom', fontSize: '11px', fontWeight: 600, labels: { colors: foreColor } }, dataLabels: { enabled: false }, tooltip: { theme: themeMode } });
   chartDonut.render();
-
-  let hourData = Array(24).fill(0);
-  Object.keys(hourMap).forEach(h => hourData[parseInt(h)] = hourMap[h]);
-  chartHour = new ApexCharts(document.querySelector("#hourChart"), {
-    chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans, sans-serif' },
-    theme: { mode: themeMode },
-    series: [{ name: 'Transaksi', data: hourData }],
-    xaxis: { categories: Array.from({length: 24}, (_, i) => i + ":00"), labels: { style: { colors: foreColor, fontSize: '10px', fontWeight: 600 } } },
-    yaxis: { labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 } } },
-    grid: { borderColor: gridColor, strokeDashArray: 4 },
-    colors: ['#6366f1'],
-    plotOptions: { bar: { borderRadius: 6, columnWidth: '60%' } },
-    dataLabels: { enabled: false },
-    tooltip: { theme: themeMode }
-  });
+  const hourData = Array(24).fill(0); Object.keys(hourMap).forEach(h => hourData[parseInt(h, 10)] = hourMap[h]);
+  chartHour = new ApexCharts(document.querySelector('#hourChart'), { chart: { type: 'bar', height: 260, toolbar: { show: false }, fontFamily: 'Plus Jakarta Sans, sans-serif' }, theme: { mode: themeMode }, series: [{ name: 'Transaksi', data: hourData }], xaxis: { categories: Array.from({length: 24}, (_, i) => String(i).padStart(2,'0') + ':00'), labels: { style: { colors: foreColor, fontSize: '10px', fontWeight: 600 } } }, yaxis: { labels: { style: { colors: foreColor, fontSize: '11px', fontWeight: 600 } } }, grid: { borderColor: gridColor, strokeDashArray: 4 }, colors: ['#6366f1'], plotOptions: { bar: { borderRadius: 6, columnWidth: '60%' } }, dataLabels: { enabled: false }, tooltip: { theme: themeMode } });
   chartHour.render();
 }
-
 function generateQuickInsights(data, revenue, custMap, treatMap) {
   const totalCust = Object.keys(custMap).length;
   const avgSpend = data.length ? revenue/data.length : 0;
   const topService = Object.entries(treatMap).sort((a,b)=>b[1]-a[1])[0];
-
-  document.getElementById('quick-ai-1').innerHTML = `
-    <div class="flex items-start gap-3">
-      <div class="w-6 h-6 rounded-full bg-emerald-200 dark:bg-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 text-[10px] mt-0.5"><i class="fa-solid fa-check"></i></div>
-      <div>
-        <p class="text-sm font-semibold text-emerald-800 dark:text-emerald-300 leading-relaxed">Pelanggan setia dominan</p>
-        <p class="text-[11px] text-emerald-600/80 dark:text-emerald-400/70 mt-1">${totalCust} pelanggan unik dengan rata-rata ${(data.length/totalCust).toFixed(1)}x kunjungan. Fokus pada retensi.</p>
-      </div>
-    </div>`;
-
-  document.getElementById('quick-ai-2').innerHTML = `
-    <div class="flex items-start gap-3">
-      <div class="w-6 h-6 rounded-full bg-blue-200 dark:bg-blue-500/30 flex items-center justify-center text-blue-700 dark:text-blue-300 text-[10px] mt-0.5"><i class="fa-solid fa-lightbulb"></i></div>
-      <div>
-        <p class="text-sm font-semibold text-blue-800 dark:text-blue-300 leading-relaxed">Layanan terpopuler: ${topService ? topService[0] : '-'}</p>
-        <p class="text-[11px] text-blue-600/80 dark:text-blue-400/70 mt-1">${topService ? Math.round(topService[1]/data.length*100) : 0}% dari total transaksi. Pertimbangkan bundling.</p>
-      </div>
-    </div>`;
-
-  document.getElementById('quick-ai-3').innerHTML = `
-    <div class="flex items-start gap-3">
-      <div class="w-6 h-6 rounded-full bg-violet-200 dark:bg-violet-500/30 flex items-center justify-center text-violet-700 dark:text-violet-300 text-[10px] mt-0.5"><i class="fa-solid fa-chart-simple"></i></div>
-      <div>
-        <p class="text-sm font-semibold text-violet-800 dark:text-violet-300 leading-relaxed">Opportunity upsell</p>
-        <p class="text-[11px] text-violet-600/80 dark:text-violet-400/70 mt-1">Avg transaction Rp ${formatRp(avgSpend)}. Upsell treatment premium bisa naikkan 20-30%.</p>
-      </div>
-    </div>`;
-
-  const container = document.getElementById('ai-deep-container');
-  container.innerHTML = `
-    <div class="card !bg-gradient-to-br !from-emerald-500/5 !to-teal-500/5 dark:!from-emerald-500/10 dark:!to-teal-500/10 border-emerald-100 dark:border-emerald-500/20">
-      <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-users text-emerald-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Customer Segmentation</h4></div>
-      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Berdasarkan frekuensi dan nominal transaksi, ${Math.round(totalCust*0.2)} pelanggan (20%) merupakan high-value segment yang menyumbang ~${Math.round(revenue*0.6)} (est. 60%) revenue. Targetkan program loyalty eksklusif untuk segmen ini.</p>
-    </div>
-    <div class="card !bg-gradient-to-br !from-indigo-500/5 !to-violet-500/5 dark:!from-indigo-500/10 dark:!to-violet-500/10 border-indigo-100 dark:border-indigo-500/20">
-      <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-clock text-indigo-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Operational Efficiency</h4></div>
-      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Peak hour terdeteksi pada jam sibuk. Optimalkan staffing pada slot waktu tersebut. Consider open slot diskon 10% pada jam sepi untuk meratakan beban kerja dan meningkatkan utilitas.</p>
-    </div>
-    <div class="card !bg-gradient-to-br !from-amber-500/5 !to-orange-500/5 dark:!from-amber-500/10 dark:!to-orange-500/10 border-amber-100 dark:border-amber-500/20">
-      <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-bag-shopping text-amber-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Product Mix Strategy</h4></div>
-      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Diversifikasi layanan masih bisa ditingkatkan. Jika kategori 'Lainnya' >15%, review katalog dan konsolidasikan penamaan treatment agar reporting lebih akurat dan cross-selling lebih terukur.</p>
-    </div>
-    <div class="card !bg-gradient-to-br !from-rose-500/5 !to-pink-500/5 dark:!from-rose-500/10 dark:!to-pink-500/10 border-rose-100 dark:border-rose-500/20">
-      <div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-bullseye text-rose-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Revenue Forecast</h4></div>
-      <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Dengan trend saat ini, projected revenue bulan depan estimasi Rp ${formatRp(Math.round(revenue * 1.08))} (+8% MoM asumsi seasonality normal). Monitor weekly untuk koreksi prediksi.</p>
-    </div>
-  `;
+  const avgVisit = totalCust ? (data.length/totalCust).toFixed(1) : '0.0';
+  document.getElementById('quick-ai-1').innerHTML = `<div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-emerald-200 dark:bg-emerald-500/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 text-[10px] mt-0.5"><i class="fa-solid fa-check"></i></div><div><p class="text-sm font-semibold text-emerald-800 dark:text-emerald-300 leading-relaxed">Pelanggan setia dominan</p><p class="text-[11px] text-emerald-600/80 dark:text-emerald-400/70 mt-1">${totalCust} pelanggan unik dengan rata-rata ${avgVisit}x kunjungan. Fokus pada retensi.</p></div></div>`;
+  document.getElementById('quick-ai-2').innerHTML = `<div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-blue-200 dark:bg-blue-500/30 flex items-center justify-center text-blue-700 dark:text-blue-300 text-[10px] mt-0.5"><i class="fa-solid fa-lightbulb"></i></div><div><p class="text-sm font-semibold text-blue-800 dark:text-blue-300 leading-relaxed">Layanan terpopuler: ${topService ? topService[0] : '-'}</p><p class="text-[11px] text-blue-600/80 dark:text-blue-400/70 mt-1">${topService && data.length ? Math.round(topService[1]/data.length*100) : 0}% dari total transaksi. Pertimbangkan bundling.</p></div></div>`;
+  document.getElementById('quick-ai-3').innerHTML = `<div class="flex items-start gap-3"><div class="w-6 h-6 rounded-full bg-violet-200 dark:bg-violet-500/30 flex items-center justify-center text-violet-700 dark:text-violet-300 text-[10px] mt-0.5"><i class="fa-solid fa-chart-simple"></i></div><div><p class="text-sm font-semibold text-violet-800 dark:text-violet-300 leading-relaxed">Opportunity upsell</p><p class="text-[11px] text-violet-600/80 dark:text-violet-400/70 mt-1">Avg transaction Rp ${formatRp(avgSpend)}. Upsell treatment premium bisa naikkan 20-30%.</p></div></div>`;
+  document.getElementById('ai-deep-container').innerHTML = `<div class="card !bg-gradient-to-br !from-emerald-500/5 !to-teal-500/5 dark:!from-emerald-500/10 dark:!to-teal-500/10 border-emerald-100 dark:border-emerald-500/20"><div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-users text-emerald-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Customer Segmentation</h4></div><p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Berdasarkan frekuensi dan nominal transaksi, ${Math.round(totalCust*0.2)} pelanggan (20%) merupakan high-value segment yang menyumbang ~${Math.round(revenue*0.6)} (est. 60%) revenue. Targetkan program loyalty eksklusif untuk segmen ini.</p></div><div class="card !bg-gradient-to-br !from-indigo-500/5 !to-violet-500/5 dark:!from-indigo-500/10 dark:!to-violet-500/10 border-indigo-100 dark:border-indigo-500/20"><div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-clock text-indigo-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Operational Efficiency</h4></div><p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Peak hour terdeteksi pada jam sibuk. Optimalkan staffing pada slot waktu tersebut. Consider open slot diskon 10% pada jam sepi untuk meratakan beban kerja dan meningkatkan utilitas.</p></div><div class="card !bg-gradient-to-br !from-amber-500/5 !to-orange-500/5 dark:!from-amber-500/10 dark:!to-orange-500/10 border-amber-100 dark:border-amber-500/20"><div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-bag-shopping text-amber-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Product Mix Strategy</h4></div><p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Diversifikasi layanan masih bisa ditingkatkan. Jika kategori 'Lainnya' >15%, review katalog dan konsolidasikan penamaan treatment agar reporting lebih akurat dan cross-selling lebih terukur.</p></div><div class="card !bg-gradient-to-br !from-rose-500/5 !to-pink-500/5 dark:!from-rose-500/10 dark:!to-pink-500/10 border-rose-100 dark:border-rose-500/20"><div class="flex items-center gap-2 mb-3"><i class="fa-solid fa-bullseye text-rose-500"></i><h4 class="font-bold text-slate-800 dark:text-white">Revenue Forecast</h4></div><p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Dengan trend saat ini, projected revenue bulan depan estimasi Rp ${formatRp(Math.round(revenue * 1.08))} (+8% MoM asumsi seasonality normal). Monitor weekly untuk koreksi prediksi.</p></div>`;
 }
-
-function refreshInsights() {
-  showToast('Memperbarui analisis AI...', 'info');
-  setTimeout(() => { applyFilter(); showToast('Analisis AI diperbarui', 'success'); }, 800);
-}
-
+function refreshInsights() { showToast('Memperbarui analisis AI...', 'info'); setTimeout(() => { applyFilter(); showToast('Analisis AI diperbarui', 'success'); }, 800); }
 async function loadTreatments() {
   try {
-    const res = await fetch(SHEETS_URL + "?action=get_layanan");
+    const res = await fetch(SHEETS_URL + '?action=get_layanan');
     const data = await res.json();
-    document.getElementById('treatmentList').innerHTML = data.map(item => `
-      <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition">
-        <td class="px-5 py-4 font-bold text-slate-700 dark:text-slate-200">${item}</td>
-        <td class="px-5 py-4 text-right">
-          <button onclick="deleteTreatment('${item}')" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg text-[11px] font-bold hover:bg-rose-100 transition">
-            <i class="fa-solid fa-trash-can mr-1"></i>Hapus
-          </button>
-        </td>
-      </tr>
-    `).join('');
+    document.getElementById('treatmentList').innerHTML = data.map(item => `<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/20 transition"><td class="px-5 py-4 font-bold text-slate-700 dark:text-slate-200">${item}</td><td class="px-5 py-4 text-right"><button onclick="deleteTreatment('${item.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg text-[11px] font-bold hover:bg-rose-100 transition"><i class="fa-solid fa-trash-can mr-1"></i>Hapus</button></td></tr>`).join('');
   } catch(e) { console.error(e); }
 }
-
-function addTreatment() {
-  const val = document.getElementById('newTreatment').value.trim();
-  if(!val) return showToast('Nama treatment tidak boleh kosong', 'error');
-  showToast('Treatment "' + val + '" ditambahkan (simulasi)', 'success');
-  document.getElementById('newTreatment').value = '';
-}
-
-function deleteTreatment(name) {
-  if(confirm('Hapus treatment "' + name + '"?')) showToast('Treatment "' + name + '" dihapus (simulasi)', 'info');
-}
-
+function addTreatment() { const val = document.getElementById('newTreatment').value.trim(); if(!val) return showToast('Nama treatment tidak boleh kosong', 'error'); showToast('Treatment "' + val + '" ditambahkan (simulasi)', 'success'); document.getElementById('newTreatment').value = ''; }
+function deleteTreatment(name) { if(confirm('Hapus treatment "' + name + '"?')) showToast('Treatment "' + name + '" dihapus (simulasi)', 'info'); }
+function buildCsvRow(arr) { return arr.map(v => '"' + String(v ?? '').replace(/"/g, '""') + '"').join(','); }
+function getFilteredExportData() { return filteredDashboardData.length ? filteredDashboardData : globalData; }
 function exportCSV() {
-  if(!globalData.length) return showToast('Tidak ada data untuk diexport', 'error');
-  const headers = Object.keys(globalData[0]);
-  const csv = [headers.join(','), ...globalData.map(row => headers.map(h => `"${(row[h]||'')}"`).join(','))].join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
+  const source = getFilteredExportData();
+  if(!source.length) return showToast('Tidak ada data untuk diexport', 'error');
+  const headers = Object.keys(source[0]);
+  const csv = [buildCsvRow(headers), ...source.map(row => buildCsvRow(headers.map(h => row[h] || '')))].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'alesha_data_' + new Date().toISOString().split('T')[0] + '.csv';
-  a.click(); URL.revokeObjectURL(url);
-  showToast('Data berhasil diexport ke CSV', 'success');
+  const a = document.createElement('a'); a.href = url; a.download = 'alesha_filtered_data_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); URL.revokeObjectURL(url); showToast('Data filter aktif berhasil diexport ke CSV', 'success');
 }
-
 function exportCustomerCSV() {
-  if(!currentCustArray.length) return showToast('Tidak ada data pelanggan', 'error');
+  const source = filteredCustArray.length ? filteredCustArray : currentCustArray;
+  if(!source.length) return showToast('Tidak ada data pelanggan', 'error');
   const headers = ['Nama','No HP','Wilayah','Treatment Terakhir','Total Transaksi','Jumlah Kunjungan'];
-  const csv = [headers.join(','), ...currentCustArray.map(c => `"${c.nama}","${c.hp}","${c.wilayah}","${kategorikan(c.lastTx)}","${c.totalSpend}","${c.count}"`).join('\n')];
-  const blob = new Blob([csv], {type:'text/csv'});
+  const rows = source.map(c => [c.nama, c.hp, c.wilayah, kategorikan(c.lastTx), c.totalSpend, c.count]);
+  const csv = [buildCsvRow(headers), ...rows.map(buildCsvRow)].join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'alesha_customers_' + new Date().toISOString().split('T')[0] + '.csv';
-  a.click(); URL.revokeObjectURL(url);
-  showToast('Database pelanggan diexport', 'success');
+  const a = document.createElement('a'); a.href = url; a.download = 'alesha_customers_' + new Date().toISOString().split('T')[0] + '.csv'; a.click(); URL.revokeObjectURL(url); showToast('Database pelanggan diexport', 'success');
 }
-
+dom.customerSearch()?.addEventListener('input', () => { currentPage = 1; applyCustomerTools(); });
+dom.customerSort()?.addEventListener('change', () => { currentPage = 1; applyCustomerTools(); });
+dom.serviceFilter()?.addEventListener('change', () => applyFilter());
+document.getElementById('filterStart').addEventListener('change', () => { syncPresetButtons(''); applyFilter(); });
+document.getElementById('filterEnd').addEventListener('change', () => { syncPresetButtons(''); applyFilter(); });
+document.querySelectorAll('.preset-chip').forEach(btn => btn.addEventListener('click', () => setPresetRange(btn.dataset.preset)));
 initDashboard();
-autoRefreshInterval = setInterval(() => {
-    if(document.getElementById('refreshToggle').classList.contains('active')) {
-        initDashboard(true); 
-    }
-}, 30000);
-
+syncDarkToggle();
+autoRefreshInterval = setInterval(() => { if(dom.refreshToggle()?.classList.contains('active')) initDashboard(true); }, 30000);
 </script>
 </body>
 </html>
