@@ -470,7 +470,9 @@
 </main>
 
 <script>
-/* ─── KONSTANTA ─── */
+/* ═══════════════════════════════════════
+   KONSTANTA
+═══════════════════════════════════════ */
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
 
 const DEFAULT_LAYANAN = [
@@ -497,7 +499,9 @@ const WILAYAH = {
   }
 };
 
-/* ─── STATE ─── */
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
 let dTransaksi = [];
 try {
   const raw = JSON.parse(localStorage.getItem('alesha_data'));
@@ -505,43 +509,39 @@ try {
 } catch(e) {}
 
 let currentFilter = 'hari_ini';
-let mBayar = 'Cash';
-let isDark = false;
-let isProses = false;
-let toastTimer = null;
+let mBayar        = 'Cash';
+let isDark        = false;
+let isProses      = false;
+let toastTimer    = null;
 
-/* ─── HELPERS ─── */
+/* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
 const $ = id => document.getElementById(id);
 
-function esc(val) {
-  return String(val ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+function esc(v) {
+  return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
-function formatRp(n) { return new Intl.NumberFormat('id-ID').format(Number(n) || 0); }
-
-function clean(s) { return parseInt(String(s ?? '').replace(/[^0-9]/g,''), 10) || 0; }
-
+function formatRp(n)    { return new Intl.NumberFormat('id-ID').format(Number(n)||0); }
+function clean(s)       { return parseInt(String(s??'').replace(/[^0-9]/g,''),10)||0; }
 function formatRpInput(el) {
   const v = String(el.value).replace(/[^0-9]/g,'');
   el.value = v ? formatRp(v) : '';
 }
 
 function getTodayWIB() {
-  return new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+  return new Date().toLocaleDateString('en-CA',{ timeZone:'Asia/Jakarta' });
 }
 
-/* Parsing tanggal dari Sheets → string YYYY-MM-DD di WIB */
 function parseISO(s) {
   if (!s) return '';
   const str = String(s).trim();
-  // Sudah dalam format YYYY-MM-DD
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
-  // Format lain (ISO string dari Sheets)
   const d = new Date(str);
   if (isNaN(d.getTime())) return '';
-  return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
+  return d.toLocaleDateString('en-CA',{ timeZone:'Asia/Jakarta' });
 }
 
 function formatTglID(s) {
@@ -549,47 +549,53 @@ function formatTglID(s) {
   const str = String(s).trim();
   if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
     const [y,m,d] = str.split('-').map(Number);
-    return new Date(y, m-1, d).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+    return new Date(y,m-1,d).toLocaleDateString('id-ID',{ day:'numeric',month:'short',year:'numeric' });
   }
   const d = new Date(str);
   if (isNaN(d.getTime())) return esc(str);
-  return d.toLocaleDateString('id-ID', { timeZone:'Asia/Jakarta', day:'numeric', month:'short', year:'numeric' });
+  return d.toLocaleDateString('id-ID',{ timeZone:'Asia/Jakarta',day:'numeric',month:'short',year:'numeric' });
 }
 
 function normalizePhone(raw) {
-  const d = String(raw ?? '').replace(/\D/g,'');
+  const d = String(raw??'').replace(/\D/g,'');
   if (d.startsWith('62')) return d;
-  if (d.startsWith('0'))  return '62' + d.slice(1);
-  if (d.startsWith('8'))  return '62' + d;
+  if (d.startsWith('0'))  return '62'+d.slice(1);
+  if (d.startsWith('8'))  return '62'+d;
   return d;
 }
 
 function isValidPhone(raw) {
-  return /^(0|62|8)\d{8,14}$/.test(String(raw ?? '').replace(/\D/g,''));
+  return /^(0|62|8)\d{8,14}$/.test(String(raw??'').replace(/\D/g,''));
 }
 
-/* ─── POST ke Google Apps Script (tidak parse JSON — GAS response tidak reliable) ─── */
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+/* ═══════════════════════════════════════
+   NETWORK — POST ke GAS (tidak parse response)
+═══════════════════════════════════════ */
 async function gasPost(payload) {
   await fetch(SHEETS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   });
-  /* GAS selalu return 200 tapi body bisa kosong/redirect — tidak perlu parse */
 }
 
-/* ─── GET dari Google Apps Script ─── */
 async function gasGet(params = '') {
-  const res = await fetch(SHEETS_URL + params, { cache: 'no-store' });
+  const res = await fetch(SHEETS_URL + params, { cache:'no-store' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return await res.json();
 }
 
-/* ─── UI HELPERS ─── */
+/* ═══════════════════════════════════════
+   UI
+═══════════════════════════════════════ */
 function showLoader(on) {
   const el = $('loader');
   if (on) { el.classList.add('show'); el.style.display = 'flex'; }
-  else    { el.classList.remove('show'); setTimeout(() => { el.style.display = 'none'; }, 100); }
+  else    { el.classList.remove('show'); setTimeout(()=>{ el.style.display='none'; },100); }
 }
 
 function showToast(msg) {
@@ -597,25 +603,22 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  toastTimer = setTimeout(()=> el.classList.remove('show'), 2800);
 }
 
 function setActiveNav(tab) {
   document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-  $('nav' + (tab === 'kasir' ? 'Kasir' : 'Riwayat')).classList.add('active');
+  $('nav'+(tab==='kasir'?'Kasir':'Riwayat')).classList.add('active');
 }
 
-/* ─── CLOCK ─── */
 function updateClock() {
-  const now = new Date();
-  const opts = { timeZone: 'Asia/Jakarta' };
-  $('badgeTgl').innerHTML  = '<i class="fa-regular fa-calendar"></i> '
-    + now.toLocaleDateString('id-ID', { ...opts, weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  $('badgeWaktu').innerHTML = '<i class="fa-regular fa-clock"></i> '
-    + now.toLocaleTimeString('id-ID', { ...opts, hour:'2-digit', minute:'2-digit' }) + ' WIB';
+  const now = new Date(), opts = { timeZone:'Asia/Jakarta' };
+  $('badgeTgl').innerHTML  = '<i class="fa-regular fa-calendar"></i> ' +
+    now.toLocaleDateString('id-ID',{...opts,weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  $('badgeWaktu').innerHTML = '<i class="fa-regular fa-clock"></i> ' +
+    now.toLocaleTimeString('id-ID',{...opts,hour:'2-digit',minute:'2-digit'}) + ' WIB';
 }
 
-/* ─── THEME ─── */
 function toggleTheme() {
   isDark = !isDark;
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -623,76 +626,140 @@ function toggleTheme() {
   $('iconMoon').style.display = isDark ? 'block' : 'none';
 }
 
-/* ─── NOTA ID ─── */
 function generateNotaID() {
-  const now = new Date();
-  const tglBln  = String(now.getDate()).padStart(2,'0') + String(now.getMonth()+1).padStart(2,'0');
+  const now    = new Date();
+  const tglBln = String(now.getDate()).padStart(2,'0') + String(now.getMonth()+1).padStart(2,'0');
   const dateKey = now.getFullYear() + tglBln;
   let lastDate = '', lastSeq = 0;
-  try { lastDate = localStorage.getItem('alesha_last_date') || ''; lastSeq = parseInt(localStorage.getItem('alesha_last_seq'),10) || 0; } catch(e){}
-  lastSeq = (lastDate !== dateKey) ? 1 : lastSeq + 1;
-  try { localStorage.setItem('alesha_last_date', dateKey); localStorage.setItem('alesha_last_seq', String(lastSeq)); } catch(e){}
+  try { lastDate=localStorage.getItem('alesha_last_date')||''; lastSeq=parseInt(localStorage.getItem('alesha_last_seq'),10)||0; } catch(e){}
+  lastSeq = (lastDate!==dateKey) ? 1 : lastSeq+1;
+  try { localStorage.setItem('alesha_last_date',dateKey); localStorage.setItem('alesha_last_seq',String(lastSeq)); } catch(e){}
   const rand = Math.random().toString(36).substring(2,5).toUpperCase();
   return `AS-${tglBln}-${String(lastSeq).padStart(2,'0')}-${rand}`;
 }
 
-/* ─── METODE BAYAR ─── */
+/* ═══════════════════════════════════════
+   WHATSAPP DEEP LINK
+   Android : window.open('whatsapp://...','_blank') — sudah berjalan, tidak diubah
+   iOS     : window.location.href = 'whatsapp://...' — iOS Safari mengizinkan ini
+             tanpa memerlukan user gesture langsung; OS intercept & buka app WA,
+             halaman kasir tetap di background Safari.
+═══════════════════════════════════════ */
+function bukaWhatsapp(phone, encodedMsg) {
+  const waUrl = `whatsapp://send?phone=${phone}&text=${encodedMsg}`;
+
+  if (isIOS()) {
+    /* iOS: location.href untuk custom scheme — app WA terbuka, Safari tetap di BG */
+    window.location.href = waUrl;
+  } else {
+    /* Android: window.open di tab baru — sudah berjalan, tidak diubah */
+    const tab = window.open(waUrl, '_blank');
+    /* Fallback jika popup diblokir atau WA tidak terinstall */
+    if (!tab) {
+      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`, '_blank');
+      return;
+    }
+    setTimeout(() => {
+      try { if (tab && !tab.closed) tab.location.href = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`; }
+      catch(e) { /* tab sudah diambil alih OS → WA terbuka, aman */ }
+    }, 1500);
+  }
+}
+
+/* ═══════════════════════════════════════
+   BUAT PESAN NOTA
+   Format garis: ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ (Opsi B — proporsional di HP)
+   Hanya 3 garis pemisah agar tidak menumpuk di bubble chat.
+═══════════════════════════════════════ */
+function buatPesanNota({ id, tglTampil, nama, lay, catatan, harga, diskon, total, metode }) {
+  const GARIS = '─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─';
+
+  let baris = [];
+  baris.push(`✂️ *NOTA SALON ALESHA* ✂️`);
+  baris.push(GARIS);
+  baris.push(`📋 *No. Nota:* ${id}`);
+  baris.push(`📅 *Tanggal:* ${tglTampil}`);
+  baris.push(`👤 *Pelanggan:* ${nama}`);
+  baris.push(GARIS);
+  baris.push(`✨ *Layanan:* ${lay}`);
+  if (catatan) baris.push(`📝 *Catatan:* ${catatan}`);
+  baris.push(GARIS);
+  baris.push(`💰 *Harga:* Rp ${formatRp(harga)}`);
+  if (diskon > 0) baris.push(`🎁 *Diskon:* -Rp ${formatRp(diskon)}`);
+  baris.push(`💳 *Total:* *Rp ${formatRp(total)}*`);
+  baris.push(`🏧 *Metode:* ${metode}`);
+  baris.push('');
+  baris.push(`Terima kasih telah mempercayakan perawatan kecantikan Anda kepada kami. 🌸`);
+  baris.push(`Kepuasan Anda adalah prioritas utama kami.`);
+  baris.push('');
+  baris.push(`Kami tunggu kunjungan Anda berikutnya di Salon Alesha! 💇‍♀️`);
+  baris.push('');
+  baris.push(`Jika puas dengan layanan kami, bantu kami dengan memberikan bintang 5 di Google Maps ya! ⭐⭐⭐⭐⭐`);
+  baris.push(`https://maps.app.goo.gl/M3bfy5Bzmta9zLJF7`);
+
+  return encodeURIComponent(baris.join('\n'));
+}
+
+/* ═══════════════════════════════════════
+   FORM — METODE BAYAR
+═══════════════════════════════════════ */
 function setMetode(m) {
   mBayar = m;
   ['btnCash','btnQRIS'].forEach(id => $(id).classList.remove('active'));
-  $(m === 'Cash' ? 'btnCash' : 'btnQRIS').classList.add('active');
+  $(m==='Cash'?'btnCash':'btnQRIS').classList.add('active');
   const divT = $('divTunai');
-  divT.style.display       = m === 'QRIS' ? 'none' : 'flex';
+  divT.style.display = m==='QRIS' ? 'none' : 'flex';
   divT.style.flexDirection = 'column';
-  divT.style.gap           = '.75rem';
-  if (m === 'QRIS') { $('inpBayar').value = ''; $('quickAmounts').innerHTML = ''; }
+  divT.style.gap = '.75rem';
+  if (m==='QRIS') { $('inpBayar').value=''; $('quickAmounts').innerHTML=''; }
   hitung();
 }
 
-/* ─── WILAYAH ─── */
+/* ═══════════════════════════════════════
+   FORM — WILAYAH
+═══════════════════════════════════════ */
 function updateKecamatan() {
-  const kab = $('inpKab').value;
-  const customEl = $('inpWilayahLain');
-  const detailEl = $('divWilayahDetail');
-  const kecSel   = $('inpKec');
-  const kelSel   = $('inpKel');
+  const kab    = $('inpKab').value;
+  const custEl = $('inpWilayahLain');
+  const detEl  = $('divWilayahDetail');
+  const kecSel = $('inpKec');
+  const kelSel = $('inpKel');
   kecSel.innerHTML = '<option value="">-- Kecamatan --</option>';
   kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
-  if (kab === 'Lainnya') { customEl.style.display = 'block'; detailEl.style.display = 'none'; return; }
-  customEl.style.display = 'none';
-  detailEl.style.display = 'grid';
+  if (kab==='Lainnya') { custEl.style.display='block'; detEl.style.display='none'; return; }
+  custEl.style.display='none'; detEl.style.display='grid';
   if (!WILAYAH[kab]) return;
   const frag = document.createDocumentFragment();
-  Object.keys(WILAYAH[kab]).forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = k; frag.appendChild(o); });
+  Object.keys(WILAYAH[kab]).forEach(k => { const o=document.createElement('option'); o.value=k; o.textContent=k; frag.appendChild(o); });
   kecSel.appendChild(frag);
 }
 
 function updateKelurahan() {
-  const kab = $('inpKab').value, kec = $('inpKec').value;
-  const kelSel = $('inpKel');
-  kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
+  const kab=  $('inpKab').value, kec=$('inpKec').value;
+  const kelSel=$('inpKel');
+  kelSel.innerHTML='<option value="">-- Kelurahan --</option>';
   if (!WILAYAH[kab]?.[kec]) return;
-  const frag = document.createDocumentFragment();
-  WILAYAH[kab][kec].forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = k; frag.appendChild(o); });
+  const frag=document.createDocumentFragment();
+  WILAYAH[kab][kec].forEach(k=>{ const o=document.createElement('option'); o.value=k; o.textContent=k; frag.appendChild(o); });
   kelSel.appendChild(frag);
 }
 
-/* ─── LAYANAN ─── */
+/* ═══════════════════════════════════════
+   FORM — LAYANAN
+═══════════════════════════════════════ */
 function cekLayananLain() {
-  const show = $('inpLayanan').value === 'Lainnya (Custom)';
-  $('inpLayananLain').style.display = show ? 'block' : 'none';
-  if (!show) $('inpLayananLain').value = '';
+  const show=$('inpLayanan').value==='Lainnya (Custom)';
+  $('inpLayananLain').style.display=show?'block':'none';
+  if (!show) $('inpLayananLain').value='';
 }
 
 function isiSelectLayanan(list) {
-  const sel  = $('inpLayanan');
-  const frag = document.createDocumentFragment();
-  const addOpt = (val, text) => { const o = document.createElement('option'); o.value = val; o.textContent = text; frag.appendChild(o); };
-  addOpt('', '-- Pilih Treatment --');
-  list.forEach(item => addOpt(item, `✨ ${item}`));
-  addOpt('Lainnya (Custom)', '✏️ Lainnya (Custom)');
-  sel.innerHTML = '';
-  sel.appendChild(frag);
+  const sel=$('inpLayanan'), frag=document.createDocumentFragment();
+  const add=(v,t)=>{ const o=document.createElement('option'); o.value=v; o.textContent=t; frag.appendChild(o); };
+  add('','-- Pilih Treatment --');
+  list.forEach(item => add(item,`✨ ${item}`));
+  add('Lainnya (Custom)','✏️ Lainnya (Custom)');
+  sel.innerHTML=''; sel.appendChild(frag);
 }
 
 async function loadMenuLayanan() {
@@ -700,156 +767,142 @@ async function loadMenuLayanan() {
     const data = await gasGet('?action=get_layanan');
     const list = Array.isArray(data) ? data.map(String).filter(Boolean) : [];
     isiSelectLayanan(list.length ? list : DEFAULT_LAYANAN);
-  } catch(e) {
-    isiSelectLayanan(DEFAULT_LAYANAN);
-  }
+  } catch(e) { isiSelectLayanan(DEFAULT_LAYANAN); }
 }
 
-/* ─── KALKULASI ─── */
+/* ═══════════════════════════════════════
+   KALKULASI
+═══════════════════════════════════════ */
 function updateQuickAmounts(total) {
-  const c = $('quickAmounts');
-  if (total <= 0 || mBayar !== 'Cash') { c.innerHTML = ''; return; }
-  const amounts = new Set([total]);
-  if (total < 50000)  amounts.add(50000);
-  if (total < 100000) amounts.add(100000);
-  const frag = document.createDocumentFragment();
-  [...amounts].sort((a,b) => a-b).forEach(p => {
-    const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'quick-btn';
-    btn.textContent = p === total ? 'Uang Pas' : `Rp ${formatRp(p)}`;
-    btn.onclick = () => setQuickBayar(p);
+  const c=$('quickAmounts');
+  if (total<=0 || mBayar!=='Cash') { c.innerHTML=''; return; }
+  const amounts=new Set([total]);
+  if (total<50000)  amounts.add(50000);
+  if (total<100000) amounts.add(100000);
+  const frag=document.createDocumentFragment();
+  [...amounts].sort((a,b)=>a-b).forEach(p=>{
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='quick-btn';
+    btn.textContent=p===total?'Uang Pas':`Rp ${formatRp(p)}`;
+    btn.onclick=()=>setQuickBayar(p);
     frag.appendChild(btn);
   });
-  c.innerHTML = '';
-  c.appendChild(frag);
+  c.innerHTML=''; c.appendChild(frag);
 }
 
-function setQuickBayar(amt) {
-  $('inpBayar').value = 'Rp ' + formatRp(amt);
-  hitung();
-}
+function setQuickBayar(amt) { $('inpBayar').value='Rp '+formatRp(amt); hitung(); }
 
 function hitung() {
-  const harga  = clean($('inpHarga').value);
-  const diskon = clean($('inpDiskon').value);
-  const bayar  = clean($('inpBayar').value);
-  const total  = Math.max(0, harga - diskon);
-  $('txtTotal').textContent   = 'Rp ' + formatRp(total);
-  $('txtKembali').textContent = 'Rp ' + formatRp(Math.max(0, bayar - total));
-  const di = $('discountInfo');
-  if (diskon > 0 && harga > 0) {
-    di.style.display = 'flex'; di.style.alignItems = 'center';
-    $('txtHargaAsli').textContent = 'Rp ' + formatRp(harga);
-    $('txtDiskonInfo').textContent = `Hemat Rp ${formatRp(Math.min(diskon, harga))}`;
-  } else { di.style.display = 'none'; }
+  const harga=clean($('inpHarga').value), diskon=clean($('inpDiskon').value);
+  const bayar=clean($('inpBayar').value), total=Math.max(0,harga-diskon);
+  $('txtTotal').textContent   = 'Rp '+formatRp(total);
+  $('txtKembali').textContent = 'Rp '+formatRp(Math.max(0,bayar-total));
+  const di=$('discountInfo');
+  if (diskon>0 && harga>0) {
+    di.style.display='flex'; di.style.alignItems='center';
+    $('txtHargaAsli').textContent='Rp '+formatRp(harga);
+    $('txtDiskonInfo').textContent=`Hemat Rp ${formatRp(Math.min(diskon,harga))}`;
+  } else { di.style.display='none'; }
   updateQuickAmounts(total);
 }
 
-/* ─── TAB & FILTER ─── */
+/* ═══════════════════════════════════════
+   NAVIGASI
+═══════════════════════════════════════ */
 function bukaTab(e, tab) {
-  document.querySelectorAll('.tab-konten').forEach(el => el.style.display = 'none');
-  $('tab-' + tab).style.display = 'block';
+  document.querySelectorAll('.tab-konten').forEach(el=>el.style.display='none');
+  $('tab-'+tab).style.display='block';
   setActiveNav(tab);
-  if (tab === 'riwayat') renderRiwayat();
+  if (tab==='riwayat') renderRiwayat();
 }
 
 function setFilter(f) {
-  currentFilter = f;
-  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
-  $('btn-f-' + f)?.classList.add('active');
-  $('divKalender').style.display = f === 'kalender' ? 'block' : 'none';
+  currentFilter=f;
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
+  $('btn-f-'+f)?.classList.add('active');
+  $('divKalender').style.display=f==='kalender'?'block':'none';
   renderRiwayat();
 }
 
-/* ─── RESET FORM ─── */
+/* ═══════════════════════════════════════
+   RESET FORM
+═══════════════════════════════════════ */
 function resetForm() {
-  ['inpNama','inpHp','inpCatatan','inpHarga','inpDiskon','inpBayar'].forEach(id => $(id).value = '');
-  $('inpLayanan').selectedIndex = 0;
-  $('inpLayananLain').value = ''; $('inpLayananLain').style.display = 'none';
-  $('inpWilayahLain').value = ''; $('inpWilayahLain').style.display = 'none';
-  $('inpKab').selectedIndex = 0;
-  updateKecamatan();
-  setMetode('Cash');
-  hitung();
+  ['inpNama','inpHp','inpCatatan','inpHarga','inpDiskon','inpBayar'].forEach(id=>$(id).value='');
+  $('inpLayanan').selectedIndex=0;
+  $('inpLayananLain').value=''; $('inpLayananLain').style.display='none';
+  $('inpWilayahLain').value=''; $('inpWilayahLain').style.display='none';
+  $('inpKab').selectedIndex=0;
+  updateKecamatan(); setMetode('Cash'); hitung();
 }
 
-/* ─── LOAD DATA ─── */
-async function muatData(showFeedback = false) {
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+async function muatData(showFeedback=false) {
   if (showFeedback) showLoader(true);
   try {
-    const data = await gasGet();
-    dTransaksi = Array.isArray(data) ? data : [];
-    try { localStorage.setItem('alesha_data', JSON.stringify(dTransaksi)); } catch(e) {}
+    const data=await gasGet();
+    dTransaksi=Array.isArray(data)?data:[];
+    try { localStorage.setItem('alesha_data',JSON.stringify(dTransaksi)); } catch(e){}
     renderRiwayat();
     if (showFeedback) showToast('✅ Data berhasil disinkronkan');
   } catch(e) {
     if (showFeedback) showToast('⚠️ Gagal sinkron, cek koneksi');
-  } finally {
-    showLoader(false);
-  }
+  } finally { showLoader(false); }
 }
 
-/* ─── RENDER RIWAYAT ─── */
+/* ═══════════════════════════════════════
+   RENDER RIWAYAT
+═══════════════════════════════════════ */
 function renderRiwayat() {
-  const listEl  = $('listRiwayat');
-  const todayWIB = getTodayWIB();
-  const q = ($('searchInp')?.value || '').toLowerCase().trim();
+  const listEl=  $('listRiwayat');
+  const todayWIB=getTodayWIB();
+  const q=($('searchInp')?.value||'').toLowerCase().trim();
 
-  let filtered = dTransaksi.slice();
-  let label = 'Total Omset';
+  let filtered=dTransaksi.slice(), label='Total Omset';
 
-  if (currentFilter === 'hari_ini') {
-    filtered = filtered.filter(t => parseISO(t.Tanggal) === todayWIB);
-    label = 'Omset Hari Ini';
-  } else if (currentFilter === 'bulan') {
-    const bln = $('filterBulan').value, thn = $('filterTahun').value;
-    filtered = filtered.filter(t => parseISO(t.Tanggal).startsWith(`${thn}-${bln}`));
-    label = `Omset ${$('filterBulan').options[$('filterBulan').selectedIndex].text} ${thn}`;
-  } else if (currentFilter === 'kalender') {
-    const val = $('filterTgl').value;
-    if (val) { filtered = filtered.filter(t => parseISO(t.Tanggal) === val); label = `Omset ${val.split('-').reverse().join('/')}`; }
+  if (currentFilter==='hari_ini') {
+    filtered=filtered.filter(t=>parseISO(t.Tanggal)===todayWIB);
+    label='Omset Hari Ini';
+  } else if (currentFilter==='bulan') {
+    const bln=$('filterBulan').value, thn=$('filterTahun').value;
+    filtered=filtered.filter(t=>parseISO(t.Tanggal).startsWith(`${thn}-${bln}`));
+    label=`Omset ${$('filterBulan').options[$('filterBulan').selectedIndex].text} ${thn}`;
+  } else if (currentFilter==='kalender') {
+    const val=$('filterTgl').value;
+    if (val) { filtered=filtered.filter(t=>parseISO(t.Tanggal)===val); label=`Omset ${val.split('-').reverse().join('/')}`; }
   }
 
-  if (q) filtered = filtered.filter(t =>
-    String(t.Pelanggan||'').toLowerCase().includes(q) ||
+  if (q) filtered=filtered.filter(t=>
+    String(t.Pelanggan||'').toLowerCase().includes(q)||
     String(t.Treatment||'').toLowerCase().includes(q)
   );
 
-  const sorted = filtered.slice().reverse();
-  const total  = sorted.reduce((s,t) => s + clean(t["Total Akhir"]), 0);
+  const sorted=filtered.slice().reverse();
+  const total=sorted.reduce((s,t)=>s+clean(t["Total Akhir"]),0);
 
-  $('labelOmset').innerHTML = `<i class="fa-solid fa-sack-dollar" style="margin-right:.35rem;"></i>${esc(label)}`;
-  $('txtOmset').textContent = 'Rp ' + formatRp(total);
-  $('statTx').innerHTML  = `<i class="fa-solid fa-receipt" style="font-size:.625rem;"></i>${sorted.length} transaksi`;
-  $('statAvg').innerHTML = `<i class="fa-solid fa-chart-simple" style="font-size:.625rem;"></i>${sorted.length ? 'Avg Rp '+formatRp(Math.round(total/sorted.length)) : 'Avg Rp 0'}`;
+  $('labelOmset').innerHTML=`<i class="fa-solid fa-sack-dollar" style="margin-right:.35rem;"></i>${esc(label)}`;
+  $('txtOmset').textContent='Rp '+formatRp(total);
+  $('statTx').innerHTML=`<i class="fa-solid fa-receipt" style="font-size:.625rem;"></i>${sorted.length} transaksi`;
+  $('statAvg').innerHTML=`<i class="fa-solid fa-chart-simple" style="font-size:.625rem;"></i>${sorted.length?'Avg Rp '+formatRp(Math.round(total/sorted.length)):'Avg Rp 0'}`;
 
   if (!sorted.length) {
-    listEl.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-        <p style="font-size:.875rem;font-weight:700;color:var(--ink-muted);">Data tidak ditemukan</p>
-        <p style="font-size:.75rem;color:var(--ink-faint);">Coba ubah filter atau tanggal</p>
-      </div>`;
+    listEl.innerHTML=`<div class="empty-state"><div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div><p style="font-size:.875rem;font-weight:700;color:var(--ink-muted);">Data tidak ditemukan</p><p style="font-size:.75rem;color:var(--ink-faint);">Coba ubah filter atau tanggal</p></div>`;
     return;
   }
 
-  const frag = document.createDocumentFragment();
-  sorted.forEach((t, i) => {
-    const nilai    = clean(t["Total Akhir"]);
-    const metode   = String(t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash');
-    const isQris   = metode === 'QRIS';
-    const mColor   = isQris ? '#60a5fa' : '#34d399';
-    const mBg      = isQris ? 'rgba(96,165,250,.12)' : 'rgba(52,211,153,.12)';
-    const mIcon    = isQris ? 'fa-qrcode' : 'fa-money-bill-wave';
-    const pelStr   = esc(t.Pelanggan || '-');
-    const trtStr   = esc(t.Treatment || '-');
-    const idStr    = esc(t["ID Nota"] || 'AS');
-    const avatar   = esc(String(t.Pelanggan||'G').charAt(0).toUpperCase());
-
-    const wrap = document.createElement('div');
-    wrap.className = 'tx-item fade-up';
-    wrap.style.animationDelay = `${i * 0.04}s`;
-    wrap.innerHTML = `
+  const frag=document.createDocumentFragment();
+  sorted.forEach((t,i)=>{
+    const nilai=clean(t["Total Akhir"]);
+    const metode=String(t["Metode Pembayaran"]||t["metodeBayar"]||'Cash');
+    const isQris=metode==='QRIS';
+    const mColor=isQris?'#60a5fa':'#34d399', mBg=isQris?'rgba(96,165,250,.12)':'rgba(52,211,153,.12)', mIcon=isQris?'fa-qrcode':'fa-money-bill-wave';
+    const pelStr=esc(t.Pelanggan||'-'), trtStr=esc(t.Treatment||'-'), idStr=esc(t["ID Nota"]||'AS');
+    const avatar=esc(String(t.Pelanggan||'G').charAt(0).toUpperCase());
+    const wrap=document.createElement('div');
+    wrap.className='tx-item fade-up'; wrap.style.animationDelay=`${i*.04}s`;
+    wrap.innerHTML=`
       <div style="width:2.5rem;height:2.5rem;border-radius:9999px;background:linear-gradient(135deg,#db2777,#9d174d);display:flex;align-items:center;justify-content:center;color:white;font-size:.875rem;font-weight:800;flex-shrink:0;">${avatar}</div>
       <div style="display:flex;flex-direction:column;gap:.2rem;min-width:0;flex:1;">
         <p style="font-size:.625rem;font-weight:700;color:var(--ink-faint);letter-spacing:.04em;">${formatTglID(t.Tanggal)} &middot; ${idStr}</p>
@@ -858,186 +911,107 @@ function renderRiwayat() {
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;flex-shrink:0;">
         <p style="font-size:1.0625rem;font-weight:800;color:var(--ink);">Rp ${formatRp(nilai)}</p>
-        <span style="font-size:.5625rem;font-weight:800;text-transform:uppercase;padding:.25rem .625rem;border-radius:9999px;background:${mBg};color:${mColor};display:flex;align-items:center;gap:.3rem;">
-          <i class="fa-solid ${mIcon}" style="font-size:.5rem;"></i>${esc(metode)}
-        </span>
+        <span style="font-size:.5625rem;font-weight:800;text-transform:uppercase;padding:.25rem .625rem;border-radius:9999px;background:${mBg};color:${mColor};display:flex;align-items:center;gap:.3rem;"><i class="fa-solid ${mIcon}" style="font-size:.5rem;"></i>${esc(metode)}</span>
         <button type="button" class="btn-delete"><i class="fa-solid fa-trash-can"></i>Hapus</button>
       </div>`;
-
-    /* Pasang event listener hapus langsung di elemen — tidak pakai inline onclick */
-    const rawId = t["ID Nota"];
-    wrap.querySelector('.btn-delete').addEventListener('click', () => hapus(rawId));
+    const rawId=t["ID Nota"];
+    wrap.querySelector('.btn-delete').addEventListener('click',()=>hapus(rawId));
     frag.appendChild(wrap);
   });
-
-  listEl.innerHTML = '';
-  listEl.appendChild(frag);
+  listEl.innerHTML=''; listEl.appendChild(frag);
 }
 
-/* ─── WHATSAPP: buka aplikasi WA langsung, bukan web ─── */
-function bukaWhatsapp(phone, msg) {
-  /*
-    Strategi:
-    1. Coba whatsapp:// (universal deep link — buka app WA langsung)
-    2. Jika gagal (WA tidak terinstall), fallback ke api.whatsapp.com di tab baru
-    Tidak menggunakan window.location.href agar halaman kasir tidak hilang.
-    Tidak menggunakan intent:// karena hanya bekerja dari WebView, bukan dari browser biasa.
-  */
-  const waDeepLink = `whatsapp://send?phone=${phone}&text=${msg}`;
-  const waWebLink  = `https://api.whatsapp.com/send?phone=${phone}&text=${msg}`;
-
-  /* Buka deep link di tab baru — jika WA terinstall, OS akan intercept dan buka app */
-  const newTab = window.open(waDeepLink, '_blank');
-
-  /*
-    Beberapa browser memblokir window.open untuk skema non-http/https.
-    Fallback: jika newTab null (diblokir popup) atau setelah 1.5 detik WA tidak terbuka,
-    redirect ke api.whatsapp.com.
-  */
-  if (!newTab) {
-    /* Popup diblokir — langsung pakai web fallback di tab baru */
-    window.open(waWebLink, '_blank');
-    return;
-  }
-
-  /* Jika deep link berhasil, WA app akan terbuka.
-     Jika tidak (WA tidak terinstall), tab baru akan tetap terbuka dengan URL whatsapp:// yang tidak valid.
-     Kita deteksi ini dan redirect ke web fallback. */
-  setTimeout(() => {
-    try {
-      /* Jika tab masih terbuka dan URL-nya masih whatsapp://, berarti OS tidak menangani */
-      if (newTab && !newTab.closed) {
-        newTab.location.href = waWebLink;
-      }
-    } catch(e) {
-      /* Cross-origin atau akses ditolak — tab sudah diambil alih OS (WA terbuka), aman */
-    }
-  }, 1500);
-}
-
-/* ─── SIMPAN TRANSAKSI ─── */
+/* ═══════════════════════════════════════
+   SIMPAN
+═══════════════════════════════════════ */
 async function simpan() {
   if (isProses) return;
 
-  const nama   = $('inpNama').value.trim();
-  const hpRaw  = $('inpHp').value.trim();
-  const kabRaw = $('inpKab').value;
-  const kab    = kabRaw === 'Lainnya' ? $('inpWilayahLain').value.trim() : kabRaw;
-  const kec    = kabRaw === 'Lainnya' ? '-' : ($('inpKec').value || '-');
-  const kel    = kabRaw === 'Lainnya' ? '-' : ($('inpKel').value || '-');
+  const nama    = $('inpNama').value.trim();
+  const hpRaw   = $('inpHp').value.trim();
+  const kabRaw  = $('inpKab').value;
+  const kab     = kabRaw==='Lainnya' ? $('inpWilayahLain').value.trim() : kabRaw;
+  const kec     = kabRaw==='Lainnya' ? '-' : ($('inpKec').value||'-');
+  const kel     = kabRaw==='Lainnya' ? '-' : ($('inpKel').value||'-');
   const catatan = $('inpCatatan').value.trim();
 
-  let lay = $('inpLayanan').value;
-  if (lay === 'Lainnya (Custom)') lay = $('inpLayananLain').value.trim();
+  let lay=$('inpLayanan').value;
+  if (lay==='Lainnya (Custom)') lay=$('inpLayananLain').value.trim();
 
-  const harga  = clean($('inpHarga').value);
-  const diskon = clean($('inpDiskon').value);
-  const total  = Math.max(0, harga - diskon);
-  const bayar  = clean($('inpBayar').value);
+  const harga =clean($('inpHarga').value);
+  const diskon=clean($('inpDiskon').value);
+  const total =Math.max(0,harga-diskon);
+  const bayar =clean($('inpBayar').value);
 
-  /* ── Validasi ── */
-  if (!nama)                            return showToast('⚠️ Nama pelanggan wajib diisi');
-  if (!hpRaw)                           return showToast('⚠️ Nomor WhatsApp wajib diisi');
-  if (!isValidPhone(hpRaw))             return showToast('⚠️ Format nomor WhatsApp tidak valid (contoh: 08123456789)');
-  if (kabRaw === 'Lainnya' && !kab)     return showToast('⚠️ Nama kota/area wajib diisi');
-  if (!lay)                             return showToast('⚠️ Pilih treatment terlebih dahulu');
-  if (!lay.trim())                      return showToast('⚠️ Nama treatment manual wajib diisi');
-  if (harga <= 0)                       return showToast('⚠️ Harga belum diisi');
-  if (diskon >= harga)                  return showToast('⚠️ Diskon tidak boleh sama atau lebih besar dari harga');
-  if (mBayar === 'Cash' && bayar < total) return showToast('⚠️ Uang diterima masih kurang dari total tagihan');
+  if (!nama)                              return showToast('⚠️ Nama pelanggan wajib diisi');
+  if (!hpRaw)                             return showToast('⚠️ Nomor WhatsApp wajib diisi');
+  if (!isValidPhone(hpRaw))               return showToast('⚠️ Format nomor tidak valid (contoh: 08123456789)');
+  if (kabRaw==='Lainnya' && !kab)         return showToast('⚠️ Nama kota/area wajib diisi');
+  if (!lay)                               return showToast('⚠️ Pilih treatment terlebih dahulu');
+  if (!lay.trim())                        return showToast('⚠️ Nama treatment manual wajib diisi');
+  if (harga<=0)                           return showToast('⚠️ Harga belum diisi');
+  if (diskon>=harga)                      return showToast('⚠️ Diskon tidak boleh sama atau lebih besar dari harga');
+  if (mBayar==='Cash' && bayar<total)     return showToast('⚠️ Uang diterima masih kurang dari total tagihan');
 
-  isProses = true;
-  $('btnSimpan').disabled = true;
-  showLoader(true);
+  isProses=true; $('btnSimpan').disabled=true; showLoader(true);
 
   const id        = generateNotaID();
   const tglISO    = getTodayWIB();
-  const tglTampil = new Date().toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' });
+  const tglTampil = new Date().toLocaleDateString('id-ID',{ timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric' });
   const hpNormal  = normalizePhone(hpRaw);
 
   try {
-    /* ── Kirim ke Google Sheets (fire, tidak perlu parse response) ── */
     await gasPost({
-      tanggal: tglISO, idNota: id, pelanggan: nama, noWa: hpNormal,
-      kabupaten: kab, kecamatan: kec, kelurahan: kel,
-      layanan: lay, diskon: diskon, totalAkhir: total,
-      metodeBayar: mBayar, catatan: catatan
+      tanggal:tglISO, idNota:id, pelanggan:nama, noWa:hpNormal,
+      kabupaten:kab, kecamatan:kec, kelurahan:kel,
+      layanan:lay, diskon:diskon, totalAkhir:total,
+      metodeBayar:mBayar, catatan:catatan
     });
 
-    /* ── Buat pesan nota ── */
-    const pesan = encodeURIComponent(
-      `★ *NOTA SALON ALESHA* ★\n` +
-      `────────────────────────\n` +
-      `*No. Nota:* ${id}\n` +
-      `*Tanggal:* ${tglTampil}\n` +
-      `────────────────────────\n` +
-      `*Pelanggan:* ${nama}\n` +
-      `*Layanan:* ${lay}\n` +
-      (catatan ? `*Catatan:* ${catatan}\n` : '') +
-      `\n*Harga:* Rp ${formatRp(harga)}\n` +
-      (diskon > 0 ? `*Diskon:* -Rp ${formatRp(diskon)}\n` : '') +
-      `────────────────────────\n` +
-      `*TOTAL:* *Rp ${formatRp(total)}*\n` +
-      `*Metode:* ${mBayar}\n` +
-      `────────────────────────\n\n` +
-      `Terima kasih sudah perawatan di Salon Alesha! 🙏\n\n` +
-      `Mohon berikan *Rating ⭐⭐⭐⭐⭐* di Google Maps kami:\n` +
-      `https://maps.app.goo.gl/M3bfy5Bzmta9zLJF7\n\n` +
-      `Sampai jumpa di treatment berikutnya! 🌸`
-    );
+    const pesanEncoded = buatPesanNota({ id, tglTampil, nama, lay, catatan, harga, diskon, total, metode:mBayar });
 
     showToast('✅ Transaksi berhasil disimpan!');
-
-    /* ── Reset & pindah tab ── */
     resetForm();
-    muatData(false); /* fire & forget — tidak perlu await agar tidak menghambat buka WA */
-    bukaTab(null, 'riwayat');
+    muatData(false); /* fire & forget */
+    bukaTab(null,'riwayat');
 
-    isProses = false;
-    $('btnSimpan').disabled = false;
-    showLoader(false);
+    isProses=false; $('btnSimpan').disabled=false; showLoader(false);
 
-    /* ── Buka WhatsApp langsung ke aplikasi ── */
-    setTimeout(() => bukaWhatsapp(hpNormal, pesan), 300);
+    /* Buka WA setelah sedikit jeda agar UI sempat update */
+    setTimeout(()=> bukaWhatsapp(hpNormal, pesanEncoded), 350);
 
   } catch(e) {
-    isProses = false;
-    $('btnSimpan').disabled = false;
-    showLoader(false);
+    isProses=false; $('btnSimpan').disabled=false; showLoader(false);
     showToast('❌ Gagal menyimpan, cek koneksi internet');
   }
 }
 
-/* ─── HAPUS TRANSAKSI ─── */
+/* ═══════════════════════════════════════
+   HAPUS
+═══════════════════════════════════════ */
 async function hapus(id) {
   if (isProses) return;
   if (!confirm('Hapus transaksi ini?')) return;
-
-  isProses = true;
-  showLoader(true);
-
+  isProses=true; showLoader(true);
   try {
-    await gasPost({ action: 'DELETE', idNota: id });
-    /* Setelah hapus, reload data dari server */
+    await gasPost({ action:'DELETE', idNota:id });
     await muatData(false);
     showToast('🗑️ Transaksi berhasil dihapus');
   } catch(e) {
     showToast('❌ Gagal menghapus, cek koneksi');
-  } finally {
-    isProses = false;
-    showLoader(false);
-  }
+  } finally { isProses=false; showLoader(false); }
 }
 
-/* ─── INIT ─── */
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
 window.onload = () => {
-  const now = new Date();
-  $('filterBulan').value = String(now.getMonth()+1).padStart(2,'0');
-  $('filterTahun').value = String(now.getFullYear());
-  $('tab-kasir').style.display = 'block';
+  const now=new Date();
+  $('filterBulan').value=String(now.getMonth()+1).padStart(2,'0');
+  $('filterTahun').value=String(now.getFullYear());
+  $('tab-kasir').style.display='block';
   setActiveNav('kasir');
-  updateClock();
-  setInterval(updateClock, 30000);
+  updateClock(); setInterval(updateClock,30000);
   loadMenuLayanan();
   muatData(true);
   hitung();
