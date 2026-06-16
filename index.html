@@ -3,66 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kasir Salon Alesha (Lite)</title>
+  <title>Kasir Salon Alesha</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="logo.PNG">
   <meta name="theme-color" content="#be185d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
-    /* VERSI LITE - MENGURANGI BEBAN GPU SEBANYAK 90% */
     :root {
-      --rose:        #be185d;
-      --rose-mid:    #db2777;
-      --rose-light:  #f9a8d4;
-      --gold:        #c08a2b;
-      --gold-light:  #fef3c7;
-      --ink:         #1c0a14;
-      --ink-muted:   #7c5a6e;
-      --ink-faint:   #c4a8b8;
-      --bg:          #fff7fb;
-      --surface:     #ffffff;
-      --surface-2:   #fdf2f8;
-      --surface-3:   #fce7f3;
-      --border:      rgba(190,24,93,.15);
-      --border-mid:  rgba(190,24,93,.25);
-      
-      --shadow-sm:  0 1px 2px rgba(190,24,93,.05);
-      --shadow-md:  0 2px 4px rgba(190,24,93,.08);
-      
-      --radius-sm:  0.5rem;
-      --radius-md:  0.5rem;
-      --radius-lg:  0.75rem;
-      --radius-xl:  1rem;
-      --radius-2xl: 1.25rem;
-      
-      --font-body:  'Lora', serif;
-      --font-disp:  'Playfair Display', serif;
+      --rose: #be185d;
+      --rose-mid: #db2777;
+      --rose-light: #f9a8d4;
+      --gold: #c08a2b;
+      --gold-light: #fef3c7;
+      --ink: #0f172a;
+      --ink-muted: #64748b;
+      --ink-faint: #94a3b8;
+      --bg: #f8fafc;
+      --surface: rgba(255,255,255,0.92);
+      --surface-solid: #ffffff;
+      --surface-2: #fdf2f8;
+      --surface-3: #fce7f3;
+      --border: rgba(190,24,93,.12);
+      --border-mid: rgba(190,24,93,.22);
+      --shadow-sm: 0 1px 3px rgba(190,24,93,.06), 0 4px 12px rgba(190,24,93,.06);
+      --shadow-md: 0 4px 6px -1px rgba(190,24,93,.08), 0 10px 15px -3px rgba(190,24,93,.10);
+      --shadow-lg: 0 20px 25px -5px rgba(0,0,0,.07), 0 10px 10px -5px rgba(190,24,93,.08);
+      --radius-sm: .5rem;
+      --radius-md: .75rem;
+      --radius-lg: 1rem;
+      --radius-xl: 1.25rem;
+      --radius-2xl: 1.5rem;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
       --transition: 150ms ease-out;
     }
-    
+
     [data-theme="dark"] {
-      --bg:          #150810;
-      --surface:     #1e0e17;
-      --surface-2:   #26121d;
-      --surface-3:   #301728;
-      --border:      rgba(244,114,182,.15);
-      --border-mid:  rgba(244,114,182,.30);
-      --ink:         #f5dded;
-      --ink-muted:   #c490ab;
-      --ink-faint:   #7a4e62;
-      --shadow-sm:  none;
-      --shadow-md:  none;
+      --bg: #0b1120;
+      --surface: rgba(30,41,59,0.78);
+      --surface-solid: #1e293b;
+      --surface-2: #26121d;
+      --surface-3: #301728;
+      --border: rgba(244,114,182,.12);
+      --border-mid: rgba(244,114,182,.25);
+      --ink: #f1f5f9;
+      --ink-muted: #94a3b8;
+      --ink-faint: #7a4e62;
+      --shadow-sm: none;
+      --shadow-md: none;
+      --shadow-lg: none;
     }
-    
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-    
     body {
       font-family: var(--font-body);
       color: var(--ink);
@@ -70,307 +68,507 @@
       min-height: 100dvh;
       overscroll-behavior-y: none;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color .2s, color .2s;
-      font-weight: 400;
+      transition: background-color .25s, color .25s;
+      font-weight: 500;
     }
-    
-    .t-disp { font-family: var(--font-disp); font-weight: 700; }
-    
+
     .glass-nav {
-      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface-solid);
       border-bottom: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(20px);
+      padding: .75rem 1rem;
     }
-    
+
+    .page-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 6rem;
+    }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
       border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
+      transition: box-shadow .25s ease, transform .25s ease;
     }
-    
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
     .inp {
       background: var(--surface-2);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
       font-family: var(--font-body);
-      font-size: 0.875rem;
+      font-size: .875rem;
       font-weight: 600;
       color: var(--ink);
       width: 100%;
-      padding: 0.875rem 1rem;
+      padding: .875rem 1rem;
       outline: none;
-      transition: border-color var(--transition);
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
     }
     .inp::placeholder { color: var(--ink-faint); font-weight: 400; }
-    .inp:focus { border-color: var(--rose-mid); background: var(--surface); }
+    .inp:focus {
+      border-color: var(--rose-mid);
+      background: var(--surface-solid);
+      box-shadow: 0 0 0 3px rgba(219,39,119,.12);
+    }
     select.inp { cursor: pointer; }
-    
+
     .tab-konten { display: none; }
     .tab-konten.active { display: block; }
-    
+
     .btn-pay {
       border: 1px solid var(--border-mid);
-      background: var(--surface-2);
-      color: var(--ink-muted);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.68);
       border-radius: var(--radius-md);
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: .75rem;
       letter-spacing: .04em;
       padding: 1rem;
       cursor: pointer;
       font-family: var(--font-body);
+      transition: all .2s;
     }
     .btn-pay.active {
       background: var(--rose-mid);
       color: white;
       border-color: var(--rose-mid);
+      box-shadow: 0 4px 14px rgba(219,39,119,.35);
     }
-    [data-theme="dark"] .btn-pay { border-color: rgba(255,255,255,.1); background: transparent; }
-    [data-theme="dark"] .btn-pay.active { background: var(--rose-mid); color: white; border-color: var(--rose-mid); }
-    
+    .btn-pay:not(.active):hover {
+      background: rgba(255,255,255,.15);
+      color: rgba(255,255,255,.9);
+    }
+
     .btn-primary {
-      background: var(--rose-mid);
+      background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
       color: white;
-      font-weight: 700;
-      font-size: 0.9375rem;
-      letter-spacing: .02em;
+      font-weight: 800;
+      font-size: .9375rem;
+      letter-spacing: .04em;
       border-radius: var(--radius-lg);
       padding: 1.125rem 2rem;
       cursor: pointer;
       border: none;
       width: 100%;
       font-family: var(--font-body);
-      display: flex; align-items: center; justify-content: center; gap: .625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .625rem;
+      box-shadow: 0 4px 14px rgba(219,39,119,.35);
+      transition: all .2s;
     }
-    .btn-primary:active { background: var(--rose); }
-    
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(219,39,119,.45); }
+    .btn-primary:active { transform: translateY(0); }
+
     .pill {
-      display: inline-flex; align-items: center; gap: .35rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
       padding: .5rem 1.125rem;
       border-radius: 9999px;
-      font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; border: 1px solid var(--border);
-      background: var(--surface-2); color: var(--ink-muted);
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface-solid);
+      color: var(--ink-muted);
       white-space: nowrap;
       font-family: var(--font-body);
+      transition: all .2s;
     }
-    .pill.active { background: var(--rose-mid); color: white; border-color: transparent; }
-    
-    .omset-card {
+    .pill:hover { border-color: var(--rose-mid); color: var(--rose-mid); }
+    .pill.active {
       background: var(--rose-mid);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(219,39,119,.25);
+    }
+
+    .hero-banner,
+    .omset-card {
       border-radius: var(--radius-2xl);
       padding: 1.75rem;
       color: white;
+      background: linear-gradient(135deg, #db2777 0%, #9d174d 100%);
+      box-shadow: 0 8px 24px rgba(219,39,119,.32);
     }
-    
+
     .dark-card {
-      background: var(--ink);
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
       border-radius: var(--radius-2xl);
       padding: 1.75rem;
       color: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
     }
-    
-    .s-badge {
-      width: 2.25rem; height: 2.25rem;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
+    [data-theme="dark"] .dark-card {
+      background: linear-gradient(145deg, #020617 0%, #0f172a 100%);
+    }
+
+    .icon-box {
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
       flex-shrink: 0;
     }
-    
+
     .tx-item {
-      background: var(--surface);
+      background: var(--surface-solid);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
       padding: 1rem 1.125rem;
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: .75rem;
+      transition: box-shadow .2s, transform .2s;
+      box-shadow: var(--shadow-sm);
     }
-    
+    .tx-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
     #loader {
       display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.6);
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
       z-index: 100;
-      align-items: center; justify-content: center;
+      align-items: center;
+      justify-content: center;
     }
     #loader.show { display: flex; }
+
     .loader-box {
-      background: var(--surface);
+      background: var(--surface-solid);
       border: 1px solid var(--border);
       border-radius: var(--radius-xl);
-      padding: 2rem;
+      padding: 2rem 2.5rem;
       text-align: center;
+      box-shadow: var(--shadow-lg);
     }
-    
+
     .toast {
-      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(6rem);
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(6rem);
       background: var(--ink);
       color: var(--bg);
-      padding: .75rem 1.5rem;
+      padding: .875rem 1.75rem;
       border-radius: 9999px;
-      font-size: .8125rem; font-weight: 600;
+      font-size: .8125rem;
+      font-weight: 700;
       z-index: 200;
-      transition: transform .3s ease-out, opacity .3s;
+      transition: transform .3s cubic-bezier(0.16,1,0.3,1), opacity .3s;
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      max-width: calc(100vw - 2rem);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    
+
     @keyframes spin { to { transform: rotate(360deg); } }
-    .fade-up { opacity: 1; } 
-    .num-flash { opacity: 1; }
-    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeInUp .35s cubic-bezier(0.16,1,0.3,1) both; }
+
     .nav-pill {
       padding: .5rem 1.25rem;
       border-radius: var(--radius-md);
-      font-size: 0.75rem; font-weight: 700;
-      cursor: pointer; border: none;
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
       color: var(--ink-muted);
       background: transparent;
       font-family: var(--font-body);
+      transition: all .2s;
     }
-    .nav-pill.active { background: var(--surface); color: var(--rose); border: 1px solid var(--border); }
-    
+    .nav-pill:hover { color: var(--rose-mid); }
+    .nav-pill.active {
+      background: var(--surface-solid);
+      color: var(--rose);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
     .theme-btn {
-      width: 2.25rem; height: 2.25rem;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: var(--radius-md);
       background: var(--surface-2);
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
+      transition: all .2s;
+      color: var(--ink-muted);
+      font-size: .9rem;
     }
-    
+    .theme-btn:hover {
+      border-color: var(--rose-mid);
+      color: var(--rose-mid);
+      transform: scale(1.04);
+    }
+
     .quick-btn {
-      padding: .4rem .75rem;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,.3);
+      padding: .45rem .875rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.25);
       border-radius: var(--radius-sm);
-      font-size: .6875rem; font-weight: 600;
-      color: rgba(255,255,255,.9);
+      font-size: .6875rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.92);
       cursor: pointer;
       font-family: var(--font-body);
       white-space: nowrap;
+      transition: all .15s;
     }
-    .quick-btn:active { background: rgba(255,255,255,.1); }
-    
+    .quick-btn:hover {
+      background: rgba(255,255,255,.2);
+      border-color: rgba(255,255,255,.45);
+    }
+
     .stat-chip {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 9999px; padding: .35rem .875rem;
-      font-size: .75rem; font-weight: 600; color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(0,0,0,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 9999px;
+      padding: .375rem .875rem;
+      font-size: .75rem;
+      font-weight: 700;
+      color: white;
     }
-    
+
     .search-inp {
-      background: var(--surface-2);
+      background: var(--surface-solid);
       border: 1px solid var(--border);
       border-radius: 9999px;
-      padding: .6rem 1rem .6rem 2.5rem;
-      font-size: .8125rem; font-weight: 500;
-      color: var(--ink); width: 100%; outline: none;
+      padding: .7rem 1rem .7rem 2.75rem;
+      font-size: .8125rem;
+      font-weight: 600;
+      color: var(--ink);
+      width: 100%;
+      outline: none;
       font-family: var(--font-body);
+      transition: border-color .2s, box-shadow .2s;
+      box-shadow: var(--shadow-sm);
     }
-    .search-inp:focus { border-color: var(--rose-mid); }
-    
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 99px; }
-    .no-sb::-webkit-scrollbar { display: none; }
-    
+    .search-inp:focus {
+      border-color: var(--rose-mid);
+      box-shadow: 0 0 0 3px rgba(219,39,119,.1);
+    }
+
     .field-label {
-      font-size: .6875rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .1em;
+      font-size: .6875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
       color: var(--ink-faint);
-      display: block; margin-bottom: .4rem;
+      display: block;
+      margin-bottom: .4rem;
     }
-    
-    .hero-banner {
-      border-radius: var(--radius-2xl);
-      padding: 1.75rem;
-      color: white;
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .3rem .75rem;
+      border-radius: 9999px;
+      font-size: .625rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1rem 0;
+    }
+
+    .btn-delete {
+      font-size: .625rem;
+      font-weight: 700;
+      color: var(--rose);
+      background: var(--surface-3);
+      border: 1px solid var(--border-mid);
+      padding: .25rem .625rem;
+      border-radius: .375rem;
+      cursor: pointer;
+      margin-top: .125rem;
+      font-family: var(--font-body);
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+    }
+    .btn-delete:hover {
       background: var(--rose-mid);
+      color: white;
+      border-color: var(--rose-mid);
+    }
+
+    .btn-sync {
+      font-size: .6875rem;
+      font-weight: 700;
+      color: var(--rose);
+      background: var(--surface-3);
+      border: 1px solid var(--border-mid);
+      padding: .45rem 1rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      transition: all .2s;
+    }
+    .btn-sync:hover {
+      background: var(--rose-mid);
+      color: white;
+      border-color: var(--rose-mid);
+    }
+
+    .empty-state {
+      padding: 3.5rem 1rem;
+      text-align: center;
+      color: var(--ink-faint);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+    }
+    .empty-state .empty-icon {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 9999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--ink-faint);
+    }
+
+    .no-sb::-webkit-scrollbar { display: none; }
+    .row-gap { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    @media (max-width: 420px) {
+      .tx-item { padding: .95rem 1rem; }
+      .dark-card, .hero-banner, .omset-card { padding: 1.35rem; }
     }
   </style>
 </head>
-<body class="antialiased">
+<body>
 
 <div id="loader">
   <div class="loader-box">
-    <div style="width:2.5rem;height:2.5rem;border:3px solid var(--surface-3);border-top-color:var(--rose);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem;"></div>
-    <p style="font-size:.8125rem;font-weight:700;color:var(--rose);letter-spacing:.03em;">Sedang Memproses…</p>
+    <div style="width:2.5rem;height:2.5rem;border:3px solid var(--surface-3);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem;"></div>
+    <p style="font-size:.875rem;font-weight:800;color:var(--rose);letter-spacing:.03em;">Sedang Memproses…</p>
     <p style="font-size:.6875rem;color:var(--ink-faint);margin-top:.25rem;">Mohon tunggu sebentar</p>
   </div>
 </div>
 
 <div class="toast" id="toastEl"></div>
 
-<nav class="sticky top-0 z-50 glass-nav px-4 py-3">
+<nav class="glass-nav">
   <div style="max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:.75rem;">
     <div style="display:flex;align-items:center;gap:.75rem;min-width:0;">
-      <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;background:var(--rose-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.125rem;height:1.125rem;" aria-label="Salon Alesha Logo">
-          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
-        </svg>
+      <div style="width:2.5rem;height:2.5rem;border-radius:.875rem;background:linear-gradient(135deg,#db2777,#9d174d);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(219,39,119,.35);">
+        <i class="fa-solid fa-scissors" style="color:white;font-size:.875rem;"></i>
       </div>
       <div style="line-height:1.2;min-width:0;">
-        <h1 class="t-disp" style="font-size:1.125rem;color:var(--rose);letter-spacing:-.01em;white-space:nowrap;">Salon Alesha</h1>
-        <p style="font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--gold);">Beauty Cashier</p>
+        <h1 style="font-size:1.0625rem;font-weight:800;color:var(--rose);letter-spacing:-.01em;white-space:nowrap;">Salon Alesha</h1>
+        <p style="font-size:.5625rem;font-weight:800;text-transform:uppercase;letter-spacing:.2em;color:var(--gold);">Beauty Cashier</p>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:.5rem;">
       <div style="display:flex;gap:.25rem;background:var(--surface-2);border:1px solid var(--border);padding:.25rem;border-radius:var(--radius-md);">
-        <button onclick="bukaTab(event,'kasir')" id="navKasir" class="nav-pill active" aria-label="Kasir">Kasir</button>
-        <button onclick="bukaTab(event,'riwayat')" id="navRiwayat" class="nav-pill" aria-label="Laporan">Laporan</button>
+        <button onclick="bukaTab(event,'kasir')" id="navKasir" class="nav-pill active" aria-label="Kasir">
+          <i class="fa-solid fa-cash-register" style="margin-right:.3rem;font-size:.625rem;"></i>Kasir
+        </button>
+        <button onclick="bukaTab(event,'riwayat')" id="navRiwayat" class="nav-pill" aria-label="Laporan">
+          <i class="fa-solid fa-chart-bar" style="margin-right:.3rem;font-size:.625rem;"></i>Laporan
+        </button>
       </div>
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" aria-label="Toggle dark mode">
-        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;display:block;"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <i id="iconSun" class="fa-solid fa-moon"></i>
+        <i id="iconMoon" class="fa-solid fa-sun" style="display:none;"></i>
       </button>
     </div>
   </div>
 </nav>
 
-<main style="max-width:640px;margin:0 auto;padding:1rem 1rem 6rem;">
+<main class="page-wrap">
   <div id="tab-kasir" class="tab-konten active" style="display:block;">
-    <div style="display:flex;flex-direction:column;gap:1rem;">
+    <div class="row-gap">
+
       <div class="hero-banner fade-up">
         <div style="position:relative;z-index:1;">
-          <p style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin-bottom:.25rem;">Welcome Back ✨</p>
-          <h2 class="t-disp" style="font-size:1.875rem;line-height:1.1;margin-bottom:.5rem;">Transaksi Baru</h2>
-          <p style="font-size:.8125rem;opacity:.8;">Catat layanan pelanggan dengan cepat & profesional.</p>
-          <div style="margin-top:.875rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
-            <span id="badgeTgl" style="background:rgba(0,0,0,.15);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;"></span>
-            <span id="badgeWaktu" style="background:rgba(0,0,0,.15);padding:.25rem .75rem;border-radius:9999px;font-size:.6875rem;font-weight:600;"></span>
+          <p style="font-size:.5625rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;opacity:.75;margin-bottom:.375rem;">
+            <i class="fa-solid fa-sparkles" style="margin-right:.3rem;"></i>Welcome Back
+          </p>
+          <h2 style="font-size:1.875rem;font-weight:800;line-height:1.1;margin-bottom:.5rem;letter-spacing:-.02em;">Transaksi Baru</h2>
+          <p style="font-size:.8125rem;opacity:.85;font-weight:500;">Catat layanan pelanggan dengan cepat & profesional.</p>
+          <div style="margin-top:1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+            <span id="badgeTgl" style="background:rgba(0,0,0,.15);padding:.3rem .875rem;border-radius:9999px;font-size:.6875rem;font-weight:700;display:flex;align-items:center;gap:.35rem;"></span>
+            <span id="badgeWaktu" style="background:rgba(0,0,0,.15);padding:.3rem .875rem;border-radius:9999px;font-size:.6875rem;font-weight:700;display:flex;align-items:center;gap:.35rem;"></span>
           </div>
         </div>
       </div>
 
       <div class="card" style="padding:1.5rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.125rem;">
-          <div style="display:flex;align-items:center;gap:.625rem;">
-            <span class="s-badge">👤</span>
-            <h2 style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);">Data Pelanggan</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="icon-box" style="background:#fce7f3;color:var(--rose-mid);">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <h2 style="font-size:.8125rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);">Data Pelanggan</h2>
           </div>
-          <span style="font-size:.625rem;font-weight:700;color:var(--rose);background:var(--surface-3);padding:.25rem .75rem;border-radius:9999px;border:1px solid var(--border-mid);">Customer</span>
+          <span class="badge" style="background:var(--surface-3);color:var(--rose);border:1px solid var(--border-mid);">
+            <i class="fa-solid fa-circle" style="font-size:.4rem;margin-right:.35rem;color:#10b981;"></i>Customer
+          </span>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <div style="display:flex;flex-direction:column;gap:.875rem;">
           <div>
-            <label class="field-label" for="inpNama">Nama Lengkap</label>
+            <label class="field-label" for="inpNama"><i class="fa-solid fa-signature" style="margin-right:.35rem;"></i>Nama Lengkap</label>
             <input type="text" id="inpNama" class="inp" placeholder="Contoh: Dewi Sartika" autocomplete="name">
           </div>
           <div>
-            <label class="field-label" for="inpHp">Nomor WhatsApp</label>
-            <input type="tel" id="inpHp" class="inp" placeholder="08xxxxxxxxxx" autocomplete="tel">
+            <label class="field-label" for="inpHp"><i class="fa-brands fa-whatsapp" style="margin-right:.35rem;color:#25d366;"></i>Nomor WhatsApp</label>
+            <input type="tel" id="inpHp" class="inp" placeholder="08xxxxxxxxxx" autocomplete="tel" inputmode="tel">
           </div>
           <div>
-            <label class="field-label" for="inpKab">Kota / Kabupaten</label>
-            <select id="inpKab" onchange="updateKecamatan()" class="inp" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.5rem;">
+            <label class="field-label" for="inpKab"><i class="fa-solid fa-location-dot" style="margin-right:.35rem;"></i>Kota / Kabupaten</label>
+            <select id="inpKab" onchange="updateKecamatan()" class="inp" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.5rem;">
               <option value="">-- Pilih Kota/Kabupaten --</option>
               <option value="Surakarta">Kota Surakarta (Solo)</option>
               <option value="Sukoharjo">Kabupaten Sukoharjo</option>
@@ -378,16 +576,16 @@
             </select>
             <input type="text" id="inpWilayahLain" class="inp" style="display:none; margin-top:.5rem; background:var(--surface-3); border-color:var(--rose-mid);" placeholder="Ketik nama kota/area...">
           </div>
-          <div id="divWilayahDetail" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+          <div id="divWilayahDetail" style="display:grid;grid-template-columns:1fr 1fr;gap:.625rem;">
             <div>
-              <label class="field-label" for="inpKec">Kecamatan</label>
-              <select id="inpKec" onchange="updateKelurahan()" class="inp" style="appearance:none;-webkit-appearance:none;font-size:.75rem;padding:.75rem .75rem;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
+              <label class="field-label" for="inpKec"><i class="fa-solid fa-map-pin" style="margin-right:.35rem;"></i>Kecamatan</label>
+              <select id="inpKec" onchange="updateKelurahan()" class="inp" style="appearance:none;-webkit-appearance:none;font-size:.8125rem;padding:.75rem .875rem;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
                 <option value="">-- Kecamatan --</option>
               </select>
             </div>
             <div>
-              <label class="field-label" for="inpKel">Kelurahan</label>
-              <select id="inpKel" class="inp" style="appearance:none;-webkit-appearance:none;font-size:.75rem;padding:.75rem .75rem;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
+              <label class="field-label" for="inpKel"><i class="fa-solid fa-house" style="margin-right:.35rem;"></i>Kelurahan</label>
+              <select id="inpKel" class="inp" style="appearance:none;-webkit-appearance:none;font-size:.8125rem;padding:.75rem .875rem;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
                 <option value="">-- Kelurahan --</option>
               </select>
             </div>
@@ -396,144 +594,186 @@
       </div>
 
       <div class="card" style="padding:1.5rem;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.125rem;">
-          <div style="display:flex;align-items:center;gap:.625rem;">
-            <span class="s-badge">✨</span>
-            <h2 style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink);">Treatment</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="icon-box" style="background:#fef3c7;color:var(--gold);">
+              <i class="fa-solid fa-spa"></i>
+            </div>
+            <h2 style="font-size:.8125rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);">Treatment</h2>
           </div>
-          <span style="font-size:.625rem;font-weight:700;color:var(--gold);background:var(--gold-light);padding:.25rem .75rem;border-radius:9999px;">Service</span>
+          <span class="badge" style="background:var(--gold-light);color:var(--gold);">
+            <i class="fa-solid fa-wand-magic-sparkles" style="margin-right:.35rem;font-size:.5rem;"></i>Service
+          </span>
         </div>
 
-        <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <div style="display:flex;flex-direction:column;gap:.875rem;">
           <div>
-            <label class="field-label" for="inpLayanan">Pilih Treatment</label>
-            <select id="inpLayanan" onchange="cekLayananLain()" class="inp" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.5rem;">
+            <label class="field-label" for="inpLayanan"><i class="fa-solid fa-list-check" style="margin-right:.35rem;"></i>Pilih Treatment</label>
+            <select id="inpLayanan" onchange="cekLayananLain()" class="inp" style="appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .75rem center;padding-right:2.5rem;">
               <option value="">-- Memuat Menu Treatment... --</option>
             </select>
           </div>
+
           <input type="text" id="inpLayananLain" class="inp" style="display:none;background:var(--surface-3);border-color:var(--rose-mid);" placeholder="Nama treatment manual…">
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.625rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
             <div>
-              <label class="field-label" for="inpHarga">Harga</label>
-              <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this);hitung()" class="inp" style="color:var(--rose);font-weight:700;" placeholder="Rp 0">
+              <label class="field-label" for="inpHarga"><i class="fa-solid fa-tag" style="margin-right:.35rem;"></i>Harga</label>
+              <input type="text" inputmode="numeric" id="inpHarga" oninput="formatRpInput(this);hitung()" class="inp" style="color:var(--rose);font-weight:800;" placeholder="Rp 0">
             </div>
             <div>
-              <label class="field-label" for="inpDiskon">Diskon</label>
-              <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this);hitung()" class="inp" style="color:var(--gold);font-weight:700;" placeholder="Rp 0">
+              <label class="field-label" for="inpDiskon"><i class="fa-solid fa-percent" style="margin-right:.35rem;"></i>Diskon</label>
+              <input type="text" inputmode="numeric" id="inpDiskon" oninput="formatRpInput(this);hitung()" class="inp" style="color:var(--gold);font-weight:800;" placeholder="Rp 0">
             </div>
           </div>
 
           <div>
-            <label class="field-label" for="inpCatatan">Catatan (opsional)</label>
-            <textarea id="inpCatatan" class="inp" rows="2" style="resize:none;line-height:1.5;font-weight:400;" placeholder="Permintaan khusus pelanggan…"></textarea>
+            <label class="field-label" for="inpCatatan"><i class="fa-solid fa-note-sticky" style="margin-right:.35rem;"></i>Catatan (opsional)</label>
+            <textarea id="inpCatatan" class="inp" rows="2" style="resize:none;line-height:1.6;font-weight:500;" placeholder="Permintaan khusus pelanggan…"></textarea>
           </div>
         </div>
       </div>
 
       <div class="dark-card">
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:1.25rem;">
+        <div style="display:flex;flex-direction:column;gap:1.375rem;">
           <div>
-            <p style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.25rem;">Total Tagihan</p>
-            <h3 id="txtTotal" style="font-size:2.75rem;font-weight:900;color:white;letter-spacing:-.03em;line-height:1;" class="t-disp">Rp 0</h3>
-            <div id="discountInfo" style="display:none;margin-top:.375rem;">
-              <span style="font-size:.6875rem;color:rgba(255,255,255,.45);text-decoration:line-through;" id="txtHargaAsli"></span>
-              <span style="font-size:.6875rem;color:#6ee7b7;font-weight:700;margin-left:.5rem;" id="txtDiskonInfo"></span>
+            <p style="font-size:.5625rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.375rem;">
+              <i class="fa-solid fa-receipt" style="margin-right:.35rem;"></i>Total Tagihan
+            </p>
+            <h3 id="txtTotal" style="font-size:2.75rem;font-weight:900;color:white;letter-spacing:-.03em;line-height:1;">Rp 0</h3>
+            <div id="discountInfo" style="display:none;margin-top:.5rem;">
+              <span style="font-size:.6875rem;color:rgba(255,255,255,.4);text-decoration:line-through;" id="txtHargaAsli"></span>
+              <span style="font-size:.6875rem;color:#6ee7b7;font-weight:800;margin-left:.5rem;" id="txtDiskonInfo"></span>
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.625rem;">
-            <button onclick="setMetode('Cash')" id="btnCash" class="btn-pay active">💵 TUNAI</button>
-            <button onclick="setMetode('QRIS')" id="btnQRIS" class="btn-pay">📱 QRIS</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <button onclick="setMetode('Cash')" id="btnCash" class="btn-pay active">
+              <i class="fa-solid fa-money-bill-wave" style="margin-right:.4rem;"></i>TUNAI
+            </button>
+            <button onclick="setMetode('QRIS')" id="btnQRIS" class="btn-pay">
+              <i class="fa-solid fa-qrcode" style="margin-right:.4rem;"></i>QRIS
+            </button>
           </div>
 
-          <div id="divTunai" style="display:flex;flex-direction:column;gap:.625rem;">
-            <label style="font-size:.625rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Uang Diterima</label>
-            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this);hitung()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-md);padding:1rem 1.125rem;font-size:1.5rem;font-weight:900;color:white;outline:none;font-family:var(--font-body);width:100%;" placeholder="Rp 0">
+          <div id="divTunai" style="display:flex;flex-direction:column;gap:.75rem;">
+            <label style="font-size:.5625rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);">
+              <i class="fa-solid fa-hand-holding-dollar" style="margin-right:.35rem;"></i>Uang Diterima
+            </label>
+            <input type="text" inputmode="numeric" id="inpBayar" oninput="formatRpInput(this);hitung()" onblur="hitung()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-md);padding:1rem 1.125rem;font-size:1.5rem;font-weight:900;color:white;outline:none;font-family:var(--font-body);width:100%;" placeholder="Rp 0">
             <div style="display:flex;gap:.375rem;flex-wrap:wrap;" id="quickAmounts"></div>
-            
-            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:.875rem 1rem;border-radius:var(--radius-md);">
-              <span style="font-size:.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);">Kembalian</span>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:1rem 1.125rem;border-radius:var(--radius-md);">
+              <span style="font-size:.6875rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:.35rem;">
+                <i class="fa-solid fa-coins"></i>Kembalian
+              </span>
               <span id="txtKembali" style="font-size:1.375rem;font-weight:900;color:#6ee7b7;">Rp 0</span>
             </div>
           </div>
 
           <button onclick="simpan()" class="btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:1.125rem;height:1.125rem;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 14a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
-            SIMPAN & KIRIM NOTA
+            <i class="fa-brands fa-whatsapp" style="font-size:1.1rem;"></i>
+            SIMPAN &amp; KIRIM NOTA
           </button>
         </div>
       </div>
+
     </div>
   </div>
 
   <div id="tab-riwayat" class="tab-konten" style="display:none;">
-    <div style="display:flex;flex-direction:column;gap:1rem;">
-      <div class="omset-card">
-        <div style="position:relative;z-index:1;">
-          <p id="labelOmset" style="font-size:.625rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.375rem;font-family:var(--font-body);">Total Omset Hari Ini</p>
-          <h4 id="txtOmset" class="t-disp" style="font-size:2.5rem;font-weight:700;color:white;letter-spacing:-.02em;line-height:1;">Rp 0</h4>
-          <div style="margin-top:.875rem;display:flex;gap:.625rem;flex-wrap:wrap;" id="statsRow">
-            <span class="stat-chip" id="statTx">0 transaksi</span>
-            <span class="stat-chip" id="statAvg">Avg Rp 0</span>
+    <div class="row-gap">
+
+      <div class="omset-card fade-up">
+        <div>
+          <p id="labelOmset" style="font-size:.5625rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:.375rem;display:flex;align-items:center;gap:.35rem;">
+            <i class="fa-solid fa-sack-dollar"></i>Total Omset Hari Ini
+          </p>
+          <h4 id="txtOmset" style="font-size:2.5rem;font-weight:800;color:white;letter-spacing:-.02em;line-height:1;">Rp 0</h4>
+          <div style="margin-top:1rem;display:flex;gap:.625rem;flex-wrap:wrap;">
+            <span class="stat-chip" id="statTx"><i class="fa-solid fa-receipt" style="font-size:.625rem;"></i>0 transaksi</span>
+            <span class="stat-chip" id="statAvg"><i class="fa-solid fa-chart-simple" style="font-size:.625rem;"></i>Avg Rp 0</span>
           </div>
         </div>
       </div>
 
       <div class="card" style="padding:1.25rem;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:.75rem;">
-          <div>
-            <p style="font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--rose);">Filter Laporan</p>
+          <div style="display:flex;align-items:center;gap:.625rem;">
+            <div class="icon-box" style="background:var(--surface-3);color:var(--rose-mid);">
+              <i class="fa-solid fa-filter"></i>
+            </div>
+            <p style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);">Filter Laporan</p>
           </div>
-          <button onclick="muatData(true)" style="font-size:.625rem;font-weight:700;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.4rem .875rem;border-radius:9999px;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;gap:.35rem;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:.875rem;height:.875rem;"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-            SINKRON
+          <button onclick="muatData(true)" class="btn-sync">
+            <i class="fa-solid fa-rotate"></i>SINKRON
           </button>
         </div>
 
         <div style="display:flex;gap:.5rem;overflow-x:auto;" class="no-sb">
-          <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="pill active">📅 Hari Ini</button>
-          <button onclick="setFilter('kalender')" id="btn-f-kalender" class="pill">🔍 Cari Tanggal</button>
+          <button onclick="setFilter('hari_ini')" id="btn-f-hari_ini" class="pill active">
+            <i class="fa-regular fa-calendar-day"></i>Hari Ini
+          </button>
+          <button onclick="setFilter('kalender')" id="btn-f-kalender" class="pill">
+            <i class="fa-solid fa-magnifying-glass"></i>Cari Tanggal
+          </button>
         </div>
 
-        <hr style="border: none; border-top: 1px solid var(--border); margin: .875rem 0;">
-        <label class="field-label">Rekap Per Bulan</label>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-          <select id="filterBulan" onchange="setFilter('bulan')" class="inp" style="padding:.6875rem .875rem;font-size:.8125rem;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
+        <div class="section-divider"></div>
+
+        <label class="field-label"><i class="fa-regular fa-calendar" style="margin-right:.35rem;"></i>Rekap Per Bulan</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.625rem;">
+          <select id="filterBulan" onchange="setFilter('bulan')" class="inp" style="padding:.6875rem .875rem;font-size:.8125rem;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
             <option value="01">Januari</option><option value="02">Februari</option><option value="03">Maret</option><option value="04">April</option><option value="05">Mei</option><option value="06">Juni</option><option value="07">Juli</option><option value="08">Agustus</option><option value="09">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
           </select>
-          <select id="filterTahun" onchange="setFilter('bulan')" class="inp" style="padding:.6875rem .875rem;font-size:.8125rem;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%23c4a8b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
+          <select id="filterTahun" onchange="setFilter('bulan')" class="inp" style="padding:.6875rem .875rem;font-size:.8125rem;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'14\' height=\'14\' viewBox=\'0 0 24 24\'><path fill=\'%2394a3b8\' d=\'M6 9l6 6 6-6\'/></svg>');background-repeat:no-repeat;background-position:right .5rem center;padding-right:2rem;">
             <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
           </select>
         </div>
 
         <div id="divKalender" style="display:none;margin-top:.75rem;">
-          <label class="field-label">Pilih Tanggal</label>
+          <label class="field-label"><i class="fa-regular fa-calendar-check" style="margin-right:.35rem;"></i>Pilih Tanggal</label>
           <input type="date" id="filterTgl" onchange="renderRiwayat()" class="inp" style="color:var(--rose);font-weight:700;">
         </div>
       </div>
 
       <div style="position:relative;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ink-faint)" stroke-width="2" style="width:1rem;height:1rem;position:absolute;left:.875rem;top:50%;transform:translateY(-50%);pointer-events:none;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--ink-faint);font-size:.8rem;pointer-events:none;"></i>
         <input type="text" id="searchInp" oninput="renderRiwayat()" class="search-inp" placeholder="Cari nama pelanggan atau treatment…">
       </div>
 
-      <div id="listRiwayat" style="display:flex;flex-direction:column;gap:.625rem;"></div>
+      <div id="listRiwayat" style="display:flex;flex-direction:column;gap:.75rem;"></div>
     </div>
   </div>
 </main>
 
 <script>
 const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
+const DEFAULT_LAYANAN = [
+  "Potong Rambut",
+  "Cuci Catok / Blow",
+  "Creambath",
+  "Hair Spa / Hair Mask",
+  "Smoothing / Matrix",
+  "Coloring / Highlight",
+  "Eyelash / Nail Art"
+];
+
+const $ = (id) => document.getElementById(id);
 
 let dTransaksi = [];
-try { dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || []; } catch(e) {}
+try {
+  dTransaksi = JSON.parse(localStorage.getItem('alesha_data')) || [];
+  if (!Array.isArray(dTransaksi)) dTransaksi = [];
+} catch(e) {
+  dTransaksi = [];
+}
+
 let currentFilter = 'hari_ini';
 let mBayar = 'Cash';
 let isDark = false;
-
-// KUNCI KEAMANAN DOUBLE KLIK
 let isProses = false;
+let toastTimer = null;
 
 const wilayahData = {
   "Surakarta": {
@@ -553,273 +793,514 @@ const wilayahData = {
   }
 };
 
-function toggleTheme() {
-  isDark = !isDark;
-  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-  document.getElementById('iconSun').style.display = isDark ? 'none' : 'block';
-  document.getElementById('iconMoon').style.display = isDark ? 'block' : 'none';
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-function updateClock() {
+function formatRp(n) {
+  return new Intl.NumberFormat('id-ID').format(Number(n) || 0);
+}
+
+function clean(s) {
+  return parseInt(String(s ?? '').replace(/[^0-9]/g, ''), 10) || 0;
+}
+
+function formatRpInput(inputEl) {
+  const v = String(inputEl.value).replace(/[^0-9]/g, '');
+  inputEl.value = v ? formatRp(v) : '';
+}
+
+function getTodayISOInWIB() {
   const now = new Date();
-  document.getElementById('badgeTgl').textContent = now.toLocaleDateString('id-ID', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('badgeWaktu').textContent = now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) + ' WIB';
-}
-updateClock(); setInterval(updateClock, 30000);
-
-function generateNotaID() {
-  const d = new Date();
-  const tglBln = String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
-  const dateKey = d.getFullYear() + tglBln;
-  let lastDate = '', lastSeq = 0;
-  try { lastDate = localStorage.getItem('alesha_last_date')||''; lastSeq = parseInt(localStorage.getItem('alesha_last_seq'))||0; } catch(e){}
-  if (lastDate !== dateKey) { lastSeq = 1; } else { lastSeq++; }
-  try { localStorage.setItem('alesha_last_date', dateKey); localStorage.setItem('alesha_last_seq', lastSeq); } catch(e){}
-  
-  // SOLUSI BUG: Tambah 3 karakter unik acak agar ID tidak pernah kembar walaupun terklik 2x atau pindah HP
-  const rand = Math.random().toString(36).substring(2, 5).toUpperCase();
-  return `AS-${tglBln}-${String(lastSeq).padStart(2,'0')}-${rand}`;
-}
-
-function setMetode(m) {
-  mBayar = m;
-  ['btnCash','btnQRIS'].forEach(id => document.getElementById(id).classList.remove('active'));
-  document.getElementById(m === 'Cash' ? 'btnCash' : 'btnQRIS').classList.add('active');
-  document.getElementById('divTunai').style.display = m === 'QRIS' ? 'none' : 'flex';
-  document.getElementById('divTunai').style.flexDirection = 'column';
-  document.getElementById('divTunai').style.gap = '.625rem';
-  hitung();
-}
-
-function updateKecamatan() {
-  const kab = document.getElementById('inpKab').value;
-  const customInput = document.getElementById('inpWilayahLain');
-  const divDetail = document.getElementById('divWilayahDetail');
-  
-  if (kab === 'Lainnya') {
-    customInput.style.display = 'block';
-    divDetail.style.display = 'none';
-  } else {
-    customInput.style.display = 'none';
-    divDetail.style.display = 'grid';
-    const kecSel = document.getElementById('inpKec');
-    kecSel.innerHTML = '<option value="">-- Kecamatan --</option>';
-    if (wilayahData[kab]) {
-      Object.keys(wilayahData[kab]).forEach(k => {
-        const o = document.createElement('option'); o.value = k; o.textContent = k; kecSel.appendChild(o);
-      });
-    }
-    document.getElementById('inpKel').innerHTML = '<option value="">-- Kelurahan --</option>';
-  }
-}
-
-function updateKelurahan() {
-  const kab = document.getElementById('inpKab').value, kec = document.getElementById('inpKec').value;
-  const kelSel = document.getElementById('inpKel');
-  kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
-  if (wilayahData[kab]?.[kec]) wilayahData[kab][kec].forEach(k => {
-    const o = document.createElement('option'); o.value = k; o.textContent = k; kelSel.appendChild(o);
-  });
-}
-
-function cekLayananLain() {
-  const show = document.getElementById('inpLayanan').value === 'Lainnya (Custom)';
-  document.getElementById('inpLayananLain').style.display = show ? 'block' : 'none';
-}
-
-function formatRp(n) { return new Intl.NumberFormat('id-ID').format(n); }
-function clean(s) { return parseInt(String(s).replace(/[^0-9]/g,''))||0; }
-function formatRpInput(i) { let v=i.value.replace(/[^0-9]/g,''); i.value=v?formatRp(v):''; }
-
-function updateQuickAmounts(total) {
-  const container = document.getElementById('quickAmounts');
-  if (total <= 0) { container.innerHTML = ''; return; }
-
-  let amounts = [total];
-  if (total < 50000) amounts.push(50000);
-  if (total < 100000) amounts.push(100000);
-  
-  amounts = [...new Set(amounts)].sort((a,b) => a-b);
-
-  container.innerHTML = amounts.map(p => {
-    let label = p === total ? 'Uang Pas' : `Rp ${formatRp(p)}`;
-    return `<button class="quick-btn" onclick="setQuickBayar(${p})">${label}</button>`;
-  }).join('');
-}
-
-function setQuickBayar(amt) {
-  document.getElementById('inpBayar').value = 'Rp ' + formatRp(amt);
-  hitung();
-}
-
-function hitung() {
-  const h = clean(document.getElementById('inpHarga').value);
-  const d = clean(document.getElementById('inpDiskon').value);
-  const b = clean(document.getElementById('inpBayar').value);
-  const total = Math.max(0, h - d);
-
-  const txtTotal = document.getElementById('txtTotal');
-  txtTotal.textContent = 'Rp '+formatRp(total);
-
-  document.getElementById('txtKembali').textContent = 'Rp '+formatRp(Math.max(0,b-total));
-
-  const discInfo = document.getElementById('discountInfo');
-  if (d > 0 && h > 0) {
-    discInfo.style.display = 'flex'; discInfo.style.alignItems = 'center';
-    document.getElementById('txtHargaAsli').textContent = 'Rp '+formatRp(h);
-    document.getElementById('txtDiskonInfo').textContent = `Hemat Rp ${formatRp(d)}`;
-  } else { discInfo.style.display = 'none'; }
-
-  if (document.activeElement.id !== 'inpBayar') {
-    updateQuickAmounts(total);
-  }
+  return now.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
 }
 
 function parseISO(s) {
   if (!s) return "";
-  let d = new Date(s);
-  if (typeof s === 'string' && s.includes('T17:00')) d.setHours(d.getHours()+7);
-  return isNaN(d.getTime()) ? "" : d.toISOString().slice(0, 10);
+  const str = String(s).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+
+  const d = new Date(str);
+  if (isNaN(d.getTime())) return "";
+
+  return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' });
 }
 
-function renderRiwayat() {
-  const listEl = document.getElementById('listRiwayat');
-  const tzOffset = (new Date()).getTimezoneOffset() * 60000;
-  const todayISO = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
-  const searchQ = (document.getElementById('searchInp')?.value || '').toLowerCase().trim();
-  
-  let filtered = dTransaksi, label = "Total Omset";
+function formatTanggalID(value) {
+  if (!value) return "-";
+  const str = String(value).trim();
 
-  if (currentFilter === 'hari_ini') {
-    filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === todayISO);
-    label = "Omset Hari Ini";
-  } else if (currentFilter === 'bulan') {
-    const bln = document.getElementById('filterBulan').value;
-    const thn = document.getElementById('filterTahun').value;
-    filtered = dTransaksi.filter(t => parseISO(t.Tanggal).startsWith(`${thn}-${bln}`));
-    const namaBln = document.getElementById('filterBulan').options[document.getElementById('filterBulan').selectedIndex].text;
-    label = `Omset ${namaBln} ${thn}`;
-  } else if (currentFilter === 'kalender') {
-    const val = document.getElementById('filterTgl').value;
-    if (val) { filtered = dTransaksi.filter(t => parseISO(t.Tanggal) === val); label = `Omset ${val.split('-').reverse().join('/')}`; }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
   }
 
-  if (searchQ) filtered = filtered.filter(t =>
-    (t.Pelanggan||'').toLowerCase().includes(searchQ) ||
-    (t.Treatment||'').toLowerCase().includes(searchQ)
-  );
+  const date = new Date(str);
+  if (isNaN(date.getTime())) return escapeHtml(str);
 
-  let total = 0;
-  const sorted = filtered.slice().reverse();
-  sorted.forEach(t => { total += clean(t["Total Akhir"]||0); });
+  return date.toLocaleDateString('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+}
 
-  document.getElementById('labelOmset').textContent = label;
-  const omsetEl = document.getElementById('txtOmset');
-  omsetEl.textContent = 'Rp '+formatRp(total);
-  document.getElementById('statTx').textContent = `${sorted.length} transaksi`;
-  document.getElementById('statAvg').textContent = sorted.length ? `Avg Rp ${formatRp(Math.round(total/sorted.length))}` : 'Avg Rp 0';
+function normalizePhone(raw) {
+  const digits = String(raw ?? '').replace(/\D/g, '');
+  if (!digits) return '';
+  if (digits.startsWith('62')) return digits;
+  if (digits.startsWith('0')) return '62' + digits.slice(1);
+  if (digits.startsWith('8')) return '62' + digits;
+  return digits;
+}
 
-  if (sorted.length === 0) {
-    listEl.innerHTML = `<div style="padding:3.5rem 1rem;text-align:center;color:var(--ink-faint);">
-      <div style="font-size:3rem;margin-bottom:.75rem;opacity:.4;font-family:var(--font-body);">🔍</div>
-      <p style="font-size:.875rem;font-weight:600;">Data tidak ditemukan</p>
-      <p style="font-size:.75rem;margin-top:.25rem;">Coba ubah filter atau tanggal</p>
-    </div>`;
+function isValidPhone(raw) {
+  const digits = String(raw ?? '').replace(/\D/g, '');
+  return /^(0|62|8)\d{8,15}$/.test(digits);
+}
+
+function setActiveNav(tab) {
+  document.querySelectorAll('.nav-pill').forEach(btn => btn.classList.remove('active'));
+  if (tab === 'kasir') $('navKasir').classList.add('active');
+  if (tab === 'riwayat') $('navRiwayat').classList.add('active');
+}
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  $('iconSun').style.display = isDark ? 'none' : 'block';
+  $('iconMoon').style.display = isDark ? 'block' : 'none';
+}
+
+function updateClock() {
+  const now = new Date();
+  $('badgeTgl').innerHTML = '<i class="fa-regular fa-calendar"></i> ' + now.toLocaleDateString('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+  $('badgeWaktu').innerHTML = '<i class="fa-regular fa-clock"></i> ' + now.toLocaleTimeString('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    hour: '2-digit',
+    minute: '2-digit'
+  }) + ' WIB';
+}
+
+function generateNotaID() {
+  const now = new Date();
+  const tglBln = String(now.getDate()).padStart(2, '0') + String(now.getMonth() + 1).padStart(2, '0');
+  const dateKey = now.getFullYear() + tglBln;
+
+  let lastDate = '';
+  let lastSeq = 0;
+
+  try {
+    lastDate = localStorage.getItem('alesha_last_date') || '';
+    lastSeq = parseInt(localStorage.getItem('alesha_last_seq'), 10) || 0;
+  } catch(e) {}
+
+  lastSeq = lastDate !== dateKey ? 1 : lastSeq + 1;
+
+  try {
+    localStorage.setItem('alesha_last_date', dateKey);
+    localStorage.setItem('alesha_last_seq', String(lastSeq));
+  } catch(e) {}
+
+  const rand = Math.random().toString(36).substring(2, 5).toUpperCase();
+  return `AS-${tglBln}-${String(lastSeq).padStart(2, '0')}-${rand}`;
+}
+
+function showLoader(show) {
+  const el = $('loader');
+  if (show) {
+    el.classList.add('show');
+    el.style.display = 'flex';
+  } else {
+    el.classList.remove('show');
+    setTimeout(() => { el.style.display = 'none'; }, 100);
+  }
+}
+
+function showToast(msg) {
+  const el = $('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function setMetode(metode) {
+  mBayar = metode;
+  ['btnCash', 'btnQRIS'].forEach(id => $(id).classList.remove('active'));
+  $(metode === 'Cash' ? 'btnCash' : 'btnQRIS').classList.add('active');
+
+  const divTunai = $('divTunai');
+  divTunai.style.display = metode === 'QRIS' ? 'none' : 'flex';
+  divTunai.style.flexDirection = 'column';
+  divTunai.style.gap = '.75rem';
+
+  if (metode === 'QRIS') {
+    $('inpBayar').value = '';
+    $('quickAmounts').innerHTML = '';
+  }
+
+  hitung();
+}
+
+function updateKecamatan() {
+  const kab = $('inpKab').value;
+  const customInput = $('inpWilayahLain');
+  const divDetail = $('divWilayahDetail');
+  const kecSel = $('inpKec');
+  const kelSel = $('inpKel');
+
+  if (kab === 'Lainnya') {
+    customInput.style.display = 'block';
+    divDetail.style.display = 'none';
+    kecSel.innerHTML = '<option value="">-- Kecamatan --</option>';
+    kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
     return;
   }
 
-  listEl.innerHTML = sorted.map((t, i) => {
-    const nilai = clean(t["Total Akhir"]||0);
-    const met = t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash';
-    let dObj = new Date(t.Tanggal);
-    if (typeof t.Tanggal === 'string' && t.Tanggal.includes('T17:00')) dObj.setHours(dObj.getHours()+7);
-    const tglTampil = isNaN(dObj.getTime()) ? t.Tanggal : dObj.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
-    const isQris = met === 'QRIS';
-    const metColor = isQris ? '#60a5fa' : '#34d399';
-    const metBg = isQris ? 'rgba(96,165,250,.12)' : 'rgba(52,211,153,.12)';
+  customInput.style.display = 'none';
+  divDetail.style.display = 'grid';
+  kecSel.innerHTML = '<option value="">-- Kecamatan --</option>';
+  kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
 
-    return `<div class="tx-item fade-up" style="animation-delay:${i*0.04}s">
-      <div style="display:flex;flex-direction:column;gap:.25rem;min-width:0;flex:1;">
-        <p style="font-size:.625rem;font-weight:700;color:var(--ink-faint);letter-spacing:.04em;">${tglTampil} · ${t["ID Nota"]||'AS'}</p>
-        <p style="font-size:.9375rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.Pelanggan}</p>
-        <p style="font-size:.75rem;color:var(--rose);font-weight:600;">${t.Treatment}</p>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;flex-shrink:0;">
-        <p style="font-size:1.0625rem;font-weight:700;color:var(--ink);" class="t-disp">Rp ${formatRp(nilai)}</p>
-        <span style="font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .625rem;border-radius:9999px;background:${metBg};color:${metColor};">${met}</span>
-        <button onclick="hapus('${t["ID Nota"]}')" style="font-size:.625rem;font-weight:600;color:var(--rose);background:var(--surface-3);border:1px solid var(--border-mid);padding:.2rem .625rem;border-radius:.375rem;cursor:pointer;margin-top:.125rem;font-family:var(--font-body);">Hapus</button>
-      </div>
-    </div>`;
-  }).join('');
+  if (!wilayahData[kab]) return;
+
+  Object.keys(wilayahData[kab]).forEach(kecamatan => {
+    const opt = document.createElement('option');
+    opt.value = kecamatan;
+    opt.textContent = kecamatan;
+    kecSel.appendChild(opt);
+  });
 }
 
-async function muatData(f=false) {
-  if (f) showLoader(true);
-  try {
-    const res = await fetch(SHEETS_URL);
-    dTransaksi = await res.json();
-    try { localStorage.setItem('alesha_data', JSON.stringify(dTransaksi)); } catch(e){}
-    renderRiwayat();
-    if (f) showToast('✅ Data berhasil disinkronkan');
-  } catch(e) {
-    if (f) showToast('⚠️ Gagal sinkron, cek koneksi');
+function updateKelurahan() {
+  const kab = $('inpKab').value;
+  const kec = $('inpKec').value;
+  const kelSel = $('inpKel');
+  kelSel.innerHTML = '<option value="">-- Kelurahan --</option>';
+
+  if (!wilayahData[kab] || !wilayahData[kab][kec]) return;
+
+  wilayahData[kab][kec].forEach(kel => {
+    const opt = document.createElement('option');
+    opt.value = kel;
+    opt.textContent = kel;
+    kelSel.appendChild(opt);
+  });
+}
+
+function cekLayananLain() {
+  const show = $('inpLayanan').value === 'Lainnya (Custom)';
+  $('inpLayananLain').style.display = show ? 'block' : 'none';
+  if (!show) $('inpLayananLain').value = '';
+}
+
+function updateQuickAmounts(total) {
+  const container = $('quickAmounts');
+  if (total <= 0 || mBayar !== 'Cash') {
+    container.innerHTML = '';
+    return;
   }
-  showLoader(false);
+
+  const amounts = new Set([total]);
+  if (total < 50000) amounts.add(50000);
+  if (total < 100000) amounts.add(100000);
+
+  container.innerHTML = [...amounts]
+    .sort((a, b) => a - b)
+    .map(amount => {
+      const label = amount === total ? 'Uang Pas' : `Rp ${formatRp(amount)}`;
+      return `<button type="button" class="quick-btn" onclick="setQuickBayar(${amount})">${label}</button>`;
+    })
+    .join('');
+}
+
+function setQuickBayar(amount) {
+  $('inpBayar').value = 'Rp ' + formatRp(amount);
+  hitung();
+}
+
+function hitung() {
+  const harga = clean($('inpHarga').value);
+  const diskon = clean($('inpDiskon').value);
+  const bayar = clean($('inpBayar').value);
+  const total = Math.max(0, harga - diskon);
+
+  $('txtTotal').textContent = 'Rp ' + formatRp(total);
+  $('txtKembali').textContent = 'Rp ' + formatRp(Math.max(0, bayar - total));
+
+  const discInfo = $('discountInfo');
+  if (diskon > 0 && harga > 0) {
+    discInfo.style.display = 'flex';
+    discInfo.style.alignItems = 'center';
+    $('txtHargaAsli').textContent = 'Rp ' + formatRp(harga);
+    $('txtDiskonInfo').textContent = `Hemat Rp ${formatRp(Math.min(diskon, harga))}`;
+  } else {
+    discInfo.style.display = 'none';
+  }
+
+  updateQuickAmounts(total);
+}
+
+function bukaTab(e, tab) {
+  document.querySelectorAll('.tab-konten').forEach(el => el.style.display = 'none');
+  $('tab-' + tab).style.display = 'block';
+  setActiveNav(tab);
+  if (tab === 'riwayat') renderRiwayat();
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.pill').forEach(btn => btn.classList.remove('active'));
+  const target = $('btn-f-' + filter);
+  if (target) target.classList.add('active');
+  $('divKalender').style.display = filter === 'kalender' ? 'block' : 'none';
+  renderRiwayat();
 }
 
 function resetForm() {
-  document.getElementById('inpNama').value = '';
-  document.getElementById('inpHp').value = '';
-  document.getElementById('inpCatatan').value = '';
-  document.getElementById('inpHarga').value = '';
-  document.getElementById('inpDiskon').value = '';
-  document.getElementById('inpBayar').value = '';
-  document.getElementById('inpLayanan').selectedIndex = 0;
-  document.getElementById('inpLayananLain').style.display = 'none';
-  document.getElementById('inpLayananLain').value = '';
-  document.getElementById('inpWilayahLain').value = '';
-  document.getElementById('inpKab').selectedIndex = 0;
+  $('inpNama').value = '';
+  $('inpHp').value = '';
+  $('inpCatatan').value = '';
+  $('inpHarga').value = '';
+  $('inpDiskon').value = '';
+  $('inpBayar').value = '';
+  $('inpLayanan').selectedIndex = 0;
+  $('inpLayananLain').value = '';
+  $('inpLayananLain').style.display = 'none';
+  $('inpWilayahLain').value = '';
+  $('inpWilayahLain').style.display = 'none';
+  $('inpKab').selectedIndex = 0;
   updateKecamatan();
   setMetode('Cash');
   hitung();
 }
 
-async function simpan() {
-  if (isProses) return; // Mencegah klik tombol 2 kali
+async function fetchJSON(url, options) {
+  const res = await fetch(url, options);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
 
-  const nama = document.getElementById('inpNama').value.trim();
-  const hp = document.getElementById('inpHp').value.trim();
-  const kabRaw = document.getElementById('inpKab').value;
-  const kab = kabRaw === 'Lainnya' ? document.getElementById('inpWilayahLain').value.trim() : kabRaw;
-  const kec = kabRaw === 'Lainnya' ? '-' : document.getElementById('inpKec').value;
-  const kel = kabRaw === 'Lainnya' ? '-' : document.getElementById('inpKel').value;
-  const catatan = document.getElementById('inpCatatan').value.trim();
-  
-  let lay = document.getElementById('inpLayanan').value;
-  if (lay === 'Lainnya (Custom)') lay = document.getElementById('inpLayananLain').value.trim();
-  
-  const harga = clean(document.getElementById('inpHarga').value);
-  const diskon = clean(document.getElementById('inpDiskon').value);
-  const total = harga - diskon;
+function isiSelectLayanan(list) {
+  const sel = $('inpLayanan');
+  sel.innerHTML = '';
 
-  if (!nama) { showToast('⚠️ Nama pelanggan wajib diisi'); return; }
-  if (!hp) { showToast('⚠️ Nomor WhatsApp wajib diisi'); return; }
-  if (kabRaw === 'Lainnya' && !kab) { showToast('⚠️ Nama kota/area wajib diisi'); return; }
-  if (!lay) { showToast('⚠️ Pilih treatment terlebih dahulu'); return; }
-  if (harga <= 0) { showToast('⚠️ Harga belum diisi'); return; }
+  const frag = document.createDocumentFragment();
 
-  isProses = true; // Mengunci tombol
-  showLoader(true);
-  const id = generateNotaID();
-  
-  const tzOffset = (new Date()).getTimezoneOffset() * 60000;
-  const tglISO = (new Date(Date.now() - tzOffset)).toISOString().slice(0, 10);
-  const tglTampil = new Date().toLocaleDateString('id-ID');
+  const defaultOpt = document.createElement('option');
+  defaultOpt.value = '';
+  defaultOpt.textContent = '-- Pilih Treatment --';
+  frag.appendChild(defaultOpt);
+
+  list.forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item;
+    opt.textContent = `✨ ${item}`;
+    frag.appendChild(opt);
+  });
+
+  const customOpt = document.createElement('option');
+  customOpt.value = 'Lainnya (Custom)';
+  customOpt.textContent = '✏️ Lainnya (Custom)';
+  frag.appendChild(customOpt);
+
+  sel.appendChild(frag);
+}
+
+async function loadMenuLayanan() {
+  try {
+    const layanan = await fetchJSON(SHEETS_URL + "?action=get_layanan");
+    if (Array.isArray(layanan) && layanan.length) {
+      isiSelectLayanan(layanan.map(item => String(item).trim()).filter(Boolean));
+      return;
+    }
+    isiSelectLayanan(DEFAULT_LAYANAN);
+  } catch(e) {
+    isiSelectLayanan(DEFAULT_LAYANAN);
+  }
+}
+
+async function muatData(showToastOnSuccess = false) {
+  if (showToastOnSuccess) showLoader(true);
 
   try {
-    await fetch(SHEETS_URL, {
+    const data = await fetchJSON(SHEETS_URL, { cache: 'no-store' });
+    dTransaksi = Array.isArray(data) ? data : [];
+    try { localStorage.setItem('alesha_data', JSON.stringify(dTransaksi)); } catch(e) {}
+    renderRiwayat();
+    if (showToastOnSuccess) showToast('✅ Data berhasil disinkronkan');
+  } catch(e) {
+    if (showToastOnSuccess) showToast('⚠️ Gagal sinkron, cek koneksi');
+  } finally {
+    showLoader(false);
+  }
+}
+
+function renderRiwayat() {
+  const listEl = $('listRiwayat');
+  const todayISO = getTodayISOInWIB();
+  const searchQ = ($('searchInp')?.value || '').toLowerCase().trim();
+
+  let filtered = Array.isArray(dTransaksi) ? dTransaksi.slice() : [];
+  let label = 'Total Omset';
+
+  if (currentFilter === 'hari_ini') {
+    filtered = filtered.filter(t => parseISO(t.Tanggal) === todayISO);
+    label = 'Omset Hari Ini';
+  } else if (currentFilter === 'bulan') {
+    const bln = $('filterBulan').value;
+    const thn = $('filterTahun').value;
+    filtered = filtered.filter(t => parseISO(t.Tanggal).startsWith(`${thn}-${bln}`));
+    const namaBln = $('filterBulan').options[$('filterBulan').selectedIndex].text;
+    label = `Omset ${namaBln} ${thn}`;
+  } else if (currentFilter === 'kalender') {
+    const val = $('filterTgl').value;
+    if (val) {
+      filtered = filtered.filter(t => parseISO(t.Tanggal) === val);
+      label = `Omset ${val.split('-').reverse().join('/')}`;
+    }
+  }
+
+  if (searchQ) {
+    filtered = filtered.filter(t =>
+      String(t.Pelanggan || '').toLowerCase().includes(searchQ) ||
+      String(t.Treatment || '').toLowerCase().includes(searchQ)
+    );
+  }
+
+  const sorted = filtered.slice().reverse();
+  const total = sorted.reduce((sum, item) => sum + clean(item["Total Akhir"]), 0);
+
+  $('labelOmset').innerHTML = '<i class="fa-solid fa-sack-dollar" style="margin-right:.35rem;"></i>' + escapeHtml(label);
+  $('txtOmset').textContent = 'Rp ' + formatRp(total);
+  $('statTx').innerHTML = `<i class="fa-solid fa-receipt" style="font-size:.625rem;"></i>${sorted.length} transaksi`;
+  $('statAvg').innerHTML = sorted.length
+    ? `<i class="fa-solid fa-chart-simple" style="font-size:.625rem;"></i>Avg Rp ${formatRp(Math.round(total / sorted.length))}`
+    : '<i class="fa-solid fa-chart-simple" style="font-size:.625rem;"></i>Avg Rp 0';
+
+  if (!sorted.length) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <p style="font-size:.875rem;font-weight:700;color:var(--ink-muted);">Data tidak ditemukan</p>
+        <p style="font-size:.75rem;color:var(--ink-faint);">Coba ubah filter atau tanggal</p>
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = sorted.map((t, i) => {
+    const nilai = clean(t["Total Akhir"]);
+    const metode = String(t["Metode Pembayaran"] || t["metodeBayar"] || 'Cash');
+    const isQris = metode === 'QRIS';
+    const metColor = isQris ? '#60a5fa' : '#34d399';
+    const metBg = isQris ? 'rgba(96,165,250,.12)' : 'rgba(52,211,153,.12)';
+    const metIcon = isQris ? 'fa-qrcode' : 'fa-money-bill-wave';
+
+    const pelanggan = escapeHtml(t.Pelanggan || '-');
+    const treatment = escapeHtml(t.Treatment || '-');
+    const idNota = escapeHtml(t["ID Nota"] || 'AS');
+    const tglTampil = formatTanggalID(t.Tanggal);
+    const avatarChar = escapeHtml(String(t.Pelanggan || 'G').charAt(0).toUpperCase());
+
+    return `
+      <div class="tx-item fade-up" style="animation-delay:${i * 0.04}s">
+        <div style="width:2.5rem;height:2.5rem;border-radius:9999px;background:linear-gradient(135deg,#db2777,#9d174d);display:flex;align-items:center;justify-content:center;color:white;font-size:.875rem;font-weight:800;flex-shrink:0;">${avatarChar}</div>
+        <div style="display:flex;flex-direction:column;gap:.2rem;min-width:0;flex:1;">
+          <p style="font-size:.625rem;font-weight:700;color:var(--ink-faint);letter-spacing:.04em;">${tglTampil} &middot; ${idNota}</p>
+          <p style="font-size:.9375rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pelanggan}</p>
+          <p style="font-size:.75rem;color:var(--rose);font-weight:600;">${treatment}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;flex-shrink:0;">
+          <p style="font-size:1.0625rem;font-weight:800;color:var(--ink);">Rp ${formatRp(nilai)}</p>
+          <span style="font-size:.5625rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .625rem;border-radius:9999px;background:${metBg};color:${metColor};display:flex;align-items:center;gap:.3rem;">
+            <i class="fa-solid ${metIcon}" style="font-size:.5rem;"></i>${escapeHtml(metode)}
+          </span>
+          <button type="button" class="btn-delete" data-id="${idNota}">
+            <i class="fa-solid fa-trash-can"></i>Hapus
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  listEl.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => hapus(btn.dataset.id));
+  });
+}
+
+async function simpan() {
+  if (isProses) return;
+
+  const nama = $('inpNama').value.trim();
+  const hpRaw = $('inpHp').value.trim();
+  const hpNormal = normalizePhone(hpRaw);
+
+  const kabRaw = $('inpKab').value;
+  const kab = kabRaw === 'Lainnya' ? $('inpWilayahLain').value.trim() : kabRaw;
+  const kec = kabRaw === 'Lainnya' ? '-' : $('inpKec').value;
+  const kel = kabRaw === 'Lainnya' ? '-' : $('inpKel').value;
+  const catatan = $('inpCatatan').value.trim();
+
+  let lay = $('inpLayanan').value;
+  if (lay === 'Lainnya (Custom)') lay = $('inpLayananLain').value.trim();
+
+  const harga = clean($('inpHarga').value);
+  const diskon = clean($('inpDiskon').value);
+  const total = Math.max(0, harga - diskon);
+
+  if (!nama) { showToast('⚠️ Nama pelanggan wajib diisi'); return; }
+  if (!hpRaw) { showToast('⚠️ Nomor WhatsApp wajib diisi'); return; }
+  if (!isValidPhone(hpRaw)) { showToast('⚠️ Format nomor WhatsApp tidak valid'); return; }
+  if (kabRaw === 'Lainnya' && !kab) { showToast('⚠️ Nama kota/area wajib diisi'); return; }
+  if (!lay) { showToast('⚠️ Pilih treatment terlebih dahulu'); return; }
+  if (lay === 'Lainnya (Custom)' || !lay.trim()) { showToast('⚠️ Nama treatment manual wajib diisi'); return; }
+  if (harga <= 0) { showToast('⚠️ Harga belum diisi'); return; }
+  if (diskon > harga) { showToast('⚠️ Diskon tidak boleh lebih besar dari harga'); return; }
+  if (mBayar === 'Cash' && clean($('inpBayar').value) < total) { showToast('⚠️ Uang diterima masih kurang'); return; }
+
+  isProses = true;
+  showLoader(true);
+
+  const id = generateNotaID();
+  const tglISO = getTodayISOInWIB();
+  const tglTampil = new Date().toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+  try {
+    await fetchJSON(SHEETS_URL, {
       method: 'POST',
-      body: JSON.stringify({tanggal:tglISO,idNota:id,pelanggan:nama,noWa:hp,kabupaten:kab,kecamatan:kec,kelurahan:kel,layanan:lay,diskon:diskon,totalAkhir:total,metodeBayar:mBayar,catatan:catatan})
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        tanggal: tglISO,
+        idNota: id,
+        pelanggan: nama,
+        noWa: hpNormal,
+        kabupaten: kab,
+        kecamatan: kec || '-',
+        kelurahan: kel || '-',
+        layanan: lay,
+        diskon: diskon,
+        totalAkhir: total,
+        metodeBayar: mBayar,
+        catatan: catatan
+      })
     });
 
     const msg = encodeURIComponent(
@@ -844,127 +1325,65 @@ async function simpan() {
       `Sampai jumpa di treatment berikutnya! 🌸`
     );
 
-    const waPhone = hp.replace(/^0/,'62');
     const isAndroid = /Android/i.test(navigator.userAgent);
-    let waUrl = `whatsapp://send?phone=${waPhone}&text=${msg}`;
-    
+    let waUrl = `whatsapp://send?phone=${hpNormal}&text=${msg}`;
     if (isAndroid) {
-      waUrl = `intent://send?phone=${waPhone}&text=${msg}#Intent;package=com.whatsapp;scheme=whatsapp;end`;
+      waUrl = `intent://send?phone=${hpNormal}&text=${msg}#Intent;package=com.whatsapp;scheme=whatsapp;end`;
     }
 
     showToast('✅ Transaksi berhasil disimpan!');
     resetForm();
-    muatData(false);
+    await muatData(false);
     bukaTab(null, 'riwayat');
-    document.getElementById('navKasir').classList.remove('active');
-    document.getElementById('navRiwayat').classList.add('active');
 
-    isProses = false; // Membuka kunci sebelum dialihkan
+    isProses = false;
     showLoader(false);
 
     setTimeout(() => {
       window.location.href = waUrl;
     }, 400);
-
   } catch(e) {
-    isProses = false; // Membuka kunci jika terjadi error
+    isProses = false;
     showLoader(false);
     showToast('❌ Gagal menyimpan transaksi, silakan coba lagi');
   }
 }
 
 async function hapus(id) {
-  if (isProses) return; // Mencegah dobel klik hapus
+  if (isProses) return;
   if (!confirm('Hapus transaksi ini?')) return;
-  
+
   isProses = true;
   showLoader(true);
+
   try {
-    await fetch(SHEETS_URL, {method:'POST', body:JSON.stringify({action:'DELETE',idNota:id})});
+    await fetchJSON(SHEETS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'DELETE', idNota: id })
+    });
+
     await muatData(false);
     showToast('🗑️ Transaksi dihapus');
-  } catch(e) { 
-    showToast('❌ Gagal menghapus'); 
-  }
-  
-  isProses = false;
-  showLoader(false);
-}
-
-function bukaTab(e, t) {
-  document.querySelectorAll('.tab-konten').forEach(el => el.style.display='none');
-  document.getElementById('tab-'+t).style.display = 'block';
-  document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-  if (e) e.currentTarget.classList.add('active');
-  if (t === 'riwayat') renderRiwayat();
-}
-
-function setFilter(f) {
-  currentFilter = f;
-  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('btn-f-'+f);
-  if (el) el.classList.add('active');
-  document.getElementById('divKalender').style.display = f === 'kalender' ? 'block' : 'none';
-  renderRiwayat();
-}
-
-function showLoader(s) {
-  const el = document.getElementById('loader');
-  if (s) { el.classList.add('show'); el.style.display='flex'; }
-  else { el.classList.remove('show'); setTimeout(()=>{ el.style.display='none'; },100); }
-}
-
-let toastTimer = null;
-function showToast(msg) {
-  const el = document.getElementById('toastEl');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
-}
-
-// --- INTEGRASI CLOUD DATABASE: LOAD MENU LAYANAN DINAMIS ---
-async function loadMenuLayanan() {
-  try {
-    const res = await fetch(SHEETS_URL + "?action=get_layanan");
-    const layanan = await res.json();
-    
-    const sel = document.getElementById('inpLayanan');
-    sel.innerHTML = '<option value="">-- Pilih Treatment --</option>';
-    
-    layanan.forEach(item => {
-      sel.innerHTML += `<option value="${item}">✨ ${item}</option>`;
-    });
-    
-    // Opsi custom manual tetap dipertahankan di bagian paling bawah
-    sel.innerHTML += '<option value="Lainnya (Custom)">✏️ Lainnya (Custom)</option>';
   } catch(e) {
-    console.error("Gagal memuat menu dari server", e);
-    // Jika gagal terhubung ke server cloud, fallback menggunakan daftar menu default agar operasional kasir aman
-    const sel = document.getElementById('inpLayanan');
-    sel.innerHTML = `
-      <option value="">-- Pilih Treatment --</option>
-      <option value="Potong Rambut">✂️ Potong Rambut</option>
-      <option value="Cuci Catok / Blow">💨 Cuci Catok / Blow</option>
-      <option value="Creambath">🧴 Creambath</option>
-      <option value="Hair Spa / Hair Mask">🌿 Hair Spa / Hair Mask</option>
-      <option value="Smoothing / Matrix">💎 Smoothing / Matrix</option>
-      <option value="Coloring / Highlight">🎨 Coloring / Highlight</option>
-      <option value="Eyelash / Nail Art">💅 Eyelash / Nail Art</option>
-      <option value="Lainnya (Custom)">✏️ Lainnya (Custom)</option>
-    `;
+    showToast('❌ Gagal menghapus');
+  } finally {
+    isProses = false;
+    showLoader(false);
   }
 }
 
 window.onload = () => {
   const now = new Date();
-  document.getElementById('filterBulan').value = String(now.getMonth()+1).padStart(2,'0');
-  document.getElementById('filterTahun').value = String(now.getFullYear());
-  document.getElementById('tab-kasir').style.display = 'block';
-  
-  // Menarik menu terupdate secara otomatis saat aplikasi kasir dibuka
+  $('filterBulan').value = String(now.getMonth() + 1).padStart(2, '0');
+  $('filterTahun').value = String(now.getFullYear());
+  $('tab-kasir').style.display = 'block';
+  setActiveNav('kasir');
+  updateClock();
+  setInterval(updateClock, 30000);
   loadMenuLayanan();
   muatData(true);
+  hitung();
 };
 </script>
 </body>
