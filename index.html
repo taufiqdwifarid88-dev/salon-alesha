@@ -470,10 +470,8 @@
 </main>
 
 <script>
-/* ═══════════════════════════════════════
-   KONSTANTA
-═══════════════════════════════════════ */
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyN9f9mlwdldSUIxDMkVcjI_e1Rsmhl4eJ6_y2lyKPxdRRKgRAjUFkVThvGpGFIFpwsyg/exec";
+/* KONSTANTA */
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
 
 const DEFAULT_LAYANAN = [
   "Potong Rambut","Cuci Catok / Blow","Creambath",
@@ -499,9 +497,7 @@ const WILAYAH = {
   }
 };
 
-/* ═══════════════════════════════════════
-   STATE
-═══════════════════════════════════════ */
+/* STATE */
 let dTransaksi = [];
 try {
   const raw = JSON.parse(localStorage.getItem('alesha_data'));
@@ -514,9 +510,7 @@ let isDark        = false;
 let isProses      = false;
 let toastTimer    = null;
 
-/* ═══════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════ */
+/* HELPERS */
 const $ = id => document.getElementById(id);
 
 function esc(v) {
@@ -572,9 +566,7 @@ function isIOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-/* ═══════════════════════════════════════
-   NETWORK — POST ke GAS (tidak parse response)
-═══════════════════════════════════════ */
+/* NETWORK */
 async function gasPost(payload) {
   await fetch(SHEETS_URL, {
     method: 'POST',
@@ -589,9 +581,7 @@ async function gasGet(params = '') {
   return await res.json();
 }
 
-/* ═══════════════════════════════════════
-   UI
-═══════════════════════════════════════ */
+/* UI */
 function showLoader(on) {
   const el = $('loader');
   if (on) { el.classList.add('show'); el.style.display = 'flex'; }
@@ -638,9 +628,7 @@ function generateNotaID() {
   return `AS-${tglBln}-${String(lastSeq).padStart(2,'0')}-${rand}`;
 }
 
-/* ═══════════════════════════════════════
-   WHATSAPP DEEP LINK
-═══════════════════════════════════════ */
+/* WA */
 function bukaWhatsapp(phone, encodedMsg) {
   const waUrl = `whatsapp://send?phone=${phone}&text=${encodedMsg}`;
 
@@ -659,9 +647,7 @@ function bukaWhatsapp(phone, encodedMsg) {
   }
 }
 
-/* ═══════════════════════════════════════
-   BUAT PESAN NOTA
-═══════════════════════════════════════ */
+/* NOTA WA */
 function buatPesanNota({ id, tglTampil, nama, lay, catatan, harga, diskon, total, metode }) {
   const GARIS = '─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─';
 
@@ -691,9 +677,7 @@ function buatPesanNota({ id, tglTampil, nama, lay, catatan, harga, diskon, total
   return encodeURIComponent(baris.join('\n'));
 }
 
-/* ═══════════════════════════════════════
-   FORM — METODE BAYAR
-═══════════════════════════════════════ */
+/* METODE BAYAR */
 function setMetode(m) {
   mBayar = m;
   ['btnCash','btnQRIS'].forEach(id => $(id).classList.remove('active'));
@@ -706,9 +690,7 @@ function setMetode(m) {
   hitung();
 }
 
-/* ═══════════════════════════════════════
-   FORM — WILAYAH
-═══════════════════════════════════════ */
+/* WILAYAH */
 function updateKecamatan() {
   const kab    = $('inpKab').value;
   const custEl = $('inpWilayahLain');
@@ -735,9 +717,7 @@ function updateKelurahan() {
   kelSel.appendChild(frag);
 }
 
-/* ═══════════════════════════════════════
-   FORM — LAYANAN
-═══════════════════════════════════════ */
+/* LAYANAN */
 function cekLayananLain() {
   const show=$('inpLayanan').value==='Lainnya (Custom)';
   $('inpLayananLain').style.display=show?'block':'none';
@@ -761,9 +741,7 @@ async function loadMenuLayanan() {
   } catch(e) { isiSelectLayanan(DEFAULT_LAYANAN); }
 }
 
-/* ═══════════════════════════════════════
-   KALKULASI
-═══════════════════════════════════════ */
+/* KALKULASI */
 function updateQuickAmounts(total) {
   const c=$('quickAmounts');
   if (total<=0 || mBayar!=='Cash') { c.innerHTML=''; return; }
@@ -797,9 +775,7 @@ function hitung() {
   updateQuickAmounts(total);
 }
 
-/* ═══════════════════════════════════════
-   NAVIGASI
-═══════════════════════════════════════ */
+/* NAVIGASI */
 function bukaTab(e, tab) {
   document.querySelectorAll('.tab-konten').forEach(el=>el.style.display='none');
   $('tab-'+tab).style.display='block';
@@ -815,9 +791,7 @@ function setFilter(f) {
   renderRiwayat();
 }
 
-/* ═══════════════════════════════════════
-   RESET FORM
-═══════════════════════════════════════ */
+/* RESET FORM */
 function resetForm() {
   ['inpNama','inpHp','inpCatatan','inpHarga','inpDiskon','inpBayar'].forEach(id=>$(id).value='');
   $('inpLayanan').selectedIndex=0;
@@ -827,9 +801,7 @@ function resetForm() {
   updateKecamatan(); setMetode('Cash'); hitung();
 }
 
-/* ═══════════════════════════════════════
-   DATA
-═══════════════════════════════════════ */
+/* DATA */
 async function muatData(showFeedback=false) {
   if (showFeedback) showLoader(true);
   try {
@@ -843,9 +815,7 @@ async function muatData(showFeedback=false) {
   } finally { showLoader(false); }
 }
 
-/* ═══════════════════════════════════════
-   RENDER RIWAYAT
-═══════════════════════════════════════ */
+/* RENDER RIWAYAT */
 function renderRiwayat() {
   const listEl=  $('listRiwayat');
   const todayWIB=getTodayWIB();
@@ -890,13 +860,42 @@ function renderRiwayat() {
     const isQris=metode==='QRIS';
     const mColor=isQris?'#60a5fa':'#34d399', mBg=isQris?'rgba(96,165,250,.12)':'rgba(52,211,153,.12)', mIcon=isQris?'fa-qrcode':'fa-money-bill-wave';
     const pelStr=esc(t.Pelanggan||'-'), trtStr=esc(t.Treatment||'-'), idStr=esc(t["ID Nota"]||'AS');
-
-    // ── TAMBAHAN JAM TRANSAKSI ──
-    // Ambil field Jam dari data. Jika tidak ada, tampilkan kosong.
-    const jamStr = t.Jam ? esc(String(t.Jam).trim()) : '';
-    const jamDisplay = jamStr ? ` &middot; <i class="fa-regular fa-clock" style="margin-right:.2rem;"></i>${jamStr} WIB` : '';
-
     const avatar=esc(String(t.Pelanggan||'G').charAt(0).toUpperCase());
+
+    // Normalisasi jam dari field t.Jam
+    let jamStr = '';
+    if (t.Jam) {
+      const rawJam = t.Jam;
+
+      if (rawJam instanceof Date) {
+        jamStr = rawJam.toLocaleTimeString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } else {
+        const s = String(rawJam).trim();
+        if (s.includes('T') && s.includes(':')) {
+          const d = new Date(s);
+          if (!isNaN(d.getTime())) {
+            jamStr = d.toLocaleTimeString('id-ID', {
+              timeZone: 'Asia/Jakarta',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+          } else {
+            jamStr = s;
+          }
+        } else {
+          jamStr = s;
+        }
+      }
+    }
+
+    const jamDisplay = jamStr
+      ? ` &middot; <i class="fa-regular fa-clock" style="margin-right:.2rem;"></i>${esc(jamStr)} WIB`
+      : '';
+
     const wrap=document.createElement('div');
     wrap.className='tx-item fade-up'; wrap.style.animationDelay=`${i*.04}s`;
     wrap.innerHTML=`
@@ -918,9 +917,7 @@ function renderRiwayat() {
   listEl.innerHTML=''; listEl.appendChild(frag);
 }
 
-/* ═══════════════════════════════════════
-   SIMPAN
-═══════════════════════════════════════ */
+/* SIMPAN */
 async function simpan() {
   if (isProses) return;
 
@@ -982,9 +979,7 @@ async function simpan() {
   }
 }
 
-/* ═══════════════════════════════════════
-   HAPUS
-═══════════════════════════════════════ */
+/* HAPUS */
 async function hapus(id) {
   if (isProses) return;
   if (!confirm('Hapus transaksi ini?')) return;
@@ -998,9 +993,7 @@ async function hapus(id) {
   } finally { isProses=false; showLoader(false); }
 }
 
-/* ═══════════════════════════════════════
-   INIT
-═══════════════════════════════════════ */
+/* INIT */
 window.onload = () => {
   const now=new Date();
   $('filterBulan').value=String(now.getMonth()+1).padStart(2,'0');
