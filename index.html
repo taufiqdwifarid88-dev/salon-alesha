@@ -473,7 +473,7 @@
 /* ═══════════════════════════════════════
    KONSTANTA
 ═══════════════════════════════════════ */
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbyN9f9mlwdldSUIxDMkVcjI_e1Rsmhl4eJ6_y2lyKPxdRRKgRAjUFkVThvGpGFIFpwsyg/exec";
 
 const DEFAULT_LAYANAN = [
   "Potong Rambut","Cuci Catok / Blow","Creambath",
@@ -640,36 +640,27 @@ function generateNotaID() {
 
 /* ═══════════════════════════════════════
    WHATSAPP DEEP LINK
-   Android : window.open('whatsapp://...','_blank') — sudah berjalan, tidak diubah
-   iOS     : window.location.href = 'whatsapp://...' — iOS Safari mengizinkan ini
-             tanpa memerlukan user gesture langsung; OS intercept & buka app WA,
-             halaman kasir tetap di background Safari.
 ═══════════════════════════════════════ */
 function bukaWhatsapp(phone, encodedMsg) {
   const waUrl = `whatsapp://send?phone=${phone}&text=${encodedMsg}`;
 
   if (isIOS()) {
-    /* iOS: location.href untuk custom scheme — app WA terbuka, Safari tetap di BG */
     window.location.href = waUrl;
   } else {
-    /* Android: window.open di tab baru — sudah berjalan, tidak diubah */
     const tab = window.open(waUrl, '_blank');
-    /* Fallback jika popup diblokir atau WA tidak terinstall */
     if (!tab) {
       window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`, '_blank');
       return;
     }
     setTimeout(() => {
       try { if (tab && !tab.closed) tab.location.href = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedMsg}`; }
-      catch(e) { /* tab sudah diambil alih OS → WA terbuka, aman */ }
+      catch(e) {}
     }, 1500);
   }
 }
 
 /* ═══════════════════════════════════════
    BUAT PESAN NOTA
-   Format garis: ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ (Opsi B — proporsional di HP)
-   Hanya 3 garis pemisah agar tidak menumpuk di bubble chat.
 ═══════════════════════════════════════ */
 function buatPesanNota({ id, tglTampil, nama, lay, catatan, harga, diskon, total, metode }) {
   const GARIS = '─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─';
@@ -899,13 +890,19 @@ function renderRiwayat() {
     const isQris=metode==='QRIS';
     const mColor=isQris?'#60a5fa':'#34d399', mBg=isQris?'rgba(96,165,250,.12)':'rgba(52,211,153,.12)', mIcon=isQris?'fa-qrcode':'fa-money-bill-wave';
     const pelStr=esc(t.Pelanggan||'-'), trtStr=esc(t.Treatment||'-'), idStr=esc(t["ID Nota"]||'AS');
+
+    // ── TAMBAHAN JAM TRANSAKSI ──
+    // Ambil field Jam dari data. Jika tidak ada, tampilkan kosong.
+    const jamStr = t.Jam ? esc(String(t.Jam).trim()) : '';
+    const jamDisplay = jamStr ? ` &middot; <i class="fa-regular fa-clock" style="margin-right:.2rem;"></i>${jamStr} WIB` : '';
+
     const avatar=esc(String(t.Pelanggan||'G').charAt(0).toUpperCase());
     const wrap=document.createElement('div');
     wrap.className='tx-item fade-up'; wrap.style.animationDelay=`${i*.04}s`;
     wrap.innerHTML=`
       <div style="width:2.5rem;height:2.5rem;border-radius:9999px;background:linear-gradient(135deg,#db2777,#9d174d);display:flex;align-items:center;justify-content:center;color:white;font-size:.875rem;font-weight:800;flex-shrink:0;">${avatar}</div>
       <div style="display:flex;flex-direction:column;gap:.2rem;min-width:0;flex:1;">
-        <p style="font-size:.625rem;font-weight:700;color:var(--ink-faint);letter-spacing:.04em;">${formatTglID(t.Tanggal)} &middot; ${idStr}</p>
+        <p style="font-size:.625rem;font-weight:700;color:var(--ink-faint);letter-spacing:.04em;">${formatTglID(t.Tanggal)}${jamDisplay} &middot; ${idStr}</p>
         <p style="font-size:.9375rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${pelStr}</p>
         <p style="font-size:.75rem;color:var(--rose);font-weight:600;">${trtStr}</p>
       </div>
@@ -972,12 +969,11 @@ async function simpan() {
 
     showToast('✅ Transaksi berhasil disimpan!');
     resetForm();
-    muatData(false); /* fire & forget */
+    muatData(false);
     bukaTab(null,'riwayat');
 
     isProses=false; $('btnSimpan').disabled=false; showLoader(false);
 
-    /* Buka WA setelah sedikit jeda agar UI sempat update */
     setTimeout(()=> bukaWhatsapp(hpNormal, pesanEncoded), 350);
 
   } catch(e) {
