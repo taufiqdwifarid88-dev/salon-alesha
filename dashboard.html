@@ -108,7 +108,10 @@ table tbody tr:hover { background: var(--accent-light); }
   <div class="flex items-center justify-between mb-8 px-2">
     <div class="flex items-center gap-3 brand-text">
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/30">A</div>
-      <div><h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">Alesha AI</h1><p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Business Intelligence</p></div>
+      <div>
+        <h1 class="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">Alesha AI</h1>
+        <p class="text-[11px] font-semibold text-slate-400 tracking-wide uppercase">Business Intelligence</p>
+      </div>
     </div>
     <div class="lg:hidden cursor-pointer text-slate-400 hover:text-slate-600" onclick="toggleMobileSidebar()"><i class="fa-solid fa-xmark text-xl"></i></div>
     <button onclick="toggleSidebar()" class="hidden lg:block text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-bars-staggered text-lg"></i></button>
@@ -122,14 +125,24 @@ table tbody tr:hover { background: var(--accent-light); }
     <div onclick="switchTab('settings', this)" class="menu-item"><i class="fa-solid fa-gear w-5 text-center"></i><span class="menu-text">Settings</span></div>
   </nav>
   <div class="mt-auto pt-4 border-t border-slate-100 dark:border-slate-700/50">
-    <div class="flex items-center gap-3 mt-4 px-2"><img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-700 shadow-sm"><div class="menu-text"><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Administrator</p><p class="text-[11px] text-slate-400 font-medium">alesha@studio.id</p></div></div>
+    <div class="flex items-center gap-3 mt-4 px-2">
+      <img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-700 shadow-sm">
+      <div class="menu-text">
+        <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Administrator</p>
+        <p class="text-[11px] text-slate-400 font-medium">alesha@studio.id</p>
+      </div>
+    </div>
   </div>
 </aside>
 <main class="flex-1 p-4 lg:p-8 min-w-0">
   <div class="topbar flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 px-5 py-3.5 rounded-2xl sticky top-4 z-30">
     <div class="flex items-center gap-3">
       <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"><i class="fa-solid fa-bars"></i></button>
-      <div><h2 class="text-lg font-bold text-slate-800 dark:text-white" id="pageTitle">Dashboard Overview</h2><p class="text-xs text-slate-400 font-medium" id="currentDate">Memuat tanggal...</p><p class="text-[11px] text-emerald-500 font-semibold mt-1" id="lastUpdated">Belum ada sinkronisasi</p></div>
+      <div>
+        <h2 class="text-lg font-bold text-slate-800 dark:text-white" id="pageTitle">Dashboard Overview</h2>
+        <p class="text-xs text-slate-400 font-medium" id="currentDate">Memuat tanggal...</p>
+        <p class="text-[11px] text-emerald-500 font-semibold mt-1" id="lastUpdated">Belum ada sinkronisasi</p>
+      </div>
     </div>
     <div class="flex items-center gap-3 w-full lg:w-auto">
       <div id="dateFilterContainer" class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-100 dark:border-slate-700/50 flex-1 lg:flex-none transition-all flex-wrap">
@@ -137,18 +150,36 @@ table tbody tr:hover { background: var(--accent-light); }
         <input type="date" id="filterStart" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-36">
         <span class="text-slate-300 text-xs">→</span>
         <input type="date" id="filterEnd" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-36">
-        <select id="serviceFilter" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-44"><option value="">Semua layanan</option></select>
-        <button onclick="applyFilter()" class="btn-primary !py-1.5 !px-3 !rounded-lg text-xs"><i class="fa-solid fa-filter mr-1"></i>Filter</button>
+        <select id="serviceFilter" class="bg-transparent px-2 py-1.5 text-xs text-slate-600 dark:text-slate-300 outline-none font-semibold w-44">
+          <option value="">Semua layanan</option>
+        </select>
+        <button onclick="applyFilter()" class="btn-primary !py-1.5 !px-3 !rounded-lg text-xs">
+          <i class="fa-solid fa-filter mr-1"></i>Filter
+        </button>
       </div>
-      <button onclick="exportCSV()" class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-600 transition shadow-sm"><i class="fa-solid fa-download"></i> Export</button>
-      <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-yellow-400 transition hover:scale-105 shadow-sm"><i class="fa-solid fa-moon dark:hidden"></i><i class="fa-solid fa-sun hidden dark:block"></i></button>
+      <button onclick="exportCSV()" class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 hover:text-indigo-600 transition shadow-sm">
+        <i class="fa-solid fa-download"></i> Export
+      </button>
+      <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-yellow-400 transition hover:scale-105 shadow-sm">
+        <i class="fa-solid fa-moon dark:hidden"></i>
+        <i class="fa-solid fa-sun hidden dark:block"></i>
+      </button>
       <div class="relative" id="notifContainer">
-        <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition hover:scale-105 shadow-sm focus:outline-none"><i class="fa-regular fa-bell"></i></button>
+        <button onclick="toggleNotif()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition hover:scale-105 shadow-sm focus:outline-none">
+          <i class="fa-regular fa-bell"></i>
+        </button>
         <span id="notifBadge" class="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white dark:ring-slate-900 transition-opacity duration-300"></span>
         <div id="notifDropdown" class="absolute right-0 mt-3 w-80 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-2xl z-50 hidden flex-col overflow-hidden origin-top-right dropdown-enter">
-          <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50"><h4 class="font-bold text-slate-800 dark:text-white text-sm">Transaksi Terbaru</h4><span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 px-2 py-1 rounded-full font-bold">10 Teratas</span></div>
+          <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+            <h4 class="font-bold text-slate-800 dark:text-white text-sm">Transaksi Terbaru</h4>
+            <span class="text-[10px] bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300 px-2 py-1 rounded-full font-bold">10 Teratas</span>
+          </div>
           <div id="notifList" class="max-h-80 overflow-y-auto p-2 flex flex-col gap-1"></div>
-          <div class="p-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50 dark:bg-slate-800"><button onclick="switchTab('analytics', document.querySelectorAll('.menu-item')[3]); toggleNotif();" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 transition">Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i></button></div>
+          <div class="p-3 border-t border-slate-100 dark:border-slate-700 text-center bg-slate-50 dark:bg-slate-800">
+            <button onclick="switchTab('analytics', document.querySelectorAll('.menu-item')[3]); toggleNotif();" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 transition">
+              Lihat Selengkapnya <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+            </button>
+          </div>
         </div>
       </div>
       <img src="https://ui-avatars.com/api/?name=Admin+Alesha&background=4f46e5&color=fff" class="w-10 h-10 rounded-xl ring-2 ring-white dark:ring-slate-700 shadow-sm cursor-pointer">
@@ -166,68 +197,384 @@ table tbody tr:hover { background: var(--accent-light); }
 
   <div id="tab-dashboard" class="tab-content active">
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
-      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"><i class="fa-solid fa-sack-dollar"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Revenue</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="revenue">Rp 0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="revTrendWrap"><i class="fa-solid fa-minus"></i> <span id="revTrend">0%</span> vs bulan lalu</p></div></div>
-      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-violet-50 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400"><i class="fa-solid fa-receipt"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transactions</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="trx">0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="trxTrendWrap"><i class="fa-solid fa-minus"></i> <span id="trxTrend">0%</span> vs bulan lalu</p></div></div>
-      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"><i class="fa-solid fa-user-group"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Customers</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="cust">0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="custTrendWrap"><i class="fa-solid fa-minus"></i> <span id="custTrend">0%</span> vs bulan lalu</p></div></div>
-      <div class="card stat-card flex items-center gap-4"><div class="icon-box bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-wallet"></i></div><div><p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Transaction</p><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="growth">Rp 0</h2><p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="avgTrendWrap"><i class="fa-solid fa-minus"></i> <span id="avgTrend">0%</span> vs bulan lalu</p></div></div>
+      <div class="card stat-card flex items-center gap-4">
+        <div class="icon-box bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400">
+          <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Revenue</p>
+          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="revenue">Rp 0</h2>
+          <p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="revTrendWrap">
+            <i class="fa-solid fa-minus"></i> <span id="revTrend">0%</span> vs bulan lalu
+          </p>
+        </div>
+      </div>
+      <div class="card stat-card flex items-center gap-4">
+        <div class="icon-box bg-violet-50 dark:bg-violet-500/20 text-violet-600 dark:text-violet-400">
+          <i class="fa-solid fa-receipt"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transactions</p>
+          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="trx">0</h2>
+          <p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="trxTrendWrap">
+            <i class="fa-solid fa-minus"></i> <span id="trxTrend">0%</span> vs bulan lalu
+          </p>
+        </div>
+      </div>
+      <div class="card stat-card flex items-center gap-4">
+        <div class="icon-box bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400">
+          <i class="fa-solid fa-user-group"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Customers</p>
+          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="cust">0</h2>
+          <p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="custTrendWrap">
+            <i class="fa-solid fa-minus"></i> <span id="custTrend">0%</span> vs bulan lalu
+          </p>
+        </div>
+      </div>
+      <div class="card stat-card flex items-center gap-4">
+        <div class="icon-box bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg Transaction</p>
+          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5" id="growth">Rp 0</h2>
+          <p class="text-[11px] font-semibold mt-1 flex items-center gap-1" id="avgTrendWrap">
+            <i class="fa-solid fa-minus"></i> <span id="avgTrend">0%</span> vs bulan lalu
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-      <div class="card lg:col-span-2"><div class="flex justify-between items-center mb-6"><div><h3 class="font-bold text-slate-800 dark:text-white">Revenue Trend</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Pendapatan harian dalam periode aktif</p></div><div class="flex gap-2"><span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5"></span>Omset</span></div></div><div id="revenueChart"></div></div>
-      <div class="card"><div class="mb-6"><h3 class="font-bold text-slate-800 dark:text-white">Service Mix</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Distribusi kategori treatment</p></div><div id="donutChart"></div></div>
+      <div class="card lg:col-span-2">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <h3 class="font-bold text-slate-800 dark:text-white">Revenue Trend</h3>
+            <p class="text-xs text-slate-400 font-medium mt-0.5">Pendapatan harian dalam periode aktif</p>
+          </div>
+          <div class="flex gap-2">
+            <span class="badge bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5"></span>Omset
+            </span>
+          </div>
+        </div>
+        <div id="revenueChart"></div>
+      </div>
+      <div class="card">
+        <div class="mb-6">
+          <h3 class="font-bold text-slate-800 dark:text-white">Service Mix</h3>
+          <p class="text-xs text-slate-400 font-medium mt-0.5">Distribusi kategori treatment</p>
+        </div>
+        <div id="donutChart"></div>
+      </div>
     </div>
 
-    <div class="card mb-6"><div class="flex justify-between items-center mb-6"><div><h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2"><i class="fa-regular fa-clock text-indigo-500"></i> Peak Hour Analysis</h3><p class="text-xs text-slate-400 font-medium mt-0.5">Jam sibuk berdasarkan frekuensi transaksi</p></div><button class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Detail</button></div><div id="hourChart"></div></div>
+    <div class="card mb-6">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h3 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+            <i class="fa-regular fa-clock text-indigo-500"></i> Peak Hour Analysis
+          </h3>
+          <p class="text-xs text-slate-400 font-medium mt-0.5">Jam sibuk berdasarkan frekuensi transaksi</p>
+        </div>
+        <button class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Detail</button>
+      </div>
+      <div id="hourChart"></div>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       <div class="card">
-        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-wand-magic-sparkles"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Quick AI Insights</h3></div>
-        <div class="space-y-3"><div class="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 p-4 rounded-xl" id="quick-ai-1"></div><div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 p-4 rounded-xl" id="quick-ai-2"></div><div class="bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 p-4 rounded-xl" id="quick-ai-3"></div></div>
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white">Quick AI Insights</h3>
+        </div>
+        <div class="space-y-3">
+          <div class="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 p-4 rounded-xl" id="quick-ai-1"></div>
+          <div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 p-4 rounded-xl" id="quick-ai-2"></div>
+          <div class="bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 p-4 rounded-xl" id="quick-ai-3"></div>
+        </div>
       </div>
-      <div class="card flex flex-col items-center justify-center text-center relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 dark:from-indigo-500/10 dark:to-violet-500/10"></div><div class="relative z-10"><p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Business Health Score</p><div class="relative w-40 h-40 mx-auto mb-3"><svg class="progress-ring w-40 h-40" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8" class="text-slate-100 dark:text-slate-700"/><circle id="healthRing" cx="60" cy="60" r="54" fill="none" stroke="url(#healthGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="0" class="progress-ring-circle"/><defs><linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs></svg><div class="absolute inset-0 flex flex-col items-center justify-center"><div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400" id="biz-health">100</div><div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Score</div></div></div><p class="text-sm font-bold text-emerald-500 dark:text-emerald-400" id="biz-status">Excellent Performance</p><p class="text-[11px] text-slate-400 mt-1 max-w-[200px]">Bisnis Anda berada di jalur yang sangat baik bulan ini.</p></div></div>
-      <div class="card"><div class="flex justify-between items-center mb-5"><h3 class="font-bold text-slate-800 dark:text-white">Top Customers</h3><button class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Semua</button></div><ul class="space-y-3" id="top-customers"><li class="text-slate-400 italic text-sm">Memuat data...</li></ul></div>
+      <div class="card flex flex-col items-center justify-center text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-violet-500/5 dark:from-indigo-500/10 dark:to-violet-500/10"></div>
+        <div class="relative z-10">
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Business Health Score</p>
+          <div class="relative w-40 h-40 mx-auto mb-3">
+            <svg class="progress-ring w-40 h-40" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8" class="text-slate-100 dark:text-slate-700"/>
+              <circle id="healthRing" cx="60" cy="60" r="54" fill="none" stroke="url(#healthGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="339.292" stroke-dashoffset="0" class="progress-ring-circle"/>
+              <defs>
+                <linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6366f1"/>
+                  <stop offset="100%" stop-color="#8b5cf6"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <div class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400" id="biz-health">100</div>
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">Score</div>
+            </div>
+          </div>
+          <p class="text-sm font-bold text-emerald-500 dark:text-emerald-400" id="biz-status">Excellent Performance</p>
+          <p class="text-[11px] text-slate-400 mt-1 max-w-[200px]">Bisnis Anda berada di jalur yang sangat baik bulan ini.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex justify-between items-center mb-5">
+          <h3 class="font-bold text-slate-800 dark:text-white">Top Customers</h3>
+          <button class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Lihat Semua</button>
+        </div>
+        <ul class="space-y-3" id="top-customers">
+          <li class="text-slate-400 italic text-sm">Memuat data...</li>
+        </ul>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="card">
-        <div class="flex justify-between items-center mb-5"><h3 class="font-bold text-slate-800 dark:text-white">Top Service Ranking</h3><span class="text-[11px] font-bold text-slate-400">Periode aktif</span></div>
+        <div class="flex justify-between items-center mb-5">
+          <h3 class="font-bold text-slate-800 dark:text-white">Top Service Ranking</h3>
+          <span class="text-[11px] font-bold text-slate-400">Periode aktif</span>
+        </div>
         <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
-          <table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">#</th><th class="px-5 py-4">Kategori</th><th class="px-5 py-4 text-right">Transaksi</th><th class="px-5 py-4 text-right">Share</th></tr></thead><tbody id="topServiceBody"></tbody></table>
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold">
+              <tr>
+                <th class="px-5 py-4">#</th>
+                <th class="px-5 py-4">Kategori</th>
+                <th class="px-5 py-4 text-right">Transaksi</th>
+                <th class="px-5 py-4 text-right">Share</th>
+              </tr>
+            </thead>
+            <tbody id="topServiceBody"></tbody>
+          </table>
         </div>
       </div>
-      <div class="card"><div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-xs shadow-lg shadow-sky-500/20"><i class="fa-solid fa-bullseye"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Ringkasan Filter Aktif</h3></div><div class="space-y-3 text-sm text-slate-600 dark:text-slate-300"><div class="flex items-center justify-between"><span>Rentang tanggal</span><span class="font-bold" id="activeDateLabel">-</span></div><div class="flex items-center justify-between"><span>Layanan</span><span class="font-bold" id="activeServiceLabel">Semua layanan</span></div><div class="flex items-center justify-between"><span>Baris export</span><span class="font-bold" id="activeExportRows">0</span></div><div class="pt-3 border-t border-slate-100 dark:border-slate-700"><p class="text-xs text-slate-400">Export sekarang mengikuti filter aktif dashboard agar file CSV lebih relevan dan ringan.</p></div></div></div>
+      <div class="card">
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-xs shadow-lg shadow-sky-500/20">
+            <i class="fa-solid fa-bullseye"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white">Ringkasan Filter Aktif</h3>
+        </div>
+        <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+          <div class="flex items-center justify-between">
+            <span>Rentang tanggal</span>
+            <span class="font-bold" id="activeDateLabel">-</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Layanan</span>
+            <span class="font-bold" id="activeServiceLabel">Semua layanan</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Baris export</span>
+            <span class="font-bold" id="activeExportRows">0</span>
+          </div>
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-700">
+            <p class="text-xs text-slate-400">Export sekarang mengikuti filter aktif dashboard agar file CSV lebih relevan dan ringan.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="tab-customers" class="tab-content"><div class="card"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"><div><h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Customer Database</h2><p class="text-xs text-slate-400 font-medium mt-1">Kelola dan monitor data pelanggan aktif</p></div><div class="flex items-center gap-3 flex-wrap"><input type="text" id="customerSearch" placeholder="Cari nama / kontak / wilayah..." class="px-4 py-2.5 rounded-xl text-sm w-72 max-w-full border border-slate-200 dark:border-slate-700"><select id="customerSort" class="px-3 py-2.5 rounded-xl text-sm border border-slate-200 dark:border-slate-700"><option value="spend_desc">Spend tertinggi</option><option value="spend_asc">Spend terendah</option><option value="visit_desc">Kunjungan terbanyak</option><option value="name_asc">Nama A-Z</option></select><span class="badge bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" id="cust-count-badge">0 Terdaftar</span><button onclick="exportCustomerCSV()" class="btn-primary !py-2 !px-4 text-xs"><i class="fa-solid fa-file-csv mr-1.5"></i>Export CSV</button></div></div><div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50"><table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">Pelanggan</th><th class="px-5 py-4">Kontak</th><th class="px-5 py-4">Wilayah</th><th class="px-5 py-4">Treatment Terakhir</th><th class="px-5 py-4 text-right">Total Spend</th><th class="px-5 py-4 text-center">Status</th></tr></thead><tbody id="dbBody" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody></table></div><div class="flex justify-between items-center mt-6"><button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2"><i class="fa-solid fa-chevron-left"></i> Sebelumnya</button><span id="pageInfo" class="text-xs font-bold text-slate-400">Halaman 1 dari 1</span><button id="btnNext" onclick="changePage(1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2">Selanjutnya <i class="fa-solid fa-chevron-right"></i></button></div></div></div>
+  <div id="tab-customers" class="tab-content">
+    <div class="card">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Customer Database</h2>
+          <p class="text-xs text-slate-400 font-medium mt-1">Kelola dan monitor data pelanggan aktif</p>
+        </div>
+        <div class="flex items-center gap-3 flex-wrap">
+          <input type="text" id="customerSearch" placeholder="Cari nama / kontak / wilayah..." class="px-4 py-2.5 rounded-xl text-sm w-72 max-w-full border border-slate-200 dark:border-slate-700">
+          <select id="customerSort" class="px-3 py-2.5 rounded-xl text-sm border border-slate-200 dark:border-slate-700">
+            <option value="spend_desc">Spend tertinggi</option>
+            <option value="spend_asc">Spend terendah</option>
+            <option value="visit_desc">Kunjungan terbanyak</option>
+            <option value="name_asc">Nama A-Z</option>
+          </select>
+          <span class="badge bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300" id="cust-count-badge">0 Terdaftar</span>
+          <button onclick="exportCustomerCSV()" class="btn-primary !py-2 !px-4 text-xs">
+            <i class="fa-solid fa-file-csv mr-1.5"></i>Export CSV
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold">
+            <tr>
+              <th class="px-5 py-4">Pelanggan</th>
+              <th class="px-5 py-4">Kontak</th>
+              <th class="px-5 py-4">Wilayah</th>
+              <th class="px-5 py-4">Treatment Terakhir</th>
+              <th class="px-5 py-4 text-right">Total Spend</th>
+              <th class="px-5 py-4 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody id="dbBody" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody>
+        </table>
+      </div>
+      <div class="flex justify-between items-center mt-6">
+        <button id="btnPrev" onclick="changePage(-1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2">
+          <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+        </button>
+        <span id="pageInfo" class="text-xs font-bold text-slate-400">Halaman 1 dari 1</span>
+        <button id="btnNext" onclick="changePage(1)" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 disabled:opacity-40 transition flex items-center gap-2">
+          Selanjutnya <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 
-  <div id="tab-insights" class="tab-content"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4"><div><div class="flex items-center gap-3 mb-2"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25"><i class="fa-solid fa-brain"></i></div><h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Deep AI Insight</h2></div><p class="text-sm text-slate-400 font-medium">Analisis mendalam adaptif berdasarkan data dan performa saat ini.</p></div><button onclick="refreshInsights()" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition flex items-center gap-2"><i class="fa-solid fa-rotate"></i> Refresh Analysis</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-deep-container"></div></div>
+  <div id="tab-insights" class="tab-content">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white">Deep AI Insight</h2>
+        </div>
+        <p class="text-sm text-slate-400 font-medium">Analisis mendalam adaptif berdasarkan data dan performa saat ini.</p>
+      </div>
+      <button onclick="refreshInsights()" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition flex items-center gap-2">
+        <i class="fa-solid fa-rotate"></i> Refresh Analysis
+      </button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="ai-deep-container"></div>
+  </div>
 
-  <div id="tab-products" class="tab-content"><div class="max-w-3xl mx-auto"><div class="card mb-6"><div class="flex items-center gap-3 mb-2"><div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/20"><i class="fa-solid fa-spa"></i></div><div><h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Manajemen Treatment</h2><p class="text-xs text-slate-400 font-medium">Tambahkan, hapus, atau kelola layanan bisnis Anda.</p></div></div></div><div class="card"><div class="flex gap-3 mb-6"><input type="text" id="newTreatment" class="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Nama treatment baru..."><button onclick="addTreatment()" id="btnAddTreat" class="btn-primary !py-3 !px-5"><i class="fa-solid fa-plus mr-1.5"></i>Tambah Menu</button></div><div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50"><table class="w-full text-left text-sm"><thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold"><tr><th class="px-5 py-4">Nama Treatment / Jasa</th><th class="px-5 py-4 text-right">Aksi</th></tr></thead><tbody id="treatmentList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody></table></div></div></div></div>
+  <div id="tab-products" class="tab-content">
+    <div class="max-w-3xl mx-auto">
+      <div class="card mb-6">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/20">
+            <i class="fa-solid fa-spa"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-800 dark:text-white">Manajemen Treatment</h2>
+            <p class="text-xs text-slate-400 font-medium">Tambahkan, hapus, atau kelola layanan bisnis Anda.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex gap-3 mb-6">
+          <input type="text" id="newTreatment" class="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="Nama treatment baru...">
+          <button onclick="addTreatment()" id="btnAddTreat" class="btn-primary !py-3 !px-5">
+            <i class="fa-solid fa-plus mr-1.5"></i>Tambah Menu
+          </button>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-slate-100 dark:border-slate-700/50">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider font-bold">
+              <tr>
+                <th class="px-5 py-4">Nama Treatment / Jasa</th>
+                <th class="px-5 py-4 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="treatmentList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="tab-analytics" class="tab-content">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="card lg:col-span-2">
-        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs shadow-lg shadow-indigo-500/20"><i class="fa-solid fa-lightbulb"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Saran Pengembangan Analytics</h3></div>
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs shadow-lg shadow-indigo-500/20">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white">Saran Pengembangan Analytics</h3>
+        </div>
         <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">1. Revenue Forecast Mingguan</p><p>Tambahkan prediksi omzet 7-30 hari ke depan berdasarkan tren harian agar analytics benar-benar membantu perencanaan operasional.</p></div>
-          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">2. Repeat vs New Customer</p><p>Pisahkan pelanggan baru dan pelanggan kembali untuk melihat kualitas retensi, bukan hanya total pelanggan aktif.</p></div>
-          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">3. Service Profitability</p><p>Tampilkan layanan paling ramai, layanan paling menguntungkan, dan layanan yang performanya rendah agar keputusan promosi lebih tepat.</p></div>
-          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50"><p class="font-bold text-slate-800 dark:text-white mb-1">4. Idle Hour Opportunity</p><p>Analisis jam sepi untuk rekomendasi promo slot kosong, penyesuaian staffing, atau bundling treatment.</p></div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+            <p class="font-bold text-slate-800 dark:text-white mb-1">1. Revenue Forecast Mingguan</p>
+            <p>Tambahkan prediksi omzet 7-30 hari ke depan berdasarkan tren harian agar analytics benar-benar membantu perencanaan operasional.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+            <p class="font-bold text-slate-800 dark:text-white mb-1">2. Repeat vs New Customer</p>
+            <p>Pisahkan pelanggan baru dan pelanggan kembali untuk melihat kualitas retensi, bukan hanya total pelanggan aktif.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+            <p class="font-bold text-slate-800 dark:text-white mb-1">3. Service Profitability</p>
+            <p>Tampilkan layanan paling ramai, layanan paling menguntungkan, dan layanan yang performanya rendah agar keputusan promosi lebih tepat.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+            <p class="font-bold text-slate-800 dark:text-white mb-1">4. Idle Hour Opportunity</p>
+            <p>Analisis jam sepi untuk rekomendasi promo slot kosong, penyesuaian staffing, atau bundling treatment.</p>
+          </div>
         </div>
       </div>
       <div class="card h-full">
-        <div class="flex items-center gap-2 mb-5"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20"><i class="fa-solid fa-chart-line"></i></div><h3 class="font-bold text-slate-800 dark:text-white">Prioritas Implementasi</h3></div>
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 dark:text-white">Prioritas Implementasi</h3>
+        </div>
         <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
-          <li class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20"><span class="font-bold">Tinggi:</span> repeat customer rate, top service profitability.</li>
-          <li class="p-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20"><span class="font-bold">Menengah:</span> forecast omzet mingguan dan alert penurunan performa.</li>
-          <li class="p-3 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20"><span class="font-bold">Lanjutan:</span> cohort pelanggan, heatmap reservasi, staffing recommendation.</li>
+          <li class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20">
+            <span class="font-bold">Tinggi:</span> repeat customer rate, top service profitability.
+          </li>
+          <li class="p-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20">
+            <span class="font-bold">Menengah:</span> forecast omzet mingguan dan alert penurunan performa.
+          </li>
+          <li class="p-3 rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20">
+            <span class="font-bold">Lanjutan:</span> cohort pelanggan, heatmap reservasi, staffing recommendation.
+          </li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div id="tab-settings" class="tab-content"><div class="max-w-2xl mx-auto space-y-6"><div class="card"><h3 class="font-bold text-slate-800 dark:text-white mb-1">Preferences</h3><p class="text-xs text-slate-400 mb-6">Atur tampilan dan perilaku dashboard sesuai kebutuhan Anda.</p><div class="space-y-5"><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Night Mode</p><p class="text-xs text-slate-400">Beralih antara tampilan terang dan gelap</p></div><div class="toggle-switch" id="darkToggle" onclick="toggleDarkMode()"></div></div><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Auto Refresh</p><p class="text-xs text-slate-400">Update data otomatis setiap 30 detik (Realtime)</p></div><div class="toggle-switch active" id="refreshToggle" onclick="toggleAutoRefresh(this)"></div></div><div class="flex items-center justify-between"><div><p class="text-sm font-bold text-slate-700 dark:text-slate-200">Notifikasi</p><p class="text-xs text-slate-400">Tampilkan alert untuk transaksi baru</p></div><div class="toggle-switch active" onclick="this.classList.toggle('active')"></div></div></div></div><div class="card"><h3 class="font-bold text-slate-800 dark:text-white mb-1">Data Management</h3><p class="text-xs text-slate-400 mb-6">Kelola sumber data dan export.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><button onclick="exportCSV()" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition"><i class="fa-solid fa-download text-indigo-500"></i> Export All Data</button><button onclick="initDashboard(false); showToast('Data berhasil dimuat ulang', 'success')" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition"><i class="fa-solid fa-rotate text-indigo-500"></i> Reload Data</button></div></div></div></div>
+  <div id="tab-settings" class="tab-content">
+    <div class="max-w-2xl mx-auto space-y-6">
+      <div class="card">
+        <h3 class="font-bold text-slate-800 dark:text-white mb-1">Preferences</h3>
+        <p class="text-xs text-slate-400 mb-6">Atur tampilan dan perilaku dashboard sesuai kebutuhan Anda.</p>
+        <div class="space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Night Mode</p>
+              <p class="text-xs text-slate-400">Beralih antara tampilan terang dan gelap</p>
+            </div>
+            <div class="toggle-switch" id="darkToggle" onclick="toggleDarkMode()"></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Auto Refresh</p>
+              <p class="text-xs text-slate-400">Update data otomatis setiap 30 detik (Realtime)</p>
+            </div>
+            <div class="toggle-switch active" id="refreshToggle" onclick="toggleAutoRefresh(this)"></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Notifikasi</p>
+              <p class="text-xs text-slate-400">Tampilkan alert untuk transaksi baru</p>
+            </div>
+            <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-bold text-slate-800 dark:text-white mb-1">Data Management</h3>
+        <p class="text-xs text-slate-400 mb-6">Kelola sumber data dan export.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button onclick="exportCSV()" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition">
+            <i class="fa-solid fa-download text-indigo-500"></i> Export All Data
+          </button>
+          <button onclick="initDashboard(false); showToast('Data berhasil dimuat ulang', 'success')" class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:border-indigo-500 transition">
+            <i class="fa-solid fa-rotate text-indigo-500"></i> Reload Data
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 </div>
 <div class="toast-container" id="toastContainer"></div>
@@ -294,34 +641,51 @@ function parseDateSafe(dateStr) {
   const d = new Date(dateStr);
   return isNaN(d.getTime()) ? null : d;
 }
+
+// PRIORITAS: gunakan kolom Jam terlebih dahulu untuk jam aktual
 function formatTimeActual(d) {
-  const raw = d.Timestamp || d.timestamp || d.Waktu || d.waktu || '';
+  const raw =
+    d.Jam || d.jam ||
+    d.Timestamp || d.timestamp ||
+    d.Waktu || d.waktu ||
+    '';
   const rawStr = String(raw || '');
-  const match = rawStr.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
-  if (match) return `${String(match[1]).padStart(2,'0')}:${match[2]}`;
+  const match = rawStr.match(/(?:T|\s)?(\d{1,2}):(\d{2})/);
+  if (match) {
+    const hh = String(match[1]).padStart(2,'0');
+    const mm = match[2];
+    return `${hh}:${mm}`;
+  }
   const parsed = parseDateSafe(raw);
   if (parsed) return parsed.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
   const fallbackHour = extractHourValue(d);
   return `${String(fallbackHour).padStart(2,'0')}:00`;
 }
+
+// PRIORITAS: gunakan Jam untuk hitung jam peak hour
 function extractHourValue(d) {
-  const raw = d.Timestamp || d.timestamp || d.Waktu || d.waktu || '';
+  const raw =
+    d.Jam || d.jam ||
+    d.Timestamp || d.timestamp ||
+    d.Waktu || d.waktu ||
+    '';
   const rawStr = String(raw || '');
-  const match = rawStr.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
+  const match = rawStr.match(/(?:T|\s)?(\d{1,2}):(\d{2})/);
   if (match) {
     const h = parseInt(match[1], 10);
-    if (h >= 0 && h <= 23) return h;
+    if (!isNaN(h) && h >= 0 && h <= 23) return h;
   }
   const dateObj = parseDateSafe(raw) || parseDateSafe(d.Tanggal || d.tanggal);
   if (dateObj) {
     const h = dateObj.getHours();
-    if (h >= 1 && h <= 23) return h;
+    if (h >= 0 && h <= 23) return h;
   }
   const note = String(d['ID Nota'] || d.idNota || d.Pelanggan || d.pelanggan || 'guest');
   let hash = 0;
   for (let i = 0; i < note.length; i++) hash = (hash + note.charCodeAt(i) * (i + 1)) % 997;
   return 9 + (hash % 12);
 }
+
 function kategorikan(teks) {
   const t = (teks || '').toLowerCase().trim();
   if (t.match(/(potong|ptg|gunting|pangkas|trim|haircut|hc)/)) return 'Potong Rambut';
@@ -361,7 +725,7 @@ function renderNotifList() {
     const nama = tx.Pelanggan || tx.pelanggan || 'Guest';
     const layanan = tx.Treatment || tx.layanan || '-';
     const nilai = cleanNum(tx['Total Akhir'] || tx.totalAkhir);
-    const jam = formatTimeActual(tx);
+    const jam = formatTimeActual(tx) + ' WIB';
     return `<div class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition cursor-pointer"><div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-receipt"></i></div><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2"><p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">${nama}</p><span class="text-[10px] text-slate-400 font-semibold shrink-0">${jam}</span></div><p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 truncate">${layanan}</p></div><div class="text-right shrink-0"><p class="text-xs font-black text-indigo-600 dark:text-indigo-400">Rp ${formatRp(nilai)}</p></div></div>`;
   }).join('');
 }
@@ -478,7 +842,7 @@ function computeHealthScore(totalTx, totalCustomers, avgSpend, topServiceShare) 
   const custScore = Math.min(25, totalCustomers * 1.5);
   const spendScore = Math.min(25, avgSpend / 20000);
   const mixScore = Math.max(0, 20 - Math.max(0, topServiceShare - 65));
-  return Math.max(0, Math.min(100, Math.round(txScore + custScore + spendScore + mixScore)));
+  return Math.max(0, Math.min(100, Math.round(txScore + custScore + spendScore)));
 }
 function renderTopServiceTable(treatMap, totalTx) {
   const body = document.getElementById('topServiceBody');
@@ -507,7 +871,8 @@ function renderDashboard(data, period) {
     custMap[nama] = { count: (custMap[nama]?.count || 0) + 1, hp: (hpRaw !== '-' ? hpRaw : custMap[nama]?.hp) || '-', wilayah: (wilayahRaw !== '-' ? wilayahRaw : custMap[nama]?.wilayah) || '-', lastTx: tx, totalSpend: (custMap[nama]?.totalSpend || 0) + val };
     const kategori = kategorikan(tx);
     treatMap[kategori] = (treatMap[kategori] || 0) + 1;
-    dailyRev[getStandardDate(d.Tanggal || d.tanggal)] = (dailyRev[getStandardDate(d.Tanggal || d.tanggal)] || 0) + val;
+    const stdDate = getStandardDate(d.Tanggal || d.tanggal);
+    dailyRev[stdDate] = (dailyRev[stdDate] || 0) + val;
   });
   const currentSummary = summarizeMetrics(data);
   const compareWindow = getComparisonWindow(period);
