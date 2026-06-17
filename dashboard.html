@@ -642,44 +642,64 @@ function parseDateSafe(dateStr) {
   return isNaN(d.getTime()) ? null : d;
 }
 
-// PRIORITAS: gunakan kolom Jam terlebih dahulu untuk jam aktual
-function formatTimeActual(d) {
+// baca jam-menit langsung dari field Jam (ISO "1899-12-30T09:03:48.000Z" atau "09:03")
+function parseJamFromRecord(d) {
   const raw =
     d.Jam || d.jam ||
     d.Timestamp || d.timestamp ||
     d.Waktu || d.waktu ||
     '';
-  const rawStr = String(raw || '');
-  const match = rawStr.match(/(?:T|\s)?(\d{1,2}):(\d{2})/);
-  if (match) {
-    const hh = String(match[1]).padStart(2,'0');
-    const mm = match[2];
+  const s = String(raw || '').trim();
+
+  const isoMatch = s.match(/T(\d{1,2}):(\d{2})/);
+  if (isoMatch) {
+    const h = parseInt(isoMatch[1], 10);
+    const m = parseInt(isoMatch[2], 10);
+    if (!isNaN(h) && h >= 0 && h <= 23 && !isNaN(m) && m >= 0 && m <= 59) {
+      return { hour: h, minute: m };
+    }
+  }
+
+  const hmMatch = s.match(/(\d{1,2}):(\d{2})/);
+  if (hmMatch) {
+    const h = parseInt(hmMatch[1], 10);
+    const m = parseInt(hmMatch[2], 10);
+    if (!isNaN(h) && h >= 0 && h <= 23 && !isNaN(m) && m >= 0 && m <= 59) {
+      return { hour: h, minute: m };
+    }
+  }
+
+  return null;
+}
+
+// notifikasi pojok kanan
+function formatTimeActual(d) {
+  const jm = parseJamFromRecord(d);
+  if (jm) {
+    const hh = String(jm.hour).padStart(2, '0');
+    const mm = String(jm.minute).padStart(2, '0');
     return `${hh}:${mm}`;
   }
-  const parsed = parseDateSafe(raw);
-  if (parsed) return parsed.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+  const parsed = parseDateSafe(d.Timestamp || d.timestamp || d.Waktu || d.waktu || '');
+  if (parsed) {
+    return parsed.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  }
   const fallbackHour = extractHourValue(d);
   return `${String(fallbackHour).padStart(2,'0')}:00`;
 }
 
-// PRIORITAS: gunakan Jam untuk hitung jam peak hour
+// peak hour chart
 function extractHourValue(d) {
-  const raw =
-    d.Jam || d.jam ||
-    d.Timestamp || d.timestamp ||
-    d.Waktu || d.waktu ||
-    '';
-  const rawStr = String(raw || '');
-  const match = rawStr.match(/(?:T|\s)?(\d{1,2}):(\d{2})/);
-  if (match) {
-    const h = parseInt(match[1], 10);
-    if (!isNaN(h) && h >= 0 && h <= 23) return h;
-  }
+  const jm = parseJamFromRecord(d);
+  if (jm) return jm.hour;
+
+  const raw = d.Timestamp || d.timestamp || d.Waktu || d.waktu || '';
   const dateObj = parseDateSafe(raw) || parseDateSafe(d.Tanggal || d.tanggal);
   if (dateObj) {
     const h = dateObj.getHours();
-    if (h >= 0 && h <= 23) return h;
+    if (!isNaN(h) && h >= 0 && h <= 23) return h;
   }
+
   const note = String(d['ID Nota'] || d.idNota || d.Pelanggan || d.pelanggan || 'guest');
   let hash = 0;
   for (let i = 0; i < note.length; i++) hash = (hash + note.charCodeAt(i) * (i + 1)) % 997;
