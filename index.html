@@ -227,7 +227,7 @@
 <div id="loader">
   <div class="loader-box">
     <div style="width:2.5rem;height:2.5rem;border:3px solid var(--surface-3);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem;"></div>
-    <p style="font-size:.875rem;font-weight:800;color:var(--rose);">Sedang Memproses…</p>
+    <p style="font-size:.875rem;font-weight:800;color:var(--rose);">Sedang Memproses...</p>
     <p style="font-size:.6875rem;color:var(--ink-faint);margin-top:.25rem;">Mohon tunggu sebentar</p>
   </div>
 </div>
@@ -345,7 +345,7 @@
               <option value="">-- Memuat Menu Treatment... --</option>
             </select>
           </div>
-          <input type="text" id="inpLayananLain" class="inp" style="display:none;background:var(--surface-3);border-color:var(--rose-mid);" placeholder="Nama treatment manual…">
+          <input type="text" id="inpLayananLain" class="inp" style="display:none;background:var(--surface-3);border-color:var(--rose-mid);" placeholder="Nama treatment manual...">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
             <div>
               <label class="field-label" for="inpHarga"><i class="fa-solid fa-tag" style="margin-right:.35rem;"></i>Harga</label>
@@ -358,7 +358,7 @@
           </div>
           <div>
             <label class="field-label" for="inpCatatan"><i class="fa-solid fa-note-sticky" style="margin-right:.35rem;"></i>Catatan (opsional)</label>
-            <textarea id="inpCatatan" class="inp" rows="2" style="resize:none;line-height:1.6;font-weight:500;" placeholder="Permintaan khusus pelanggan…"></textarea>
+            <textarea id="inpCatatan" class="inp" rows="2" style="resize:none;line-height:1.6;font-weight:500;" placeholder="Permintaan khusus pelanggan..."></textarea>
           </div>
         </div>
       </div>
@@ -461,7 +461,7 @@
 
       <div style="position:relative;">
         <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:.9rem;top:50%;transform:translateY(-50%);color:var(--ink-faint);font-size:.8rem;pointer-events:none;"></i>
-        <input type="text" id="searchInp" oninput="renderRiwayat()" class="search-inp" placeholder="Cari nama pelanggan atau treatment…">
+        <input type="text" id="searchInp" oninput="renderRiwayat()" class="search-inp" placeholder="Cari nama pelanggan atau treatment...">
       </div>
 
       <div id="listRiwayat" style="display:flex;flex-direction:column;gap:.75rem;"></div>
@@ -471,7 +471,7 @@
 
 <script>
 /* KONSTANTA */
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwbZUcFX7_1r7LhKcs7Bt7RprN1_dNBaKkjR_P77GYjJAmjWRyryryoIBv5R4WUwOAouQ/exec";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbzahuIErsjzprG1jU2sTB7pTmgHTl7YjzdZ7fs7uMjvaRdSYZVTMXpje8sFTfb4u2XfwQ/exec";
 
 const DEFAULT_LAYANAN = [
   "Potong Rambut","Cuci Catok / Blow","Creambath",
@@ -862,35 +862,38 @@ function renderRiwayat() {
     const pelStr=esc(t.Pelanggan||'-'), trtStr=esc(t.Treatment||'-'), idStr=esc(t["ID Nota"]||'AS');
     const avatar=esc(String(t.Pelanggan||'G').charAt(0).toUpperCase());
 
-    // Normalisasi jam dari field t.Jam
+    // === PERBAIKAN JAM TRANSAKSI ===
+    // Parser ini menangani 3 format: "HH:mm", ISO string dengan T, dan angka serial Sheets
     let jamStr = '';
     if (t.Jam) {
       const rawJam = t.Jam;
+      const s = String(rawJam).trim();
 
-      if (rawJam instanceof Date) {
-        jamStr = rawJam.toLocaleTimeString('id-ID', {
-          timeZone: 'Asia/Jakarta',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      } else {
-        const s = String(rawJam).trim();
-        if (s.includes('T') && s.includes(':')) {
-          const d = new Date(s);
-          if (!isNaN(d.getTime())) {
-            jamStr = d.toLocaleTimeString('id-ID', {
-              timeZone: 'Asia/Jakarta',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
-          } else {
-            jamStr = s;
-          }
+      if (s.includes('T') && s.includes(':')) {
+        // Format ISO 8601 dari Date object: "1899-12-30T07:35:00.000Z"
+        const d = new Date(s);
+        if (!isNaN(d.getTime())) {
+          jamStr = d.toLocaleTimeString('id-ID', {
+            timeZone: 'Asia/Jakarta',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          });
         } else {
-          jamStr = s;
+          jamStr = s.substring(0, 5);
         }
+      } else if (!isNaN(s) && parseFloat(s) >= 0 && parseFloat(s) < 1) {
+        // Format serial number Spreadsheet (0.0 - 1.0)
+        const totalMinutes = Math.round(parseFloat(s) * 24 * 60);
+        const hh = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
+        const mm = String(totalMinutes % 60).padStart(2, '0');
+        jamStr = `${hh}:${mm}`;
+      } else {
+        // Format plain string "HH:mm" atau fallback
+        jamStr = s.substring(0, 5);
       }
     }
+    // === AKHIR PERBAIKAN JAM ===
 
     const jamDisplay = jamStr
       ? ` &middot; <i class="fa-regular fa-clock" style="margin-right:.2rem;"></i>${esc(jamStr)} WIB`
@@ -940,7 +943,7 @@ async function simpan() {
   if (!nama)                              return showToast('⚠️ Nama pelanggan wajib diisi');
   if (!hpRaw)                             return showToast('⚠️ Nomor WhatsApp wajib diisi');
   if (!isValidPhone(hpRaw))               return showToast('⚠️ Format nomor tidak valid (contoh: 08123456789)');
-  if (kabRaw==='Lainnya' && !kab)         return showToast('⚠️ Nama kota/area wajib diisi');
+  if (kabRaw==='Lainnya' && !kab)         return showToast('⚠️ Nama kota/area wajub diisi');
   if (!lay)                               return showToast('⚠️ Pilih treatment terlebih dahulu');
   if (!lay.trim())                        return showToast('⚠️ Nama treatment manual wajib diisi');
   if (harga<=0)                           return showToast('⚠️ Harga belum diisi');
